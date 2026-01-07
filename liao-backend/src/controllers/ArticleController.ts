@@ -1,0 +1,114 @@
+import { Request, Response } from 'express';
+import prisma from '../config/database';
+
+export const createArticle = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { title, description, content, images, tags, isPublished } = req.body;
+
+        if (images && images.length > 5) {
+            res.status(400).json({ success: false, error: 'Maximum of 5 images allowed per article.' });
+            return;
+        }
+
+        const article = await prisma.article.create({
+            data: {
+                title,
+                description,
+                content,
+                images: images || [],
+                tags: tags || [],
+                isPublished: isPublished !== undefined ? isPublished : true,
+            },
+        });
+
+        res.status(201).json({ success: true, data: article });
+    } catch (error) {
+        console.error('Error creating article:', error);
+        res.status(500).json({ success: false, error: 'Failed to create article' });
+    }
+};
+
+export const getArticles = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { tag, search } = req.query;
+
+        const where: any = {
+            isPublished: true, // By default public view
+        };
+
+        // Admin might want to see all, but let's assume public logic mostly here for filtering.
+        // Actually, for admin table we likely want all. Let's add an ?all=true param maybe?
+        // Or just return all and filter in frontend for specific views, but for public we usually modify this query.
+        // For simplicity, let's return ALL and filter on frontend or add simple param.
+
+        if (req.query.publishedOnly === 'true') {
+            where.isPublished = true;
+        }
+
+        if (tag) {
+            where.tags = {
+                has: String(tag),
+            };
+        }
+
+        if (search) {
+            where.OR = [
+                { title: { contains: String(search), mode: 'insensitive' } },
+                { description: { contains: String(search), mode: 'insensitive' } },
+                { content: { contains: String(search), mode: 'insensitive' } },
+            ];
+        }
+
+        const articles = await prisma.article.findMany({
+            where,
+            orderBy: { createdAt: 'desc' },
+        });
+
+        res.json({ success: true, data: articles });
+    } catch (error) {
+        console.error('Error fetching articles:', error);
+        res.status(500).json({ success: false, error: 'Failed to fetch articles' });
+    }
+};
+
+export const deleteArticle = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        await prisma.article.delete({
+            where: { id: Number(id) },
+        });
+        res.json({ success: true, message: 'Article deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting article:', error);
+        res.status(500).json({ success: false, error: 'Failed to delete article' });
+    }
+};
+
+export const updateArticle = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const { title, description, content, images, tags, isPublished } = req.body;
+
+        if (images && images.length > 5) {
+            res.status(400).json({ success: false, error: 'Maximum of 5 images allowed per article.' });
+            return;
+        }
+
+        const article = await prisma.article.update({
+            where: { id: Number(id) },
+            data: {
+                title,
+                description,
+                content,
+                images,
+                tags,
+                isPublished,
+            },
+        });
+
+        res.json({ success: true, data: article });
+    } catch (error) {
+        console.error('Error updating article:', error);
+        res.status(500).json({ success: false, error: 'Failed to update article' });
+    }
+};

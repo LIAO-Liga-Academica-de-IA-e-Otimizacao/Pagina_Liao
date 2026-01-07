@@ -1,0 +1,75 @@
+import React, { useEffect, useState } from 'react';
+import { apiService } from '../../services/api';
+import TutorCard from '../../components/TutorCard';
+import type { Tutor } from '../../models/Tutor';
+
+const Tutors: React.FC = () => {
+    const [tutors, setTutors] = useState<Tutor[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    useEffect(() => {
+        const fetchTutors = async () => {
+            try {
+                const response = await apiService.getTutors();
+                // Ensure we handle the response structure correctly
+                const data = response.data.data?.tutors || response.data.data || [];
+                setTutors(Array.isArray(data) ? data : []);
+            } catch (err) {
+                console.error(err);
+                setError('Erro ao carregar tutores. Tente novamente mais tarde.');
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchTutors();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-600"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                    <p className="text-red-800">{error}</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-50 py-12">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12">
+                    <h1 className="section-title">Nossos Tutores</h1>
+                    <p className="text-xl text-gray-600">
+                        Nossos tutores estão prontos para ajudar você
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {tutors.map((tutor) => (
+                        <TutorCard key={tutor.id} tutor={tutor} />
+                    ))}
+                </div>
+
+                {tutors.length === 0 && (
+                    <div className="text-center py-12 bg-white rounded-xl shadow-sm">
+                        <p className="text-gray-500 text-lg">
+                            Nenhum tutor disponível no momento.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default Tutors;
