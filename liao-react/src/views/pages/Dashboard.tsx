@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Member } from '../../models/Member';
-import type { Tutor } from '../../models/Tutor';
 import type { Article } from '../../models/Article';
 
 // Simple Carousel Component

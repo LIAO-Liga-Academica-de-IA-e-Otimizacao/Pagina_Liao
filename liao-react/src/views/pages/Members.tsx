@@ -20,8 +20,7 @@ interface Member {
 
 const Members: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    // const [loading, setLoading] = useState(true);
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -46,9 +45,8 @@ const Members: React.FC = () => {
                 setMembers(data);
             } catch (err) {
                 console.error(err);
-                setError('Erro ao carregar membros. Tente novamente mais tarde.');
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         };
 
