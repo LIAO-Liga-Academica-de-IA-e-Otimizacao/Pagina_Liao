@@ -53,6 +53,19 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'LIAO Backend is running' });
 });
 
+// Root route to prevent 404 on main page
+app.get('/', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'LIAO Backend API',
+        endpoints: {
+            auth: '/api/auth',
+            members: '/api/members',
+            health: '/health'
+        }
+    });
+});
+
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
@@ -65,8 +78,5 @@ if (process.env.NODE_ENV !== 'production') {
         console.log(`🌐 CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
     });
 }
-
-// Keep process alive (hack for debugging)
-setInterval(() => { }, 10000);
 
 export default app;
