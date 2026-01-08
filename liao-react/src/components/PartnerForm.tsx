@@ -31,9 +31,10 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
         try {
             const data = { name, imageUrl, websiteUrl };
 
+
             if (partner && partner.id) {
-                alert("Edição não implementada, remova e adicione novamente se necessário.");
-                return;
+                // Update implementation
+                await apiService.updatePartner(partner.id, data);
             } else {
                 await apiService.createPartner(data);
             }

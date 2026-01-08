@@ -73,23 +73,17 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Register (admin only)
-const MASTER_ADMIN_EMAILS = ['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'];
-
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         // Enforce Master Admin permission
         const actingUser = (req as any).user;
-        const requesterId = actingUser?.id;
 
-        if (requesterId) {
-            const requester = await prisma.user.findUnique({ where: { id: requesterId } });
-            if (!requester || !MASTER_ADMIN_EMAILS.includes(requester.email)) {
-                res.status(403).json({
-                    success: false,
-                    error: 'Somente Administradores Master podem adicionar novos administradores.',
-                });
-                return;
-            }
+        if (!actingUser || actingUser.role !== 'master') {
+            res.status(403).json({
+                success: false,
+                error: 'Somente Administradores Master podem adicionar novos administradores.',
+            });
+            return;
         }
 
         const { email, password, name } = req.body;
@@ -240,28 +234,22 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
-        // Fetch full acting user to check email
-        const fullActingUser = await prisma.user.findUnique({ where: { id: actingUserId } });
-        if (!fullActingUser) {
-            res.status(403).json({ success: false, error: 'Unauthorized' });
-            return;
-        }
-
-        const isActingMaster = MASTER_ADMIN_EMAILS.includes(fullActingUser.email);
-
         const targetUser = await prisma.user.findUnique({ where: { id: targetUserId } });
         if (!targetUser) {
             res.status(404).json({ success: false, error: 'User not found' });
             return;
         }
-        const isTargetMaster = MASTER_ADMIN_EMAILS.includes(targetUser.email);
+
+        const isActingMaster = actingUser.role === 'master';
+        const isTargetMaster = targetUser.role === 'master';
 
         // SELF DELETION
         if (actingUserId === targetUserId) {
             if (isActingMaster) {
                 // Check remaining masters
-                const allUsers = await prisma.user.findMany();
-                const masterCount = allUsers.filter((u: any) => MASTER_ADMIN_EMAILS.includes(u.email)).length;
+                const masterCount = await prisma.user.count({
+                    where: { role: 'master' }
+                });
 
                 if (masterCount <= 2) {
                     res.status(403).json({

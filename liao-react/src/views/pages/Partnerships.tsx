@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import type { Partner } from '../../models/Partner';
+import ThreeDCarousel from '../../components/ThreeDCarousel';
 
 const Partnerships: React.FC = () => {
     const [partners, setPartners] = useState<Partner[]>([]);
@@ -153,28 +154,9 @@ const Partnerships: React.FC = () => {
                                 )}
                             </div>
                         ) : (
-                            /* Desktop Grid */
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                                {partners.map((partner) => (
-                                    <div key={partner.id} className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 group">
-                                        {partner.websiteUrl ? (
-                                            <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="block transform transition-transform group-hover:scale-105">
-                                                <img
-                                                    src={partner.imageUrl}
-                                                    alt={partner.name}
-                                                    className="h-32 md:h-40 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300"
-                                                />
-                                            </a>
-                                        ) : (
-                                            <img
-                                                src={partner.imageUrl}
-                                                alt={partner.name}
-                                                className="h-32 md:h-40 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300"
-                                            />
-                                        )}
-                                        <h3 className="text-lg font-semibold text-gray-800 mt-2">{partner.name}</h3>
-                                    </div>
-                                ))}
+                            /* Desktop Carousel */
+                            <div className="py-12">
+                                <ThreeDCarousel partners={partners} />
                             </div>
                         )}
                     </>

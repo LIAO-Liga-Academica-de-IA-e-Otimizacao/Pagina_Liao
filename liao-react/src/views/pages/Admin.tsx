@@ -599,6 +599,7 @@ const Admin: React.FC = () => {
                                         ) : '-'}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button onClick={() => { setEditingPartner(partner); setShowPartnerForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
                                         <button onClick={() => handleDeletePartner(partner.id)} className="text-red-600 hover:text-red-900">Excluir</button>
                                     </td>
                                 </tr>

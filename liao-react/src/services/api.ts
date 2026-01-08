@@ -100,6 +100,7 @@ export const apiService = {
     // Partners
     getPartners: () => api.get('/partners'),
     createPartner: (data: any) => api.post('/partners', data),
+    updatePartner: (id: number, data: any) => api.put(`/partners/${id}`, data),
     deletePartner: (id: number) => api.delete(`/partners/${id}`),
 };
 

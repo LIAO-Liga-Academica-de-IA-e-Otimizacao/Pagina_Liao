@@ -49,6 +49,38 @@ export const createPartner = async (req: Request, res: Response) => {
     }
 };
 
+// Update a partner
+export const updatePartner = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { name, imageUrl, websiteUrl } = req.body;
+
+        if (!name || !imageUrl) {
+            res.status(400).json({ error: 'Name and Image URL are required' });
+            return;
+        }
+
+        const partner = await prisma.partner.update({
+            where: {
+                id: parseInt(id),
+            },
+            data: {
+                name,
+                imageUrl,
+                websiteUrl,
+            },
+        });
+
+        res.json({
+            success: true,
+            data: partner,
+        });
+    } catch (error) {
+        console.error('Error updating partner:', error);
+        res.status(500).json({ error: 'Failed to update partner' });
+    }
+};
+
 // Delete a partner
 export const deletePartner = async (req: Request, res: Response) => {
     try {
