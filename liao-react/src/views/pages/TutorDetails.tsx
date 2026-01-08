@@ -73,9 +73,11 @@ const TutorDetails: React.FC = () => {
                                         className="relative w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-white shadow-2xl"
                                     />
                                 ) : (
-                                    <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-6xl font-bold border-4 border-white shadow-2xl">
-                                        {tutor.name.charAt(0)}
-                                    </div>
+                                    <img
+                                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name)}&background=random&size=256`}
+                                        alt={tutor.name}
+                                        className="relative w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-white shadow-2xl"
+                                    />
                                 )}
                             </div>
                         </div>
