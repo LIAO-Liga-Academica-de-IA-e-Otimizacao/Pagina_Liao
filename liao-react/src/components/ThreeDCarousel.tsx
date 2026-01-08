@@ -31,7 +31,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
         const absDist = Math.abs(dist);
 
         // Visual Parameters
-        const SPACING = 220; // Base spacing (card width + gap) ~ 190 + 30
+        // const SPACING = 220; // Base spacing (card width + gap) ~ 190 + 30
         const GAP = 55; // Requested fixed spacing (effective visual gap) -> tuned via translation
 
         // We generally want visible cards to be: 
