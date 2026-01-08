@@ -67,7 +67,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         console.error('Login error:', error);
         res.status(500).json({
             success: false,
-            error: 'Login failed',
+            error: `Login failed: ${(error as any).message}`,
         });
     }
 };
