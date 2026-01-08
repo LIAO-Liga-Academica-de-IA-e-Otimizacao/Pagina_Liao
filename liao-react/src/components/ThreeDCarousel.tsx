@@ -1,5 +1,5 @@
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
 
@@ -8,38 +8,34 @@ interface ThreeDCarouselProps {
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
-    // Ensure we have enough items to form a nice circle. 
-    // Minimum 8 items feels good for a "Ring".
-    const displayPartners = useMemo(() => {
-        if (!partners.length) return [];
-        let items = [...partners];
-        while (items.length < 8) {
-            items = [...items, ...partners];
-        }
-        return items;
-    }, [partners]);
+    const count = partners.length;
 
-    const count = displayPartners.length;
-    const cardWidth = 200; // Match CSS
-    const spacing = 40; // Spacing between cards
+    // Check if we have enough partners to render something meaningful (at least 1)
+    if (count === 0) return null;
 
-    // Exact radius formula for a regular polygon
-    const radius = Math.round((cardWidth + spacing) / (2 * Math.tan(Math.PI / count)));
+    // Dimensions (20% smaller than previous 200px)
+    const cardWidth = 160;
+    const spacing = 20; // Adjusted spacing
+
+    // Radius formula: r = w / (2 * tan(PI / N))
+    // Add safety for small counts
+    let radius = 0;
+    if (count > 1) {
+        radius = Math.round((cardWidth + spacing) / (2 * Math.tan(Math.PI / count)));
+    }
+    // If count is 1 or 2, we might want a minimum radius or specific handling so they don't overlap too weirdly
+    // For a ring of 1, radius essentially doesn't matter for distribution, but visualization needs distance.
+    if (radius < 150) radius = 150;
 
     return (
         <div className="carousel-view">
             <div className="carousel-container">
                 <div className="carousel-ring">
-                    {displayPartners.map((partner, index) => {
-                        // Distribute cards evenly around the Y axis
+                    {partners.map((partner, index) => {
                         const angle = (360 / count) * index;
-
-                        // Use a unique key that handles duplication
-                        const uniqueKey = `partner-${partner.id}-${index}`;
-
                         return (
                             <div
-                                key={uniqueKey}
+                                key={partner.id}
                                 className="carousel-card-wrapper"
                                 style={{
                                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`
@@ -65,7 +61,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                         <p className="partner-type">Parceiro LIAO</p>
                                     </div>
 
-                                    {/* Full Card Link overlay */}
+                                    {/* Link Overlay */}
                                     {partner.websiteUrl && (
                                         <a
                                             href={partner.websiteUrl}
