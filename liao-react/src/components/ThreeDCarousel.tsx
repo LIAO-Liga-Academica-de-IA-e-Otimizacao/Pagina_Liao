@@ -42,11 +42,6 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                 }}
                             >
                                 <div className="carousel-card">
-                                    {/* LIAO Logo Watermark (Background) */}
-                                    <div className="card-watermark">
-                                        <img src="/logo.png" alt="LIAO" />
-                                    </div>
-
                                     {/* Card Content (Foreground) */}
                                     <div className="card-content">
                                         <div className="logo-box">
