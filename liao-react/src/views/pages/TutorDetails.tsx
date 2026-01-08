@@ -71,6 +71,10 @@ const TutorDetails: React.FC = () => {
                                         src={tutor.photo.startsWith('http') ? tutor.photo : `/Liao_membros/${tutor.photo}`}
                                         alt={tutor.name}
                                         className="relative w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-white shadow-2xl"
+                                        onError={(e) => {
+                                            e.currentTarget.onerror = null;
+                                            e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name)}&background=random&size=256`;
+                                        }}
                                     />
                                 ) : (
                                     <img
@@ -173,12 +177,6 @@ const TutorDetails: React.FC = () => {
                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                         Voltar para a lista de Tutores
                     </Link>
-                </div>
-
-                {/* DEBUG SECTION - TO BE REMOVED */}
-                <div className="mt-12 p-4 bg-gray-100 rounded text-xs overflow-auto opacity-50 hover:opacity-100 transition-opacity">
-                    <p className="font-bold">DEBUG INFO (Role para ver dados brutos):</p>
-                    <pre>{JSON.stringify(tutor, null, 2)}</pre>
                 </div>
             </div>
         </div>
