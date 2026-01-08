@@ -22,7 +22,11 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
                         <div className="absolute inset-0 bg-gradient-to-br from-red-500 to-green-500 rounded-full blur-sm opacity-50 group-hover:opacity-100 transition-opacity"></div>
                         <div className="relative w-24 h-24 p-1 bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 rounded-full">
                             <img
-                                src={tutor.photo ? `/Liao_membros/${tutor.photo}` : `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name)}&background=random`}
+                                src={
+                                    tutor.photo
+                                        ? (tutor.photo.startsWith('http') ? tutor.photo : `/Liao_membros/${tutor.photo}`)
+                                        : `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name)}&background=random`
+                                }
                                 alt={tutor.name}
                                 className="w-full h-full object-cover rounded-full border-2 border-white"
                             />

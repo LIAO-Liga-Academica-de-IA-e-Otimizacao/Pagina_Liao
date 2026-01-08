@@ -68,7 +68,7 @@ const TutorDetails: React.FC = () => {
                                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
                                 {tutor.photo ? (
                                     <img
-                                        src={`/Liao_membros/${tutor.photo}`}
+                                        src={tutor.photo.startsWith('http') ? tutor.photo : `/Liao_membros/${tutor.photo}`}
                                         alt={tutor.name}
                                         className="relative w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-white shadow-2xl"
                                     />
