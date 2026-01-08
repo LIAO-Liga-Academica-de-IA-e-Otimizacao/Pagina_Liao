@@ -56,8 +56,8 @@
     height: 240px;
     /* New Height */
     transform-style: preserve-3d;
-    /* Reflection effect - Reduced intensity */
-    -webkit-box-reflect: below 10px linear-gradient(transparent 85%, rgba(255, 255, 255, 0.1));
+    transform-style: preserve-3d;
+    /* Reflection removed as requested */
 }
 
 /* The Visible Card */
@@ -79,7 +79,7 @@
     transition: transform 0.3s ease, border-color 0.3s ease;
 
     /* Ensure proper internal stacking context */
-    isolation: isolate;
+    transform-style: preserve-3d;
 }
 
 .carousel-card:hover {
@@ -87,12 +87,16 @@
     transform: translateY(-5px);
 }
 
-/* Content Layer */
+/* Content Layer (Front Face) */
 .card-content {
-    position: relative;
-    z-index: 10;
-    /* Strictly above watermark */
-    flex: 1;
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    /* Hide when turned */
+    z-index: 2;
+    background: linear-gradient(145deg, #1e1e1e, #141414);
+    /* Background moves here */
+    border-radius: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -153,4 +157,20 @@
     inset: 0;
     z-index: 10;
     cursor: pointer;
+    transform: translateZ(1px);
+    /* Ensure it's above background */
+}
+
+/* Back Face */
+.carousel-card-back {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    transform: rotateY(180deg);
+    /* Face backwards */
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }

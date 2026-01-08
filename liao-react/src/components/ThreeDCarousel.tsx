@@ -66,6 +66,8 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                             title={`Visitar ${partner.name}`}
                                         />
                                     )}
+                                    {/* Back Face (Solid) */}
+                                    <div className="carousel-card-back"></div>
                                 </div>
                             </div>
                         );
