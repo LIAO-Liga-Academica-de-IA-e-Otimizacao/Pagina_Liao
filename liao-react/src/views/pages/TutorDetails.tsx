@@ -174,6 +174,12 @@ const TutorDetails: React.FC = () => {
                         Voltar para a lista de Tutores
                     </Link>
                 </div>
+
+                {/* DEBUG SECTION - TO BE REMOVED */}
+                <div className="mt-12 p-4 bg-gray-100 rounded text-xs overflow-auto opacity-50 hover:opacity-100 transition-opacity">
+                    <p className="font-bold">DEBUG INFO (Role para ver dados brutos):</p>
+                    <pre>{JSON.stringify(tutor, null, 2)}</pre>
+                </div>
             </div>
         </div>
     );
