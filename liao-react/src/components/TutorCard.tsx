@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Card from '../views/components/Card';
+
 import type { Tutor } from '../models/Tutor';
 
 interface TutorCardProps {
