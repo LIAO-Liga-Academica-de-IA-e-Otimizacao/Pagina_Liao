@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
 
@@ -8,55 +8,32 @@ interface ThreeDCarouselProps {
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
-    const [currAngle, setCurrAngle] = useState(0);
-    const [activeIndex, setActiveIndex] = useState(0);
+    // Duplicate partners if few to ensure a full ring look
+    const displayPartners = useMemo(() => {
+        if (partners.length === 0) return [];
+        if (partners.length < 6) return [...partners, ...partners, ...partners]; // Triple to fill ring
+        return partners;
+    }, [partners]);
 
-    const partnerCount = partners.length;
-    const theta = 360 / partnerCount;
-
-    const radius = useMemo(() => {
-        // Calculate radius to fit width ~190-250px cards
-        // r = w / (2 * tan(PI/n))
-        // Using a fixed width base of 250px for calculation + spacing
-        if (partnerCount < 3) return 300; // Min radius
-        return Math.round((280) / (2 * Math.tan(Math.PI / partnerCount))) + 50;
-    }, [partnerCount]);
-
-    // Auto-rotation
-    useEffect(() => {
-        if (partnerCount <= 1) return;
-        const interval = setInterval(() => {
-            setActiveIndex((prev) => (prev + 1) % partnerCount);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, [partnerCount]);
-
-    // Sync angle with active index
-    useEffect(() => {
-        setCurrAngle(activeIndex * -theta);
-    }, [activeIndex, theta]);
+    const count = displayPartners.length;
+    const cardWidth = 200; // fixed card width
+    const radius = Math.round((cardWidth + 20) / (2 * Math.tan(Math.PI / count)));
 
     return (
         <div className="carousel-container">
-            <div
-                className="carousel-track"
-                style={{
-                    transform: `translateZ(${-radius}px) rotateY(${currAngle}deg)`
-                }}
-            >
-                {partners.map((partner, index) => {
-                    const angle = theta * index;
+            <div className="carousel-ring">
+                {displayPartners.map((partner, index) => {
+                    const angle = (360 / count) * index;
                     return (
                         <div
-                            key={partner.id}
-                            className={`carousel-card-container ${index === activeIndex ? 'active' : ''}`}
+                            key={`${partner.id}-${index}`}
+                            className="carousel-card-container"
                             style={{
                                 transform: `rotateY(${angle}deg) translateZ(${radius}px)`
                             }}
-                            onClick={() => setActiveIndex(index)}
                         >
                             <div className="carousel-card">
-                                {/* Watermark - Centered Background */}
+                                {/* Watermark */}
                                 <div className="card-watermark">
                                     <img src="/logo.png" alt="LIAO Watermark" />
                                 </div>
@@ -71,6 +48,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                         />
                                     </div>
                                     <h3 className="partner-name">{partner.name}</h3>
+                                    <div className="partner-line"></div>
                                     <p className="partner-subtext">Parceiro LIAO</p>
 
                                     {partner.websiteUrl && (
@@ -87,18 +65,6 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                         </div>
                     );
                 })}
-            </div>
-
-            {/* Indicators */}
-            <div className="carousel-indicators">
-                {partners.map((_, idx) => (
-                    <button
-                        key={idx}
-                        className={`indicator-dot ${idx === activeIndex ? 'active' : ''}`}
-                        onClick={() => setActiveIndex(idx)}
-                        aria-label={`Go to slide ${idx + 1}`}
-                    />
-                ))}
             </div>
         </div>
     );

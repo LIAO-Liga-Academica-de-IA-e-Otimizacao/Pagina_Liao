@@ -3,26 +3,40 @@
 .carousel-container {
     position: relative;
     width: 100%;
-    height: 500px;
+    height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Adjust if needed */
     overflow: hidden;
     perspective: 1200px;
-    /* Strong perspective */
     background: transparent;
+    /* No central shadow as requested */
 }
 
-.carousel-track {
+/* The spinning ring */
+.carousel-ring {
     position: relative;
-    width: 240px;
-    /* Same as card width */
-    height: 330px;
-    /* Same as card height */
+    width: 200px;
+    height: 300px;
     transform-style: preserve-3d;
-    transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
-    /* Smooth rotation */
+    animation: spin 30s linear infinite;
+    /* Optional: Slight tilt for 3D effect */
+    transform: rotateX(-5deg);
+}
+
+/* Pause on hover for readability */
+.carousel-container:hover .carousel-ring {
+    animation-play-state: paused;
+}
+
+@keyframes spin {
+    from {
+        transform: rotateX(-5deg) rotateY(0deg);
+    }
+
+    to {
+        transform: rotateX(-5deg) rotateY(360deg);
+    }
 }
 
 .carousel-card-container {
@@ -31,52 +45,44 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Position is handled inline via rotateY + translateZ */
-    /* Backface visibility ensures we see cards as they spin, but maybe hide the back? */
     backface-visibility: hidden;
-    cursor: pointer;
-    transition: opacity 0.5s;
+    /* Or visible if we want to see backs */
+    /* Transform is set inline */
 }
-
-/* Optional: Fade distant cards if needed */
-/* .carousel-card-container:not(.active) { opacity: 0.8; } */
-
 
 .carousel-card {
     width: 100%;
     height: 100%;
     background: #1a1a1a;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: hidden;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Watermark - Large and Centered */
+/* Watermark */
 .card-watermark {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    /* Large relative to card */
-    opacity: 0.08;
-    /* Subtle but visible */
-    pointer-events: none;
-    z-index: 0;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.1;
+    /* Subtle */
+    pointer-events: none;
+    z-index: 0;
 }
 
 .card-watermark img {
-    width: 100%;
+    width: 80%;
+    /* Large logo coverage */
     height: auto;
-    object-fit: contain;
     filter: grayscale(100%);
+    transform: rotate(-15deg);
+    /* Dynamic angle */
 }
 
 .card-content {
@@ -91,16 +97,16 @@
 }
 
 .logo-container {
-    width: 110px;
-    height: 110px;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 12px;
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20px;
-    padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .partner-logo {
@@ -112,49 +118,30 @@
 .partner-name {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 1.2rem;
-    color: #ffffff;
-    margin: 0 0 6px 0;
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 10px 0 5px;
     text-align: center;
+}
+
+.partner-line {
+    width: 40px;
+    height: 2px;
+    background: #4f46e5;
+    margin: 5px 0 10px;
 }
 
 .partner-subtext {
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
     font-size: 0.75rem;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin: 0;
 }
 
 .card-link-overlay {
     position: absolute;
     inset: 0;
     z-index: 20;
-}
-
-.carousel-indicators {
-    position: absolute;
-    bottom: 20px;
-    display: flex;
-    gap: 8px;
-    z-index: 50;
-    width: 100%;
-    justify-content: center;
-}
-
-.indicator-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
-    border: none;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.indicator-dot.active {
-    background: #4f46e5;
-    transform: scale(1.2);
 }
