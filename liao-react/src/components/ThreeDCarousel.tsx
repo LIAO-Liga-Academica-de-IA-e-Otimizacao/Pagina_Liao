@@ -49,11 +49,6 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                 }}
                             >
                                 <div className="carousel-card">
-                                    {/* Institutional Logo Watermark (Background) - Re-added as requested */}
-                                    <div className="card-watermark">
-                                        <img src="/logo.png" alt="LIAO" />
-                                    </div>
-
                                     {/* Card Content (Foreground) */}
                                     <div className="card-content">
                                         <div className="logo-box">
@@ -79,8 +74,10 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                         />
                                     )}
 
-                                    {/* Back Face (Solid for realistic 3D) */}
-                                    <div className="carousel-card-back"></div>
+                                    {/* Back Face (LIAO Logo) */}
+                                    <div className="carousel-card-back">
+                                        <img src="/logo.png" alt="LIAO" className="back-logo" />
+                                    </div>
                                 </div>
                             </div>
                         );
