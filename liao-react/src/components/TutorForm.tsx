@@ -82,7 +82,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Disciplinas (separadas por vírgula)</label>
+                    <label className="block text-sm font-medium text-gray-700">Áreas de Atuação (separadas por vírgula)</label>
                     <input
                         type="text"
                         value={subjects}
@@ -104,7 +104,8 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                     />
                 </div>
 
-                <div>
+                {/* Availability field hidden as per request */}
+                {/* <div>
                     <label className="block text-sm font-medium text-gray-700">Disponibilidade</label>
                     <input
                         type="text"
@@ -113,10 +114,10 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                         placeholder="Ex: Segundas e Quartas, 14h-16h"
                         className="input-field mt-1"
                     />
-                </div>
+                </div> */}
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Bio</label>
+                    <label className="block text-sm font-medium text-gray-700">Informações sobre o tutor</label>
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
