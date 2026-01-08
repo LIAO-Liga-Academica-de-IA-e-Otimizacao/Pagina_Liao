@@ -47,7 +47,7 @@ export const requireAdmin = (
 ): void => {
     const authReq = req as AuthRequest;
 
-    if (!authReq.user || authReq.user.role !== 'admin') {
+    if (!authReq.user || !['admin', 'master'].includes(authReq.user.role)) {
         res.status(403).json({
             success: false,
             error: 'Admin access required.',
