@@ -1,6 +1,6 @@
 import React from 'react';
 import Card from './Card';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import type { Tutor } from '../../models/Tutor';
 
 interface TutorCardProps {
@@ -8,8 +8,14 @@ interface TutorCardProps {
 }
 
 const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
+    const navigate = useNavigate();
+
+    const handleCardClick = () => {
+        navigate(`/tutors/${tutor.id}`);
+    };
+
     return (
-        <Card>
+        <Card onClick={handleCardClick} className="transition-all duration-300 hover:shadow-lg">
             <div className="p-6">
                 <div className="flex items-start gap-4">
                     {/* Photo */}
@@ -45,7 +51,7 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
 
                         {/* Bio */}
                         {tutor.bio && (
-                            <p className="text-sm text-gray-600 mb-2">{tutor.bio}</p>
+                            <p className="text-sm text-gray-600 mb-2 line-clamp-3">{tutor.bio}</p>
                         )}
 
                         {/* Availability */}
@@ -57,13 +63,12 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
 
                         {/* Actions */}
                         <div className="mt-4 pt-4 border-t border-gray-100">
-                            <Link
-                                to={`/tutors/${tutor.id}`}
+                            <button
                                 className="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
                             >
                                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                                 Sobre
-                            </Link>
+                            </button>
                         </div>
                     </div>
                 </div>
