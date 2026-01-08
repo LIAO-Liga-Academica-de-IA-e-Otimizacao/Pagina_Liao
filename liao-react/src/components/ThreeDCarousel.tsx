@@ -22,7 +22,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
         if (count === 0) return 0;
         if (count < 3) return 200; // Minimum visual radius for 1-2 items
         const width = 160;
-        const gap = 20;
+        const gap = 140; // Increased gap drastically as requested
         return Math.round((width + gap) / (2 * Math.tan(Math.PI / count)));
     }, [count]);
 
