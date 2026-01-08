@@ -7,71 +7,74 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    /* Adjust if needed */
     overflow: hidden;
     perspective: 1200px;
+    /* Strong perspective */
     background: transparent;
-    /* Neutral background as requested */
 }
 
 .carousel-track {
     position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 240px;
+    /* Same as card width */
+    height: 330px;
+    /* Same as card height */
     transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+    /* Smooth rotation */
 }
 
-.carousel-card-wrapper {
+.carousel-card-container {
     position: absolute;
-    left: 50%;
-    /* Center origin */
-    top: 50%;
-    margin-top: -165px;
-    /* Half of height roughly */
-    width: 240px;
-    /* Base width */
-    height: 330px;
-    /* ~3:4 Aspect Ratio */
-    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-    /* Smooth fluid movement */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Position is handled inline via rotateY + translateZ */
+    /* Backface visibility ensures we see cards as they spin, but maybe hide the back? */
+    backface-visibility: hidden;
     cursor: pointer;
-    transform-origin: center center;
+    transition: opacity 0.5s;
 }
+
+/* Optional: Fade distant cards if needed */
+/* .carousel-card-container:not(.active) { opacity: 0.8; } */
+
 
 .carousel-card {
     width: 100%;
     height: 100%;
     background: #1a1a1a;
-    /* Dark background */
     border-radius: 16px;
-    /* Rounded borders */
-    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
-    /* Smooth shadow */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     overflow: hidden;
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Watermark */
+/* Watermark - Large and Centered */
 .card-watermark {
     position: absolute;
-    bottom: -20px;
-    right: -20px;
-    width: 150px;
-    height: 150px;
-    opacity: 0.05;
-    /* Low opacity */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    /* Large relative to card */
+    opacity: 0.08;
+    /* Subtle but visible */
     pointer-events: none;
     z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-watermark img {
     width: 100%;
-    height: 100%;
+    height: auto;
     object-fit: contain;
     filter: grayscale(100%);
 }
@@ -84,12 +87,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 20px;
 }
 
 .logo-container {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     background: rgba(255, 255, 255, 0.95);
     border-radius: 12px;
     display: flex;
@@ -97,7 +100,7 @@
     justify-content: center;
     margin-bottom: 20px;
     padding: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .partner-logo {
@@ -109,44 +112,43 @@
 .partner-name {
     font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: #ffffff;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
     text-align: center;
-    letter-spacing: 0.5px;
 }
 
 .partner-subtext {
     font-family: 'Montserrat', sans-serif;
     font-weight: 500;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
 }
 
-/* Link overlay */
 .card-link-overlay {
     position: absolute;
     inset: 0;
     z-index: 20;
 }
 
-/* Indicators */
 .carousel-indicators {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     display: flex;
     gap: 8px;
     z-index: 50;
+    width: 100%;
+    justify-content: center;
 }
 
 .indicator-dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -154,7 +156,5 @@
 
 .indicator-dot.active {
     background: #4f46e5;
-    /* Indigo */
-    width: 24px;
-    border-radius: 4px;
+    transform: scale(1.2);
 }

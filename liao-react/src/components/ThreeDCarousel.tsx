@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
 
@@ -8,78 +8,55 @@ interface ThreeDCarouselProps {
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
+    const [currAngle, setCurrAngle] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
-    const containerRef = useRef<HTMLDivElement>(null);
+
+    const partnerCount = partners.length;
+    const theta = 360 / partnerCount;
+
+    const radius = useMemo(() => {
+        // Calculate radius to fit width ~190-250px cards
+        // r = w / (2 * tan(PI/n))
+        // Using a fixed width base of 250px for calculation + spacing
+        if (partnerCount < 3) return 300; // Min radius
+        return Math.round((280) / (2 * Math.tan(Math.PI / partnerCount))) + 50;
+    }, [partnerCount]);
 
     // Auto-rotation
     useEffect(() => {
-        if (partners.length <= 1) return;
+        if (partnerCount <= 1) return;
         const interval = setInterval(() => {
-            setActiveIndex((current) => (current + 1) % partners.length);
+            setActiveIndex((prev) => (prev + 1) % partnerCount);
         }, 3000);
         return () => clearInterval(interval);
-    }, [partners.length]);
+    }, [partnerCount]);
 
-    const getCardStyle = (index: number) => {
-        const total = partners.length;
-        // Calculate distance from active index, handling wrap-around
-        let dist = (index - activeIndex) % total;
-        if (dist > total / 2) dist -= total;
-        if (dist < -total / 2) dist += total;
-
-        const isActive = dist === 0;
-        const absDist = Math.abs(dist);
-
-        // Visual Parameters
-        // const SPACING = 220; // Base spacing (card width + gap) ~ 190 + 30
-        const GAP = 55; // Requested fixed spacing (effective visual gap) -> tuned via translation
-
-        // We generally want visible cards to be: 
-        // 0 (Center), +/- 1 (Left/Right), +/- 2 (Far Left/Right)
-
-        let translateX = dist * (190 + GAP); // Simple linear spacing
-        let scale = isActive ? 1.15 : 0.9; // Center highlighted (larger)
-        let rotateY = 0;
-        let zIndex = 100 - absDist;
-        let opacity = 1;
-
-        if (dist !== 0) {
-            // Side cards: Smaller, rotated Y
-            scale = 0.85;
-            rotateY = dist > 0 ? -15 : 15; // Point inward
-            // Reduce opacity for distant cards
-            opacity = Math.max(0, 1 - absDist * 0.3);
-        }
-
-        // Limit visibility to avoid clutter
-        if (absDist > 2) opacity = 0;
-
-        return {
-            transform: `translateX(calc(-50% + ${translateX}px)) scale(${scale}) perspective(1000px) rotateY(${rotateY}deg)`,
-            zIndex: zIndex,
-            opacity: opacity,
-        };
-    };
-
-    if (!partners.length) return null;
+    // Sync angle with active index
+    useEffect(() => {
+        setCurrAngle(activeIndex * -theta);
+    }, [activeIndex, theta]);
 
     return (
-        <div className="carousel-container" ref={containerRef}>
-            <div className="carousel-track">
+        <div className="carousel-container">
+            <div
+                className="carousel-track"
+                style={{
+                    transform: `translateZ(${-radius}px) rotateY(${currAngle}deg)`
+                }}
+            >
                 {partners.map((partner, index) => {
-                    const style = getCardStyle(index);
-                    // Hide completely if opacity is 0 to remove interactions
-                    if (style.opacity === 0) return null;
-
+                    const angle = theta * index;
                     return (
                         <div
                             key={partner.id}
-                            className={`carousel-card-wrapper ${index === activeIndex ? 'active' : ''}`}
-                            style={style}
+                            className={`carousel-card-container ${index === activeIndex ? 'active' : ''}`}
+                            style={{
+                                transform: `rotateY(${angle}deg) translateZ(${radius}px)`
+                            }}
                             onClick={() => setActiveIndex(index)}
                         >
                             <div className="carousel-card">
-                                {/* Watermark */}
+                                {/* Watermark - Centered Background */}
                                 <div className="card-watermark">
                                     <img src="/logo.png" alt="LIAO Watermark" />
                                 </div>
