@@ -1,42 +1,44 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
-/* View Container - Centers everything */
+/* Viewport - The Stage */
 .carousel-view {
     width: 100%;
     height: 500px;
-    /* Reduced height slightly due to smaller cards */
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    position: relative;
+    perspective: 1500px;
+    /* Deep perspective for realistic 3D */
     background: transparent;
 }
 
-/* 3D Scene Container */
+/* 3D Container - Holds the Ring */
 .carousel-container {
-    perspective: 1200px;
     position: relative;
     width: 160px;
-    /* New Width */
+    /* Matches Card Width */
     height: 240px;
-    /* New Height (previously 300) */
+    /* Matches Card Height */
+    transform-style: preserve-3d;
 }
 
-/* The Rotating Ring */
+/* The Ring - Rotates globally */
 .carousel-ring {
     position: absolute;
     width: 100%;
     height: 100%;
     transform-style: preserve-3d;
-    animation: simple-spin 30s linear infinite;
+    /* Continuous 360 rotation around Y axis */
+    animation: auto-spin 40s linear infinite;
 }
 
+/* Stop rotation on hover for interaction */
 .carousel-view:hover .carousel-ring {
     animation-play-state: paused;
 }
 
-@keyframes simple-spin {
+@keyframes auto-spin {
     from {
         transform: rotateY(0deg);
     }
@@ -46,78 +48,98 @@
     }
 }
 
-/* Wrapper positions the card in 3D space */
+/* Card Wrapper - Determines position in the ring */
 .carousel-card-wrapper {
     position: absolute;
     top: 0;
     left: 0;
     width: 160px;
-    /* New Width */
     height: 240px;
-    /* New Height */
     transform-style: preserve-3d;
-    transform-style: preserve-3d;
-    /* Reflection removed as requested */
+    /* No reflection as requested previously */
 }
 
-/* The Visible Card */
+/* The Visual Card */
 .carousel-card {
     width: 100%;
     height: 100%;
-    background: linear-gradient(145deg, #1e1e1e, #141414);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    backface-visibility: hidden;
-
-    font-family: 'Montserrat', sans-serif;
-    color: #fff;
-    transition: transform 0.3s ease, border-color 0.3s ease;
-
-    /* Ensure proper internal stacking context */
     transform-style: preserve-3d;
+    border-radius: 12px;
+    transition: transform 0.3s ease;
 }
 
 .carousel-card:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-5px);
+    transform: translateY(-10px) scale(1.05);
+    /* Pop effect */
 }
 
-/* Content Layer (Front Face) */
+/* Watermark - Institutional Logo Background */
+.card-watermark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.08;
+    /* Low opacity */
+    pointer-events: none;
+    z-index: 1;
+    /* Behind content, appearing on card face */
+    transform: translateZ(2px);
+    /* Slightly above base */
+}
+
+.card-watermark img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(1.2);
+}
+
+/* Front Face Content */
 .card-content {
     position: absolute;
     inset: 0;
-    backface-visibility: hidden;
-    /* Hide when turned */
-    z-index: 2;
-    background: linear-gradient(145deg, #1e1e1e, #141414);
-    /* Background moves here */
+    background: linear-gradient(145deg, #222, #111);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
+    backface-visibility: hidden;
+    /* Hide when facing away (shows back face instead) */
+    z-index: 5;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    padding: 16px;
-    /* Reduced padding */
-    text-align: center;
+    align-items: center;
+    padding: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
+/* Back Face Content (Solid) */
+.carousel-card-back {
+    position: absolute;
+    inset: 0;
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transform: rotateY(180deg);
+    /* Faces opposite direction */
+    backface-visibility: hidden;
+    z-index: 4;
+}
+
+/* Content Elements */
 .logo-box {
-    width: 80px;
-    /* Reduced from 100 */
-    height: 80px;
+    width: 70px;
+    height: 70px;
     background: #fff;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 12px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .partner-logo {
@@ -127,50 +149,35 @@
 }
 
 .partner-name {
-    font-size: 0.9rem;
-    /* Reduced font size */
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
-    margin: 0;
-    letter-spacing: 0.5px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 0.9rem;
+    color: #fff;
+    margin: 5px 0;
+    text-align: center;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .separator {
-    width: 32px;
+    width: 25px;
     height: 3px;
-    background-color: #4f46e5;
-    margin: 10px 0;
-    border-radius: 2px;
+    background: #4f46e5;
+    margin: 8px 0;
+    border-radius: 20px;
 }
 
 .partner-type {
-    font-size: 0.65rem;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.6rem;
     color: #888;
-    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
-/* Full Click Overlay */
 .card-link {
     position: absolute;
     inset: 0;
     z-index: 10;
     cursor: pointer;
-    transform: translateZ(1px);
-    /* Ensure it's above background */
-}
-
-/* Back Face */
-.carousel-card-back {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: #1a1a1a;
-    border-radius: 12px;
-    backface-visibility: hidden;
-    transform: rotateY(180deg);
-    /* Face backwards */
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    transform: translateZ(10px);
 }

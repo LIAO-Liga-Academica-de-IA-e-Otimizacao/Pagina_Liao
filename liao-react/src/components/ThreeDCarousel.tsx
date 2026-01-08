@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
 
@@ -8,40 +8,52 @@ interface ThreeDCarouselProps {
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
+    // Determine the number of cards
     const count = partners.length;
 
-    // Check if we have enough partners to render something meaningful (at least 1)
-    if (count === 0) return null;
+    // Radius calculation
+    // We want a closed ring. 
+    // Card Width = 160px (from CSS)
+    // Gap = 20px (Tighter, as requested)
+    // Formula: r = (w + gap) / (2 * tan(PI / N))
 
-    // Dimensions (20% smaller than previous 200px)
-    const cardWidth = 160;
-    const spacing = 60; // Increased spacing as requested
+    // Safety check for low count to prevent huge radius or overlap
+    const radius = useMemo(() => {
+        if (count === 0) return 0;
+        if (count < 3) return 200; // Minimum visual radius for 1-2 items
+        const width = 160;
+        const gap = 20;
+        return Math.round((width + gap) / (2 * Math.tan(Math.PI / count)));
+    }, [count]);
 
-    // Radius formula: r = w / (2 * tan(PI / N))
-    // Add safety for small counts
-    let radius = 0;
-    if (count > 1) {
-        radius = Math.round((cardWidth + spacing) / (2 * Math.tan(Math.PI / count)));
-    }
-    // If count is 1 or 2, we might want a minimum radius or specific handling so they don't overlap too weirdly
-    // For a ring of 1, radius essentially doesn't matter for distribution, but visualization needs distance.
-    if (radius < 150) radius = 150;
+    if (!count) return null;
 
     return (
         <div className="carousel-view">
             <div className="carousel-container">
+                {/* The Ring rotates, carrying all cards with it */}
                 <div className="carousel-ring">
                     {partners.map((partner, index) => {
+                        // Distribute cards equally in 360 degrees
                         const angle = (360 / count) * index;
+
                         return (
                             <div
                                 key={partner.id}
                                 className="carousel-card-wrapper"
                                 style={{
+                                    // PRECISE POSITIONING:
+                                    // Rotate to angle, then push out by radius.
+                                    // This locks the card to its slot in the "Ring".
                                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`
                                 }}
                             >
                                 <div className="carousel-card">
+                                    {/* Institutional Logo Watermark (Background) - Re-added as requested */}
+                                    <div className="card-watermark">
+                                        <img src="/logo.png" alt="LIAO" />
+                                    </div>
+
                                     {/* Card Content (Foreground) */}
                                     <div className="card-content">
                                         <div className="logo-box">
@@ -66,7 +78,8 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                             title={`Visitar ${partner.name}`}
                                         />
                                     )}
-                                    {/* Back Face (Solid) */}
+
+                                    {/* Back Face (Solid for realistic 3D) */}
                                     <div className="carousel-card-back"></div>
                                 </div>
                             </div>
