@@ -74,28 +74,6 @@
     /* Pop effect */
 }
 
-/* Watermark - Institutional Logo Background */
-.card-watermark {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.08;
-    /* Low opacity */
-    pointer-events: none;
-    z-index: 1;
-    /* Behind content, appearing on card face */
-    transform: translateZ(2px);
-    /* Slightly above base */
-}
-
-.card-watermark img {
-    width: 80%;
-    height: 80%;
-    object-fit: contain;
-    filter: grayscale(100%) brightness(1.2);
-}
 
 /* Front Face Content */
 .card-content {
@@ -126,6 +104,20 @@
     /* Faces opposite direction */
     backface-visibility: hidden;
     z-index: 4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
+}
+
+.back-logo {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    filter: grayscale(100%);
+    opacity: 0.3;
+    /* Subtle branding */
 }
 
 /* Content Elements */
