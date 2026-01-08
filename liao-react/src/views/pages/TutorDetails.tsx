@@ -66,7 +66,7 @@ const TutorDetails: React.FC = () => {
                         <div className="flex-shrink-0 group">
                             <div className="relative">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-                                {tutor.photo ? (
+                                {tutor.photo && tutor.photo.trim() ? (
                                     <img
                                         src={tutor.photo.startsWith('http') ? tutor.photo : `/Liao_membros/${tutor.photo}`}
                                         alt={tutor.name}

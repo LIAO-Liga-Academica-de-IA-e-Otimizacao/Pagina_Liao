@@ -120,7 +120,7 @@ export const apiService = {
 
     // Tutors
     getTutors: () => getCached('/tutors'),
-    getTutorById: (id: number) => getCached(`/tutors/${id}`),
+    getTutorById: (id: number) => api.get(`/tutors/${id}`),
     createTutor: (data: any) => {
         reqCache.clear('/tutors');
         return api.post('/tutors', data);

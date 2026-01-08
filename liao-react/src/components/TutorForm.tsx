@@ -23,12 +23,12 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
         setError('');
 
         const data = {
-            name,
-            email,
+            name: name.trim(),
+            email: email.trim(),
             subjects: subjects.split(',').map((s: string) => s.trim()).filter((s: string) => s),
-            bio,
-            photo,
-            availability,
+            bio: bio.trim(),
+            photo: photo.trim(),
+            availability: availability.trim(),
         };
 
         try {
