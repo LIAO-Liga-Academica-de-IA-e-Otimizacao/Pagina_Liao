@@ -34,7 +34,8 @@
 }
 
 /* Stop rotation on hover for interaction */
-.carousel-view:hover .carousel-ring {
+/* Stop rotation ONLY when hovering a specific card */
+.carousel-view:has(.carousel-card:hover) .carousel-ring {
     animation-play-state: paused;
 }
 
