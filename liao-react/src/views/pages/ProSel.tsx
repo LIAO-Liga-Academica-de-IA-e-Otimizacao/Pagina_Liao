@@ -100,7 +100,7 @@ const ProSel: React.FC = () => {
                         </p>
                         <Link to="/" className="btn-primary inline-flex items-center">
                             Voltar para o início
-                        </a>
+                        </Link>
                     </div>
                 ) : (
                     <div className="card p-8">
