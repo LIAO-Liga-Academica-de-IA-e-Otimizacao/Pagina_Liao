@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+.carousel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 600px;
+    /* Adjust as needed */
+    overflow: hidden;
+    perspective: 1000px;
+    background-image: radial-gradient(circle at 50% 50%, #222 30%, transparent 40%);
+    width: 100%;
+}
+
+.carousel-3d {
+    position: relative;
+    width: 190px;
+    height: 225px;
+    transform-style: preserve-3d;
+    animation: rotate 20s linear infinite;
+    transform: rotateX(-10deg);
+    /* Slightly reduced tilt for better visibility */
+}
+
+.carousel-3d:hover {
+    animation-play-state: paused;
+}
+
+.carousel-card-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    /* Transform origin is handled in JS or logic usually, but here consistent with center */
+    transform-origin: center center;
+}
+
+.carousel-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 190px;
+    height: 225px;
+    background-color: #333;
+    /* Dark card background */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    -webkit-box-reflect: below 10px linear-gradient(transparent 75%, rgba(255, 255, 255, 0.1));
+    overflow: hidden;
+    transition: transform 0.3s;
+    backface-visibility: hidden;
+    /* Hide back if we are using single sided */
+}
+
+.carousel-card img {
+    width: 90%;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    filter: brightness(0.9);
+    transition: filter 0.3s;
+    background: white;
+    /* Ensure transparency looks good */
+    padding: 5px;
+}
+
+.carousel-card:hover img {
+    filter: brightness(1);
+}
+
+.carousel-card h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    margin: 5px 0 0;
+    text-align: center;
+}
+
+.carousel-card p {
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+    padding: 0 10px;
+}
+
+/* Back 'cardb' equivalent if we want a backplate or just styling context */
+@keyframes rotate {
+    from {
+        transform: perspective(1000px) rotateX(-10deg) rotateY(0deg);
+    }
+
+    to {
+        transform: perspective(1000px) rotateX(-10deg) rotateY(360deg);
+    }
+}
