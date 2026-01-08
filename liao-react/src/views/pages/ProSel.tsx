@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
+import { Link } from 'react-router-dom';
 
 const ProSel: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -97,7 +98,7 @@ const ProSel: React.FC = () => {
                             Fique atento às nossas redes sociais para saber quando abriremos novas vagas.
                             Enquanto isso, você pode conferir nossos conteúdos e projetos.
                         </p>
-                        <a href="/" className="btn-primary inline-flex items-center">
+                        <Link to="/" className="btn-primary inline-flex items-center">
                             Voltar para o início
                         </a>
                     </div>
