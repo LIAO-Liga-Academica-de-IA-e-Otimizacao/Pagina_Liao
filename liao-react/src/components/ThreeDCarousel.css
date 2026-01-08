@@ -1,112 +1,146 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
-.carousel-container {
-    position: relative;
+/* View Container - Centers everything */
+.carousel-view {
     width: 100%;
     height: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    perspective: 1200px;
+    position: relative;
+    /* Neutral/Transparent background as requested */
     background: transparent;
-    /* No central shadow as requested */
 }
 
-/* The spinning ring */
-.carousel-ring {
+/* 3D Scene Container */
+.carousel-container {
+    perspective: 1500px;
+    /* Deep perspective */
     position: relative;
     width: 200px;
     height: 300px;
-    transform-style: preserve-3d;
-    animation: spin 30s linear infinite;
-    /* Optional: Slight tilt for 3D effect */
-    transform: rotateX(-5deg);
 }
 
-/* Pause on hover for readability */
-.carousel-container:hover .carousel-ring {
+/* The Rotating Ring */
+.carousel-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    animation: simple-spin 40s linear infinite;
+    /* Slow, elegant spin */
+}
+
+.carousel-view:hover .carousel-ring {
     animation-play-state: paused;
 }
 
-@keyframes spin {
+@keyframes simple-spin {
     from {
-        transform: rotateX(-5deg) rotateY(0deg);
+        transform: rotateY(0deg);
     }
 
     to {
-        transform: rotateX(-5deg) rotateY(360deg);
+        transform: rotateY(360deg);
     }
 }
 
-.carousel-card-container {
+/* Wrapper positions the card in 3D space */
+.carousel-card-wrapper {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    /* Or visible if we want to see backs */
-    /* Transform is set inline */
+    width: 200px;
+    height: 300px;
+    /* Transformation is applied inline (rotateY + translateZ) */
+    transform-style: preserve-3d;
+    /* -webkit-box-reflect creates the "floor reflection" */
+    -webkit-box-reflect: below 15px linear-gradient(transparent 70%, rgba(255, 255, 255, 0.15));
 }
 
+/* The Visible Card */
 .carousel-card {
     width: 100%;
     height: 100%;
-    background: #1a1a1a;
+    background: linear-gradient(145deg, #1e1e1e, #141414);
+    /* Subtle gradient dark bg */
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Fine border */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    /* Deep shadow */
+    overflow: hidden;
+    position: relative;
     display: flex;
     flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    backface-visibility: hidden;
+    /* Standard front face */
+
+    /* Ensure legibility */
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-/* Watermark */
+.carousel-card:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    /* Tiny lift on hover */
+    transform: translateY(-5px);
+}
+
+/* Watermark Layer */
 .card-watermark {
     position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.1;
-    /* Subtle */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    opacity: 0.08;
+    /* Very subtle watermark */
+    z-index: 1;
+    /* Behind content */
     pointer-events: none;
-    z-index: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .card-watermark img {
-    width: 80%;
-    /* Large logo coverage */
-    height: auto;
-    filter: grayscale(100%);
-    transform: rotate(-15deg);
-    /* Dynamic angle */
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(1.5);
+    /* brighten for dark bg */
 }
 
+/* Content Layer */
 .card-content {
     position: relative;
-    z-index: 10;
+    z-index: 2;
+    /* Foreground */
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 24px;
+    text-align: center;
 }
 
-.logo-container {
+.logo-box {
     width: 100px;
     height: 100px;
     background: #fff;
     border-radius: 50%;
+    /* Circle logo background */
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    align-items: center;
     padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .partner-logo {
@@ -116,32 +150,34 @@
 }
 
 .partner-name {
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 700;
     font-size: 1.1rem;
-    color: #fff;
-    margin: 10px 0 5px;
-    text-align: center;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.partner-line {
+.separator {
     width: 40px;
-    height: 2px;
-    background: #4f46e5;
-    margin: 5px 0 10px;
+    height: 3px;
+    background-color: #4f46e5;
+    /* Accent color */
+    margin: 12px 0;
+    border-radius: 2px;
 }
 
-.partner-subtext {
-    font-family: 'Montserrat', sans-serif;
+.partner-type {
     font-size: 0.75rem;
-    color: #888;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    color: #888;
+    font-weight: 500;
 }
 
-.card-link-overlay {
+/* Full Click Overlay */
+.card-link {
     position: absolute;
     inset: 0;
-    z-index: 20;
+    z-index: 10;
     cursor: pointer;
 }

@@ -8,63 +8,78 @@ interface ThreeDCarouselProps {
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
-    // Duplicate partners if few to ensure a full ring look
+    // Ensure we have enough items to form a nice circle. 
+    // Minimum 8 items feels good for a "Ring".
     const displayPartners = useMemo(() => {
-        if (partners.length === 0) return [];
-        if (partners.length < 6) return [...partners, ...partners, ...partners]; // Triple to fill ring
-        return partners;
+        if (!partners.length) return [];
+        let items = [...partners];
+        while (items.length < 8) {
+            items = [...items, ...partners];
+        }
+        return items;
     }, [partners]);
 
     const count = displayPartners.length;
-    const cardWidth = 200; // fixed card width
-    const radius = Math.round((cardWidth + 20) / (2 * Math.tan(Math.PI / count)));
+    const cardWidth = 200; // Match CSS
+    const spacing = 40; // Spacing between cards
+
+    // Exact radius formula for a regular polygon
+    const radius = Math.round((cardWidth + spacing) / (2 * Math.tan(Math.PI / count)));
 
     return (
-        <div className="carousel-container">
-            <div className="carousel-ring">
-                {displayPartners.map((partner, index) => {
-                    const angle = (360 / count) * index;
-                    return (
-                        <div
-                            key={`${partner.id}-${index}`}
-                            className="carousel-card-container"
-                            style={{
-                                transform: `rotateY(${angle}deg) translateZ(${radius}px)`
-                            }}
-                        >
-                            <div className="carousel-card">
-                                {/* Watermark */}
-                                <div className="card-watermark">
-                                    <img src="/logo.png" alt="LIAO Watermark" />
-                                </div>
+        <div className="carousel-view">
+            <div className="carousel-container">
+                <div className="carousel-ring">
+                    {displayPartners.map((partner, index) => {
+                        // Distribute cards evenly around the Y axis
+                        const angle = (360 / count) * index;
 
-                                {/* Content */}
-                                <div className="card-content">
-                                    <div className="logo-container">
-                                        <img
-                                            src={partner.imageUrl}
-                                            alt={partner.name}
-                                            className="partner-logo"
-                                        />
+                        // Use a unique key that handles duplication
+                        const uniqueKey = `partner-${partner.id}-${index}`;
+
+                        return (
+                            <div
+                                key={uniqueKey}
+                                className="carousel-card-wrapper"
+                                style={{
+                                    transform: `rotateY(${angle}deg) translateZ(${radius}px)`
+                                }}
+                            >
+                                <div className="carousel-card">
+                                    {/* LIAO Logo Watermark (Background) */}
+                                    <div className="card-watermark">
+                                        <img src="/logo.png" alt="LIAO" />
                                     </div>
-                                    <h3 className="partner-name">{partner.name}</h3>
-                                    <div className="partner-line"></div>
-                                    <p className="partner-subtext">Parceiro LIAO</p>
 
+                                    {/* Card Content (Foreground) */}
+                                    <div className="card-content">
+                                        <div className="logo-box">
+                                            <img
+                                                src={partner.imageUrl}
+                                                alt={partner.name}
+                                                className="partner-logo"
+                                            />
+                                        </div>
+                                        <h3 className="partner-name">{partner.name}</h3>
+                                        <div className="separator"></div>
+                                        <p className="partner-type">Parceiro LIAO</p>
+                                    </div>
+
+                                    {/* Full Card Link overlay */}
                                     {partner.websiteUrl && (
                                         <a
                                             href={partner.websiteUrl}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="card-link-overlay"
-                                            aria-label={`Visitar ${partner.name}`}
+                                            className="card-link"
+                                            title={`Visitar ${partner.name}`}
                                         />
                                     )}
                                 </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
