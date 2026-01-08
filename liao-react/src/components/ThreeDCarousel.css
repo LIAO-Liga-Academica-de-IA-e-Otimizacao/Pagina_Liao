@@ -1,99 +1,160 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap');
 
 .carousel-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 600px;
-    /* Adjust as needed */
     overflow: hidden;
-    perspective: 1000px;
-    background-image: radial-gradient(circle at 50% 50%, #222 30%, transparent 40%);
-    width: 100%;
+    perspective: 1200px;
+    background: transparent;
+    /* Neutral background as requested */
 }
 
-.carousel-3d {
+.carousel-track {
     position: relative;
-    width: 190px;
-    height: 225px;
-    transform-style: preserve-3d;
-    animation: rotate 20s linear infinite;
-    transform: rotateX(-10deg);
-    /* Slightly reduced tilt for better visibility */
-}
-
-.carousel-3d:hover {
-    animation-play-state: paused;
-}
-
-.carousel-card-container {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transform-style: preserve-3d;
-    /* Transform origin is handled in JS or logic usually, but here consistent with center */
+}
+
+.carousel-card-wrapper {
+    position: absolute;
+    left: 50%;
+    /* Center origin */
+    top: 50%;
+    margin-top: -165px;
+    /* Half of height roughly */
+    width: 240px;
+    /* Base width */
+    height: 330px;
+    /* ~3:4 Aspect Ratio */
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    /* Smooth fluid movement */
+    cursor: pointer;
     transform-origin: center center;
 }
 
 .carousel-card {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    /* Dark background */
+    border-radius: 16px;
+    /* Rounded borders */
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+    /* Smooth shadow */
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Watermark */
+.card-watermark {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 150px;
+    height: 150px;
+    opacity: 0.05;
+    /* Low opacity */
+    pointer-events: none;
+    z-index: 0;
+}
+
+.card-watermark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(100%);
+}
+
+.card-content {
+    position: relative;
+    z-index: 10;
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 190px;
-    height: 225px;
-    background-color: #333;
-    /* Dark card background */
-    border-radius: 8px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    -webkit-box-reflect: below 10px linear-gradient(transparent 75%, rgba(255, 255, 255, 0.1));
-    overflow: hidden;
-    transition: transform 0.3s;
-    backface-visibility: hidden;
-    /* Hide back if we are using single sided */
+    padding: 24px;
 }
 
-.carousel-card img {
-    width: 90%;
+.logo-container {
+    width: 120px;
     height: 120px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.partner-logo {
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    filter: brightness(0.9);
-    transition: filter 0.3s;
-    background: white;
-    /* Ensure transparency looks good */
-    padding: 5px;
 }
 
-.carousel-card:hover img {
-    filter: brightness(1);
-}
-
-.carousel-card h3 {
+.partner-name {
     font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
-    color: #fff;
-    margin: 5px 0 0;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin: 0 0 8px 0;
     text-align: center;
+    letter-spacing: 0.5px;
 }
 
-.carousel-card p {
-    font-size: 12px;
-    color: #ccc;
-    text-align: center;
-    padding: 0 10px;
+.partner-subtext {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
 }
 
-/* Back 'cardb' equivalent if we want a backplate or just styling context */
-@keyframes rotate {
-    from {
-        transform: perspective(1000px) rotateX(-10deg) rotateY(0deg);
-    }
+/* Link overlay */
+.card-link-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+}
 
-    to {
-        transform: perspective(1000px) rotateX(-10deg) rotateY(360deg);
-    }
+/* Indicators */
+.carousel-indicators {
+    position: absolute;
+    bottom: 30px;
+    display: flex;
+    gap: 8px;
+    z-index: 50;
+}
+
+.indicator-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+    background: #4f46e5;
+    /* Indigo */
+    width: 24px;
+    border-radius: 4px;
 }
