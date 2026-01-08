@@ -13,7 +13,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
     const [subjects, setSubjects] = useState(tutor ? tutor.subjects.join(', ') : '');
     const [bio, setBio] = useState(tutor?.bio || '');
     const [photo, setPhoto] = useState(tutor?.photo || '');
-    const [availability, setAvailability] = useState(tutor?.availability || '');
+    const [availability] = useState(tutor?.availability || '');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
