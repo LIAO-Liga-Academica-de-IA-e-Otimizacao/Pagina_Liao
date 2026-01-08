@@ -15,7 +15,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
 
     // Dimensions (20% smaller than previous 200px)
     const cardWidth = 160;
-    const spacing = 20; // Adjusted spacing
+    const spacing = 60; // Increased spacing as requested
 
     // Radius formula: r = w / (2 * tan(PI / N))
     // Add safety for small counts
