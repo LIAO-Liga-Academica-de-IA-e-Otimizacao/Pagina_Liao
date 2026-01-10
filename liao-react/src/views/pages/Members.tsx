@@ -300,18 +300,12 @@ const Members: React.FC = () => {
                                             className="flex flex-col items-center bg-white p-2 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95"
                                         >
                                             <div className="w-full aspect-square mb-2 relative overflow-hidden rounded-lg">
-                                                {member.photo ? (
-                                                    <img
-                                                        src={member.photo.startsWith('http') ? member.photo : `/Liao_membros/${member.photo}`}
-                                                        alt={member.name}
-                                                        className="w-full h-full object-cover"
-                                                        loading="lazy"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400">
-                                                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
-                                                    </div>
-                                                )}
+                                                <img
+                                                    src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
+                                                    alt={member.name}
+                                                    className="w-full h-full object-cover"
+                                                    loading="lazy"
+                                                />
                                                 {/* Role Badge (Tiny) */}
                                                 {member.role !== 'member' && (
                                                     <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-400 rounded-full shadow-sm"></div>
