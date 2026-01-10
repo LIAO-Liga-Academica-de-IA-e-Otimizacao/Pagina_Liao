@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaInstagram, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
     const currentYear = new Date().getFullYear();
@@ -47,13 +48,29 @@ const Footer: React.FC = () => {
                     {/* Contact */}
                     <div>
                         <h3 className="text-xl font-bold mb-4">Contato</h3>
-                        <ul className="space-y-2 text-gray-400">
-                            <li>Email: liaoufba@gmail.com</li>
-                            <li>Instagram: <a href="https://www.instagram.com/liaoufba" target="_blank" rel="noopener noreferrer" className="hover:text-white">@liaoufba</a></li>
-                            <li>LinkedIn: LIAO</li>
+                        <ul className="space-y-4 text-gray-400">
                             <li>
-                                <Link to="/login" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
-                                    Área Administrativa
+                                <a href="mailto:liaoufba@gmail.com" className="flex items-center gap-2 hover:text-white transition-colors">
+                                    <FaEnvelope className="text-xl" />
+                                    <span>liaoufba@gmail.com</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/liaoufba" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                    <FaInstagram className="text-xl" />
+                                    <span>@liaoufba</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/company/liao-ufba" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-white transition-colors">
+                                    <FaLinkedin className="text-xl" />
+                                    <span>LIAO - UFBA</span>
+                                </a>
+                            </li>
+                            <li>
+                                <Link to="/login" className="flex items-center gap-2 hover:text-white transition-colors">
+                                    <span className="text-xs bg-gray-800 px-2 py-1 rounded border border-gray-700">Admin</span>
+                                    <span className="text-sm">Área Administrativa</span>
                                 </Link>
                             </li>
                         </ul>
