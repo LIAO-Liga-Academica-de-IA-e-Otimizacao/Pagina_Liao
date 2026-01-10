@@ -61,7 +61,9 @@ const Members: React.FC = () => {
     // Filter Logic
     const filteredMembers = members.filter(member => {
         if (activeTab === 'directors') {
-            return member.role === 'director' && member.isActive !== false; // Default to true if undefined
+            // Directors are active members who are not just 'member' and not primarily 'founder' (unless they hold a role)
+            // Simpler check: explicit list or everything that isn't 'member'
+            return member.role !== 'member' && member.isActive !== false;
         }
         if (activeTab === 'founders') {
             return member.isFounder === true;
@@ -71,7 +73,7 @@ const Members: React.FC = () => {
             if (!matchesYear) return false;
 
             if (roleFilter === 'directors') {
-                return member.role === 'director';
+                return member.role !== 'member';
             }
             return true; // 'all' includes everyone in that year
         }
