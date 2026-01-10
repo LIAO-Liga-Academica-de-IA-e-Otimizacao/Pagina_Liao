@@ -61,6 +61,16 @@ const TutorDetails: React.FC = () => {
                     <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-white opacity-5"></div>
                     <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-60 h-60 rounded-full bg-white opacity-5"></div>
 
+                    <div className="absolute top-8 left-4 md:left-8 z-20">
+                        <Link
+                            to="/tutors"
+                            className="inline-flex items-center text-white/80 hover:text-white transition-colors bg-black/10 hover:bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm"
+                        >
+                            <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                            <span className="text-sm font-medium">Voltar</span>
+                        </Link>
+                    </div>
+
                     <div className="relative z-10 flex flex-col md:flex-row items-center gap-12">
                         {/* Profile Image with Ring Effect */}
                         <div className="flex-shrink-0 group">
