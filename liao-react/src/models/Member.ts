@@ -2,7 +2,7 @@ export interface Member {
     id: number;
     name: string;
     email: string;
-    role: 'director' | 'founder' | 'member';
+    role: string;
     photo?: string;
     bio?: string;
     linkedin?: string;

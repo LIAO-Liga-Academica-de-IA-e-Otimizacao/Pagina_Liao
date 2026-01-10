@@ -111,7 +111,13 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             className="input-field"
                         >
                             <option value="member">Membro</option>
-                            <option value="director">Diretor</option>
+                            <option value="Diretor Geral">Diretor Geral</option>
+                            <option value="Vice Diretor">Vice Diretor</option>
+                            <option value="Secretaria Geral">Secretaria Geral</option>
+                            <option value="Coordenação Acadêmica">Coordenação Acadêmica</option>
+                            <option value="Relações Públicas">Relações Públicas</option>
+                            <option value="Extensão">Extensão</option>
+                            <option value="Científico">Científico</option>
                         </select>
                     </div>
                     <div className="flex items-center mt-6">

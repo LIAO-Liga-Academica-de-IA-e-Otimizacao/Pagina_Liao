@@ -47,7 +47,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
                 )}
 
                 <p className="text-xs font-medium text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-green-600 uppercase tracking-wide">
-                    {member.role === 'director' ? 'Diretoria' : 'Membro'}
+                    {member.role === 'member' ? 'Membro' : member.role}
                 </p>
 
                 {/* Status Text (Vigente / Não Vigente) */}
