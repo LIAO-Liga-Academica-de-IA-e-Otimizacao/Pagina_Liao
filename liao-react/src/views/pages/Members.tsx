@@ -32,6 +32,7 @@ const Members: React.FC = () => {
     const [selectedYear, setSelectedYear] = useState(2026);
     const [roleFilter, setRoleFilter] = useState<'all' | 'directors'>('all'); // New Sub-filter
     const [mobileViewMode, setMobileViewMode] = useState<'carousel' | 'grid'>('carousel'); // Mobile View Toggle
+    const [isPaused, setIsPaused] = useState(false); // Mobile Carousel Pause Toggle
 
     // Derived Data
     const availableYears = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
@@ -100,14 +101,14 @@ const Members: React.FC = () => {
 
     // Auto-advance
     useEffect(() => {
-        if (filteredMembers.length <= itemsPerView) return;
+        if (filteredMembers.length <= itemsPerView || isPaused) return;
 
         const maxIndex = Math.max(0, filteredMembers.length - itemsPerView);
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
         }, 3000);
         return () => clearInterval(interval);
-    }, [filteredMembers.length, itemsPerView]);
+    }, [filteredMembers.length, itemsPerView, isPaused]);
 
     const nextSlide = () => {
         const maxIndex = Math.max(0, filteredMembers.length - itemsPerView);
@@ -208,6 +209,18 @@ const Members: React.FC = () => {
                         {filteredMembers.length > 0 && (
                             <div className="flex justify-end px-4 mb-2">
                                 <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 flex gap-1">
+                                    <button
+                                        onClick={() => setIsPaused(!isPaused)}
+                                        className={`p-2 rounded-md transition-all ${isPaused ? 'bg-red-50 text-red-600' : 'text-gray-400 hover:text-green-600'}`}
+                                        title={isPaused ? "Retomar" : "Pausar"}
+                                    >
+                                        {isPaused ? (
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        ) : (
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                        )}
+                                    </button>
+                                    <div className="w-px bg-gray-200 mx-1 my-1"></div>
                                     <button
                                         onClick={() => setMobileViewMode('carousel')}
                                         className={`p-2 rounded-md transition-all ${mobileViewMode === 'carousel' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:text-gray-600'}`}
