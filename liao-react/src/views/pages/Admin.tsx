@@ -16,6 +16,7 @@ const Admin: React.FC = () => {
     const [members, setMembers] = useState<any[]>([]);
     const [editingMember, setEditingMember] = useState<any>(null);
     const [showMemberForm, setShowMemberForm] = useState(false);
+    const [selectedMemberYear, setSelectedMemberYear] = useState<number | 'all'>('all');
 
     // Tutors State
     const [tutors, setTutors] = useState<any[]>([]);
@@ -343,57 +344,89 @@ const Admin: React.FC = () => {
         </div>
     );
 
-    const renderMembersSection = () => (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Gerenciar Membros</h2>
-                <button
-                    onClick={() => { setEditingMember(null); setShowMemberForm(true); }}
-                    className="btn-primary"
-                >
-                    Novo Membro
-                </button>
-            </div>
-            {showMemberForm ? (
-                <MemberForm
-                    member={editingMember}
-                    onSuccess={handleMemberSuccess}
-                    onCancel={() => { setShowMemberForm(false); setEditingMember(null); }}
-                />
-            ) : (
-                <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {members.map((member) => (
-                                <tr key={member.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            {member.photo && <img className="h-8 w-8 rounded-full mr-3" src={member.photo} alt="" />}
-                                            <div className="text-sm font-medium text-gray-900">{member.name}</div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.email}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.isFounder ? 'Fundador' : member.role}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteMember(member.id)} className="text-red-600 hover:text-red-900">Excluir</button>
-                                    </td>
-                                </tr>
+    const renderMembersSection = () => {
+        // Year Filter Logic
+        const years = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
+        const filteredMembers = selectedMemberYear === 'all'
+            ? members
+            : members.filter(m => (m.year || 2025) === selectedMemberYear);
+
+        return (
+            <div className="space-y-6">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                    <h2 className="text-2xl font-bold text-gray-900">Gerenciar Membros</h2>
+
+                    <div className="flex items-center gap-4">
+                        {/* Year Filter Dropdown */}
+                        <select
+                            value={selectedMemberYear}
+                            onChange={(e) => setSelectedMemberYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                            className="block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        >
+                            <option value="all">Todos os Anos</option>
+                            {years.map(year => (
+                                <option key={year} value={year}>{year}</option>
                             ))}
-                        </tbody>
-                    </table>
+                        </select>
+
+                        <button
+                            onClick={() => { setEditingMember(null); setShowMemberForm(true); }}
+                            className="btn-primary"
+                        >
+                            Novo Membro
+                        </button>
+                    </div>
                 </div>
-            )}
-        </div>
-    );
+
+                {showMemberForm ? (
+                    <MemberForm
+                        member={editingMember}
+                        onSuccess={handleMemberSuccess}
+                        onCancel={() => { setShowMemberForm(false); setEditingMember(null); }}
+                    />
+                ) : (
+                    <div className="bg-white shadow rounded-lg overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ano</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {filteredMembers.map((member) => (
+                                    <tr key={member.id}>
+                                        <td className="px-6 py-4 whitespace-nowrap">
+                                            <div className="flex items-center">
+                                                {member.photo && <img className="h-8 w-8 rounded-full mr-3" src={member.photo} alt="" />}
+                                                <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.email}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{member.year || 2025}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.isFounder ? 'Fundador' : member.role}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
+                                            <button onClick={() => handleDeleteMember(member.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+
+                        {filteredMembers.length === 0 && (
+                            <div className="text-center py-8 text-gray-500">
+                                Nenhum membro encontrado para este filtro.
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     const renderTutorsSection = () => (
         <div className="space-y-6">
