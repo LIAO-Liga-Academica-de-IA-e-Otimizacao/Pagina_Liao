@@ -61,10 +61,9 @@ const Members: React.FC = () => {
     };
 
     // Filter Logic
-    const filteredMembers = members.filter(member => {
+    // Filter Logic
+    let filteredMembers = members.filter(member => {
         if (activeTab === 'directors') {
-            // Directors are active members who are not just 'member' and not primarily 'founder' (unless they hold a role)
-            // Simpler check: explicit list or everything that isn't 'member'
             return member.role !== 'member' && member.isActive !== false;
         }
         if (activeTab === 'founders') {
@@ -77,10 +76,18 @@ const Members: React.FC = () => {
             if (roleFilter === 'directors') {
                 return member.role !== 'member';
             }
-            return true; // 'all' includes everyone in that year
+            return true;
         }
         return false;
     });
+
+    // Fallback: If filtering by "Apenas Diretores" inside "Membros" tab yields no results for the selected year,
+    // show currently active directors instead.
+    if (activeTab === 'members' && roleFilter === 'directors' && filteredMembers.length === 0) {
+        filteredMembers = members.filter(member =>
+            member.role !== 'member' && member.isActive !== false
+        );
+    }
 
     // Responsive Carousel Logic
     const [itemsPerView, setItemsPerView] = useState(3);
