@@ -31,6 +31,7 @@ const Members: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'directors' | 'members' | 'founders'>('directors');
     const [selectedYear, setSelectedYear] = useState(2026);
     const [roleFilter, setRoleFilter] = useState<'all' | 'directors'>('all'); // New Sub-filter
+    const [mobileViewMode, setMobileViewMode] = useState<'carousel' | 'grid'>('carousel'); // Mobile View Toggle
 
     // Derived Data
     const availableYears = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
@@ -199,57 +200,126 @@ const Members: React.FC = () => {
                 )}
 
 
-                {/* Content Display: Grid (Desktop) vs Carousel (Mobile) */}
+                {/* Content Display: Grid (Desktop) vs Mobile (Carousel/Grid) */}
                 {itemsPerView === 1 ? (
-                    /* Mobile Carousel View */
-                    <>
-                        <div
-                            className="relative group overflow-hidden"
-                            onTouchStart={handleTouchStart}
-                            onTouchMove={handleTouchMove}
-                            onTouchEnd={handleTouchEnd}
-                        >
-                            {filteredMembers.length > 0 ? (
-                                <div
-                                    className="flex transition-transform duration-500 ease-in-out"
-                                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                                >
-                                    {filteredMembers.map((member) => (
-                                        <div
-                                            key={member.id}
-                                            style={{ width: '100%' }}
-                                            className="shrink-0 px-2 sm:px-4"
-                                        >
-                                            <div className="h-full flex justify-center">
-                                                <MemberCard
-                                                    member={member}
-                                                    onSelect={handleCardClick}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
+                    /* Mobile View Container */
+                    <div className="space-y-4">
+                        {/* Mobile View Toggle */}
+                        {filteredMembers.length > 0 && (
+                            <div className="flex justify-end px-4 mb-2">
+                                <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 flex gap-1">
+                                    <button
+                                        onClick={() => setMobileViewMode('carousel')}
+                                        className={`p-2 rounded-md transition-all ${mobileViewMode === 'carousel' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:text-gray-600'}`}
+                                        title="Visualização Carrossel"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+                                    </button>
+                                    <button
+                                        onClick={() => setMobileViewMode('grid')}
+                                        className={`p-2 rounded-md transition-all ${mobileViewMode === 'grid' ? 'bg-indigo-100 text-indigo-700' : 'text-gray-400 hover:text-gray-600'}`}
+                                        title="Visualização em Grade"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                                    </button>
                                 </div>
-                            ) : (
-                                <div className="text-center py-12 bg-white rounded-xl shadow-sm">
-                                    <p className="text-gray-500 text-lg">
-                                        Nenhum membro encontrado nesta categoria.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Mobile Indicators */}
-                        {filteredMembers.length > 1 && (
-                            <div className="flex justify-center mt-4 space-x-2">
-                                {filteredMembers.map((_, idx) => (
-                                    <div
-                                        key={idx}
-                                        className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-green-600' : 'bg-gray-300'}`}
-                                    />
-                                ))}
                             </div>
                         )}
-                    </>
+
+                        {mobileViewMode === 'carousel' ? (
+                            /* Mobile Carousel Logic */
+                            <>
+                                <div
+                                    className="relative group overflow-hidden"
+                                    onTouchStart={handleTouchStart}
+                                    onTouchMove={handleTouchMove}
+                                    onTouchEnd={handleTouchEnd}
+                                >
+                                    {filteredMembers.length > 0 ? (
+                                        <div
+                                            className="flex transition-transform duration-500 ease-in-out"
+                                            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                                        >
+                                            {filteredMembers.map((member) => (
+                                                <div
+                                                    key={member.id}
+                                                    style={{ width: '100%' }}
+                                                    className="shrink-0 px-2 sm:px-4"
+                                                >
+                                                    <div className="h-full flex justify-center">
+                                                        <MemberCard
+                                                            member={member}
+                                                            onSelect={handleCardClick}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-12 bg-white rounded-xl shadow-sm">
+                                            <p className="text-gray-500 text-lg">
+                                                Nenhum membro encontrado nesta categoria.
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Mobile Indicators */}
+                                {filteredMembers.length > 1 && (
+                                    <div className="flex justify-center mt-4 space-x-2">
+                                        {filteredMembers.map((_, idx) => (
+                                            <div
+                                                key={idx}
+                                                className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-green-600' : 'bg-gray-300'}`}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            /* Mobile Grid View (New) */
+                            <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 px-2">
+                                {filteredMembers.length > 0 ? (
+                                    filteredMembers.map((member) => (
+                                        <button
+                                            key={member.id}
+                                            onClick={() => handleCardClick(member)}
+                                            className="flex flex-col items-center bg-white p-2 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95"
+                                        >
+                                            <div className="w-full aspect-square mb-2 relative overflow-hidden rounded-lg">
+                                                {member.photo ? (
+                                                    <img
+                                                        src={member.photo.startsWith('http') ? member.photo : `/Liao_membros/${member.photo}`}
+                                                        alt={member.name}
+                                                        className="w-full h-full object-cover"
+                                                        loading="lazy"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-400">
+                                                        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+                                                    </div>
+                                                )}
+                                                {/* Role Badge (Tiny) */}
+                                                {member.role !== 'member' && (
+                                                    <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-400 rounded-full shadow-sm"></div>
+                                                )}
+                                            </div>
+                                            <span className="text-xs font-semibold text-gray-800 text-center line-clamp-2 leading-tight w-full">
+                                                {member.name}
+                                            </span>
+                                            <span className="text-[10px] text-gray-500 mt-1 truncate w-full text-center">
+                                                {member.role === 'member' ? 'Membro' : member.role}
+                                            </span>
+                                        </button>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center py-8">
+                                        <p className="text-gray-500 text-sm">Nenhum membro encontrado.</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 ) : (
                     /* Desktop Grid View */
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
