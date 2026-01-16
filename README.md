@@ -1,6 +1,6 @@
 # LIAO - Full Stack Application
 
-Complete full-stack web application for LIAO (Liga de Informática Aplicada à Otimização) with React frontend and Node.js backend.
+Complete full-stack web application for LIAO (Liga de Inteligência Artificial e  Otimização) with React frontend and Node.js backend.
 
 ## 🚀 Quick Start
 
