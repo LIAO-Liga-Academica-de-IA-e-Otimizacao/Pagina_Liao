@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Tutor } from '../../models/Tutor';
+import TechBackground from '../../components/TechBackground';
 
 const TutorDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();
@@ -59,7 +60,16 @@ const TutorDetails: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 relative overflow-hidden">
                     {/* Abstract decorative circles */}
                     <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-white opacity-5"></div>
+                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-white opacity-5"></div>
                     <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-60 h-60 rounded-full bg-white opacity-5"></div>
+
+                    {/* Tech Background Animation (Overlay) */}
+                    <TechBackground
+                        mode="absolute"
+                        backgroundColor="transparent"
+                        colors={['#ef4444', '#eab308', '#22c55e', '#3b82f6']} // Red, Yellow, Green, Blue
+                        opacity={0.6}
+                    />
 
                     <div className="absolute top-8 left-4 md:left-8 z-20">
                         <Link

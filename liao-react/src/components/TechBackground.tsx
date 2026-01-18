@@ -1,10 +1,24 @@
 import React, { useEffect, useRef } from 'react';
 
-const TechBackground: React.FC = () => {
+interface TechBackgroundProps {
+    colors?: string[];
+    backgroundColor?: string;
+    mode?: 'fixed' | 'absolute';
+    opacity?: number;
+}
+
+const TechBackground: React.FC<TechBackgroundProps> = ({
+    colors = ['#4cc9f0', '#0b132b', '#00f5d4'],
+    backgroundColor = '#050a14',
+    mode = 'fixed',
+    opacity = 1
+}) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const canvas = canvasRef.current;
+        const container = containerRef.current;
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
@@ -17,12 +31,18 @@ const TechBackground: React.FC = () => {
         const particleCount = 60;
         const connectionDistance = 150;
 
-
         // Resize handling
         const resizeCanvas = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            // If mode is absolute, size to parent container if possible, else window
+            if (mode === 'absolute' && canvas.parentElement) {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = canvas.parentElement.clientHeight;
+            } else {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
         };
+
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
@@ -43,8 +63,6 @@ const TechBackground: React.FC = () => {
                 this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2 + 1;
 
-                // Tech colors
-                const colors = ['#4cc9f0', '#0b132b', '#00f5d4'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
             }
 
@@ -79,9 +97,11 @@ const TechBackground: React.FC = () => {
             if (!ctx || !canvas) return;
             ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear screen
 
-            // Draw Background (Deep Blue/Black)
-            ctx.fillStyle = '#050a14'; // Almost black
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Draw Background
+            if (backgroundColor !== 'transparent') {
+                ctx.fillStyle = backgroundColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
 
             // Update and draw particles
             particles.forEach((particle, index) => {
@@ -96,11 +116,18 @@ const TechBackground: React.FC = () => {
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(76, 201, 240, ${1 - distance / connectionDistance})`; // Fade out line
+                        // Use the particle's color for the line to create colorful connections
+                        const gradient = ctx.createLinearGradient(particle.x, particle.y, particles[j].x, particles[j].y);
+                        gradient.addColorStop(0, particle.color);
+                        gradient.addColorStop(1, particles[j].color);
+
+                        ctx.strokeStyle = gradient;
+                        ctx.globalAlpha = 1 - distance / connectionDistance;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particle.x, particle.y);
                         ctx.lineTo(particles[j].x, particles[j].y);
                         ctx.stroke();
+                        ctx.globalAlpha = 1.0;
                     }
                 }
             });
@@ -115,13 +142,13 @@ const TechBackground: React.FC = () => {
             window.removeEventListener('resize', resizeCanvas);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [colors, backgroundColor, mode]);
 
     return (
         <canvas
             ref={canvasRef}
-            className="fixed inset-0 w-full h-full pointer-events-none"
-            style={{ zIndex: 0 }} // Behind everything in its container
+            className={`${mode === 'fixed' ? 'fixed inset-0' : 'absolute inset-0'} w-full h-full pointer-events-none`}
+            style={{ zIndex: 0, opacity }}
         />
     );
 };
