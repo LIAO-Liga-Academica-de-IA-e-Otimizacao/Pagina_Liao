@@ -1,4 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
+import TechBackground from './TechBackground';
 
 // Interface defining the Member object structure
 interface Member {
@@ -12,6 +14,7 @@ interface Member {
     bio?: string;
     linkedin?: string;
     github?: string;
+    isActive?: boolean;
 }
 
 // Props interface for the Modal component
@@ -23,150 +26,127 @@ interface MemberModalProps {
 
 /**
  * MemberModal Component
- * Displays detailed information about a member in a centered popup with overlay.
- * Features:
- * - Responsive design
- * - Smooth fade/scale animation
- * - Close on ESC key
- * - Close on overlay click
- * - Close button (X)
+ * Implements a high-end Tech/AI aesthetic modal with particle background.
  */
 const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) => {
+    const [shouldRender, setShouldRender] = useState(isOpen);
 
-    // Effect to handle ESC key press for accessibility
+    // Handle Animation Lifecycle
+    useEffect(() => {
+        if (isOpen) {
+            setShouldRender(true);
+        } else {
+            const timer = setTimeout(() => setShouldRender(false), 300); // Wait for exit animation
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen]);
+
+    // Handle ESC key
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                onClose();
-            }
+            if (event.key === 'Escape') onClose();
         };
-
-        if (isOpen) {
-            window.addEventListener('keydown', handleEsc);
-        }
-
-        return () => {
-            window.removeEventListener('keydown', handleEsc);
-        };
+        if (isOpen) window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, onClose]);
 
-    // Prevent rendering if not open or no member data
-    if (!isOpen || !member) return null;
-
-    // Handle click on the overlay to close the modal
-    const handleOverlayClick = (e: React.MouseEvent) => {
-        e.preventDefault(); // Prevent unexpected default behaviors
-        onClose();
-    };
-
-    // Prevent clicks inside the modal content from closing the modal
-    const handleContentClick = (e: React.MouseEvent) => {
-        e.stopPropagation();
-    };
+    if (!shouldRender || !member) return null;
 
     return (
-        // Modal Root / Overlay Container
         <div
-            className="fixed inset-0 z-50 overflow-y-auto"
-            aria-labelledby="modal-title"
+            className={`fixed inset-0 z-[9999] flex items-center justify-center`}
             role="dialog"
             aria-modal="true"
         >
-            <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            {/* Tech Background Container - Fixed & Full Screen */}
+            <div className={`fixed inset-0 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+                {/* Dark Overlay for contrast */}
+                <div className="absolute inset-0 bg-[#0b132b] bg-opacity-90" onClick={onClose}></div>
+                {/* Animated Particles */}
+                <TechBackground />
+            </div>
 
-                {/* Darkened Overlay Background */}
-                <div
-                    className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity backdrop-blur-sm"
-                    aria-hidden="true"
-                    onClick={handleOverlayClick}
-                ></div>
-
-                {/* Vertical centering helper */}
-                <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-                {/* Modal Content Panel */}
-                <div
-                    className="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border-t-4 border-l-4 border-r-0 border-b-0 border-transparent bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 p-[2px] animate-fade-in-up"
-                    onClick={handleContentClick}
+            {/* Modal Card */}
+            <div
+                className={`
+                    relative z-10 w-full max-w-[420px] mx-4
+                    bg-white rounded-2xl shadow-[0_0_40px_rgba(76,201,240,0.3)]
+                    p-8 flex flex-col items-center
+                    transform transition-all duration-300
+                    ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
+                `}
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* Close Button */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 transition-colors rounded-full hover:bg-gray-100"
+                    aria-label="Close"
                 >
-                    <div className="bg-white rounded-2xl relative">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
 
-                        {/* Close Button (X) - Top Right */}
-                        <button
-                            type="button"
-                            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                onClose();
-                            }}
-                            aria-label="Fechar"
-                        >
-                            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+                {/* Avatar with Glow */}
+                <div className="relative mb-6">
+                    <div className="absolute inset-0 bg-cyan-400 rounded-full blur-md opacity-30 animate-pulse"></div>
+                    <img
+                        src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
+                        alt={member.name}
+                        className="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-sm filter drop-shadow-md"
+                    />
+                </div>
 
-                        <div className="px-4 pt-5 pb-4 sm:p-8">
-                            <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+                {/* Header Info */}
+                <h2 className="text-2xl font-bold text-gray-900 text-center mb-1">{member.name}</h2>
+                <div className="flex items-center gap-2 mb-6">
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                    <p className="text-sm font-medium text-cyan-600 uppercase tracking-wider">
+                        {member.role === 'member' ? 'Membro' : member.role}
+                    </p>
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                </div>
 
-                                {/* Header: Photo and Name */}
-                                <div className="w-full flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-6">
-                                    <div className="flex-shrink-0 relative">
-                                        {/* Gradient Ring Decoration */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 rounded-full blur-none transform scale-105"></div>
-                                        {member.photo ? (
-                                            <img
-                                                className="relative h-32 w-32 rounded-full object-cover border-4 border-white shadow-md"
-                                                src={member.photo}
-                                                alt={member.name}
-                                            />
-                                        ) : (
-                                            <div className="relative h-32 w-32 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 text-4xl font-bold border-4 border-white shadow-md">
-                                                {member.name?.charAt(0) || '?'}
-                                            </div>
-                                        )}
-                                    </div>
+                {/* Bio / Status */}
+                <div className="w-full text-center space-y-4 mb-8">
+                    {member.bio && (
+                        <p className="text-gray-600 text-sm leading-relaxed px-2">
+                            {member.bio}
+                        </p>
+                    )}
 
-                                    <div className="flex-grow pt-2">
-                                        <h3 className="text-3xl font-bold text-gray-900 font-sans" id="modal-title">
-                                            {member.name || 'Nome Indisponível'}
-                                        </h3>
-                                        <div className="w-16 h-1 bg-green-500 rounded mt-2 mx-auto sm:mx-0"></div>
-                                    </div>
-                                </div>
-
-                                {/* Body: Bio */}
-                                <div className="w-full mb-8">
-                                    <h4 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-2">Sobre</h4>
-                                    <p className="text-gray-700 text-base leading-relaxed">
-                                        {member.bio || 'Sem biografia disponível.'}
-                                    </p>
-                                </div>
-
-                                {/* Footer: Email */}
-                                <div className="w-full border-t border-gray-100 pt-4">
-                                    {member.email && (
-                                        <a
-                                            href={`mailto:${member.email}`}
-                                            className="inline-flex items-center text-gray-600 hover:text-red-500 transition-colors group"
-                                            onClick={(e) => e.preventDefault()} // As per request to prevent redirect/new tab default if not intended? Actually mailto usually needs default. 
-                                        // The user said "Usar event.preventDefault() para evitar abertura de nova aba". 
-                                        // Ideally mailto opens mail client. I will leave standard behavior for mailto but strict preventDefault for close actions.
-                                        // But strictly following user "avoid new tab", usually mailto doesn't open new TAB but new APP. 
-                                        // I'll keep default for mailto so it actually works, but standard links get preventDefault if they were '#'.
-                                        >
-                                            <div className="p-2 bg-gray-100 rounded-full group-hover:bg-red-50 transition-colors mr-3">
-                                                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                                </svg>
-                                            </div>
-                                            <span className="font-medium text-sm">{member.email}</span>
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
+                    {member.isActive !== undefined && (
+                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-50 border border-gray-100">
+                            <span className={`w-2 h-2 rounded-full mr-2 ${member.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                            <span className="text-xs font-medium text-gray-500">
+                                {member.isActive ? 'Ativo' : 'Ex-membro'}
+                            </span>
                         </div>
+                    )}
+                </div>
 
+                {/* Contact & Socials */}
+                <div className="w-full space-y-3">
+                    {member.email && (
+                        <div className="flex items-center justify-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors">
+                            <FaEnvelope size={14} />
+                            <a href={`mailto:${member.email}`} className="text-sm font-medium">{member.email}</a>
+                        </div>
+                    )}
+
+                    <div className="flex justify-center gap-6 mt-4 pt-6 border-t border-gray-100 w-full">
+                        {member.linkedin && (
+                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-transform hover:scale-110">
+                                <FaLinkedin size={24} />
+                            </a>
+                        )}
+                        {member.github && (
+                            <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 transition-transform hover:scale-110">
+                                <FaGithub size={24} />
+                            </a>
+                        )}
                     </div>
                 </div>
             </div>

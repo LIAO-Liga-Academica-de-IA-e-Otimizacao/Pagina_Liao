@@ -46,3 +46,34 @@ body {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-700;
   }
 }
+
+/* Custom Animations for Tech Modal */
+@keyframes techModalEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes techBgFadeIn {
+  0% {
+    opacity: 0;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.animate-tech-modal {
+  animation: techModalEnter 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-tech-bg {
+  animation: techBgFadeIn 400ms ease-out forwards;
+}
