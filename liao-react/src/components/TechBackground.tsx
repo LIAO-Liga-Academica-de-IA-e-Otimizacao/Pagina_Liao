@@ -18,7 +18,7 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
 
     useEffect(() => {
         const canvas = canvasRef.current;
-        const container = containerRef.current;
+
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
