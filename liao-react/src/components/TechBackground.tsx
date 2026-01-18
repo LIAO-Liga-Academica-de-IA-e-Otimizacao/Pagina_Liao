@@ -16,7 +16,7 @@ const TechBackground: React.FC = () => {
         // Configuration
         const particleCount = 60;
         const connectionDistance = 150;
-        const mouseDistance = 200;
+
 
         // Resize handling
         const resizeCanvas = () => {
@@ -42,7 +42,7 @@ const TechBackground: React.FC = () => {
                 this.vx = (Math.random() - 0.5) * 0.5;
                 this.vy = (Math.random() - 0.5) * 0.5;
                 this.size = Math.random() * 2 + 1;
-                
+
                 // Tech colors
                 const colors = ['#4cc9f0', '#0b132b', '#00f5d4'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
