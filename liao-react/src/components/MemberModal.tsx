@@ -27,6 +27,11 @@ interface MemberModalProps {
 /**
  * MemberModal Component
  * Implements a high-end Tech/AI aesthetic modal with particle background.
+ * Follows strict "Initial Request" specs:
+ * - Centralized white minimalist card
+ * - Dark blue tech background (#0b132b)
+ * - Scale 0.92 -> 1 opening animation
+ * - 300ms duration
  */
 const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) => {
     const [shouldRender, setShouldRender] = useState(false);
@@ -41,7 +46,7 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
             return () => clearTimeout(timer);
         } else {
             setIsVisible(false);
-            const timer = setTimeout(() => setShouldRender(false), 300); // Wait for exit animation
+            const timer = setTimeout(() => setShouldRender(false), 300); // 300ms exit animation
             return () => clearTimeout(timer);
         }
     }, [isOpen]);
@@ -65,30 +70,45 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
             role="dialog"
             aria-modal="true"
         >
-            {/* Tech Background Container - Fixed & Full Screen */}
-            <div className={`fixed inset-0 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-                {/* Dark Overlay for contrast */}
-                <div className="absolute inset-0 bg-[#0b132b] bg-opacity-90" onClick={onClose}></div>
-                {/* Animated Particles */}
-                <TechBackground />
+            {/* Background Layer: Fade + Blur + Tech Particles */}
+            <div
+                className={`
+                    fixed inset-0 
+                    transition-all duration-300 ease-out
+                    ${isVisible ? 'opacity-100 backdrop-blur-sm' : 'opacity-0 backdrop-blur-none'}
+                `}
+                aria-hidden="true"
+            >
+                {/* Background Click Handler */}
+                <div className="absolute inset-0 bg-[#0b132b] bg-opacity-95" onClick={onClose}></div>
+
+                {/* Tech Background: Strictly configured */}
+                <div className="absolute inset-0 pointer-events-none opacity-60">
+                    <TechBackground
+                        mode="absolute"
+                        backgroundColor="transparent"
+                        colors={['#4cc9f0', '#00f5d4', '#0b132b']}
+                    />
+                </div>
             </div>
 
             {/* Modal Card */}
             <div
                 className={`
                     relative z-10 w-full max-w-[420px] mx-4
-                    bg-white dark:bg-gray-900/90 backdrop-blur-sm
-                    rounded-2xl shadow-[0_0_40px_rgba(76,201,240,0.3)]
+                    bg-white dark:bg-zinc-900
+                    rounded-2xl 
+                    shadow-[0_0_40px_rgba(76,201,240,0.3)]
                     p-8 flex flex-col items-center
-                    transform transition-all duration-300 ease-out
-                    ${isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-4'}
+                    transform transition-all duration-300 cubic-bezier(0.4, 0, 0.2, 1)
+                    ${isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-[0.92] opacity-0 translate-y-4'}
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Close Button */}
+                {/* Close Button (Discrete) */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="absolute top-4 right-4 p-2 text-gray-300 hover:text-gray-600 dark:text-gray-600 dark:hover:text-gray-300 transition-colors rounded-full hover:bg-gray-50 dark:hover:bg-gray-800"
                     aria-label="Close"
                 >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -99,36 +119,41 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
 
                 {/* Avatar with Glow */}
                 <div className="relative mb-6">
-                    <div className="absolute inset-0 bg-cyan-400 rounded-full blur-md opacity-30 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-cyan-400 rounded-full blur-xl opacity-20 animate-pulse"></div>
                     <img
                         src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
                         alt={member.name}
-                        className="relative w-28 h-28 rounded-full object-cover border-4 border-white shadow-sm filter drop-shadow-md"
+                        className="relative w-28 h-28 rounded-full object-cover border-4 border-white dark:border-zinc-800 shadow-md"
                     />
                 </div>
 
                 {/* Header Info */}
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-1">{member.name}</h2>
                 <div className="flex items-center gap-2 mb-6">
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
-                    <p className="text-sm font-medium text-cyan-600 uppercase tracking-wider">
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_5px_#4cc9f0]"></span>
+                    <p className="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest">
                         {member.role === 'member' ? 'Membro' : member.role}
                     </p>
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-500 shadow-[0_0_5px_#4cc9f0]"></span>
                 </div>
 
                 {/* Bio / Status */}
                 <div className="w-full text-center space-y-4 mb-8">
                     {member.bio && (
-                        <p className="text-gray-600 text-sm leading-relaxed px-2">
+                        <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed px-2 font-light">
                             {member.bio}
                         </p>
                     )}
 
                     {member.isActive !== undefined && (
-                        <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-50 border border-gray-100">
-                            <span className={`w-2 h-2 rounded-full mr-2 ${member.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-                            <span className="text-xs font-medium text-gray-500">
+                        <div className={`
+                            inline-flex items-center px-3 py-1 rounded-full border 
+                            ${member.isActive
+                                ? 'bg-green-50 border-green-100 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'
+                                : 'bg-gray-50 border-gray-100 text-gray-500 dark:bg-gray-800/50 dark:border-gray-700 dark:text-gray-500'}
+                        `}>
+                            <span className={`w-1.5 h-1.5 rounded-full mr-2 ${member.isActive ? 'bg-green-500' : 'bg-gray-400'}`}></span>
+                            <span className="text-[10px] font-bold uppercase tracking-wider">
                                 {member.isActive ? 'Ativo' : 'Ex-membro'}
                             </span>
                         </div>
@@ -138,21 +163,21 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
                 {/* Contact & Socials */}
                 <div className="w-full space-y-3">
                     {member.email && (
-                        <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
-                            <FaEnvelope size={14} />
+                        <div className="flex items-center justify-center gap-2 text-gray-400 dark:text-gray-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group cursor-pointer">
+                            <FaEnvelope size={12} className="group-hover:animate-bounce" />
                             <a href={`mailto:${member.email}`} className="text-sm font-medium">{member.email}</a>
                         </div>
                     )}
 
-                    <div className="flex justify-center gap-6 mt-4 pt-6 border-t border-gray-100 dark:border-gray-700 w-full">
+                    <div className="flex justify-center gap-6 mt-4 pt-6 border-t border-gray-100 dark:border-zinc-800 w-full">
                         {member.linkedin && (
-                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-transform hover:scale-110">
-                                <FaLinkedin size={24} />
+                            <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-300 dark:text-gray-600 hover:text-[#0077b5] dark:hover:text-[#0077b5] transition-all hover:scale-110 hover:-translate-y-1">
+                                <FaLinkedin size={22} />
                             </a>
                         )}
                         {member.github && (
-                            <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-gray-900 transition-transform hover:scale-110">
-                                <FaGithub size={24} />
+                            <a href={member.github} target="_blank" rel="noopener noreferrer" className="text-gray-300 dark:text-gray-600 hover:text-gray-900 dark:hover:text-white transition-all hover:scale-110 hover:-translate-y-1">
+                                <FaGithub size={22} />
                             </a>
                         )}
                     </div>
