@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from '../../../hooks/useTheme';
+import { useTheme } from '../../hooks/useTheme';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
 
@@ -56,6 +56,15 @@ const Navbar: React.FC = () => {
 
                     </div>
 
+                    {/* Theme Toggle (Desktop) */}
+                    <button
+                        onClick={toggleTheme}
+                        className="hidden md:flex p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300 ml-2"
+                        aria-label="Alternar tema"
+                    >
+                        {theme === 'dark' ? <FaSun className="w-5 h-5 text-yellow-400" /> : <FaMoon className="w-5 h-5" />}
+                    </button>
+
                     {/* Mobile section spacer - keeps mobile menu button to the right if logos are hidden */}
                     <div className="md:hidden ml-auto"></div>
 
@@ -105,6 +114,27 @@ const Navbar: React.FC = () => {
                                 {link.name}
                             </Link>
                         ))}
+                        ))}
+
+                        {/* Theme Toggle (Mobile) */}
+                        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700 mt-2">
+                            <button
+                                onClick={toggleTheme}
+                                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 w-full"
+                            >
+                                {theme === 'dark' ? (
+                                    <>
+                                        <FaSun className="w-5 h-5 text-yellow-400" />
+                                        <span>Modo Claro</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaMoon className="w-5 h-5" />
+                                        <span>Modo Escuro</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
