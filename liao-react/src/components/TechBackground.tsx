@@ -14,7 +14,7 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
     opacity = 1
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
+
 
     useEffect(() => {
         const canvas = canvasRef.current;
