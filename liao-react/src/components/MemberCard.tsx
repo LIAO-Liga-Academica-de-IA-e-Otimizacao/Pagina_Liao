@@ -23,7 +23,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
             className="group relative w-[230px] h-[329px] rounded-2xl p-[2px] bg-gradient-to-br from-red-500 via-yellow-400 to-green-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
         >
             {/* White Content Container */}
-            <div className="bg-white rounded-2xl p-4 h-full flex flex-col items-center text-center relative z-10 gap-2">
+            <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 h-full flex flex-col items-center text-center relative z-10 gap-2 transition-colors duration-200">
 
                 {/* Avatar with Gradient Ring */}
                 <div className="relative mb-1">
@@ -32,16 +32,16 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
                         <img
                             src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
                             alt={member.name}
-                            className="w-full h-full object-cover rounded-full border-2 border-white"
+                            className="w-full h-full object-cover rounded-full border-2 border-white dark:border-gray-700"
                         />
                     </div>
                 </div>
 
                 {/* Typography */}
-                <h3 className="text-lg font-bold text-gray-900 font-sans leading-tight">{member.name}</h3>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white font-sans leading-tight">{member.name}</h3>
 
                 {member.course && (
-                    <p className="text-sm font-medium text-gray-600 italic mb-1">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300 italic mb-1">
                         {member.course}
                     </p>
                 )}

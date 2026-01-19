@@ -29,13 +29,18 @@ interface MemberModalProps {
  * Implements a high-end Tech/AI aesthetic modal with particle background.
  */
 const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) => {
-    const [shouldRender, setShouldRender] = useState(isOpen);
+    const [shouldRender, setShouldRender] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
 
     // Handle Animation Lifecycle
     useEffect(() => {
         if (isOpen) {
             setShouldRender(true);
+            // Slight delay to allow DOM to mount with initial state before animating
+            const timer = setTimeout(() => setIsVisible(true), 10);
+            return () => clearTimeout(timer);
         } else {
+            setIsVisible(false);
             const timer = setTimeout(() => setShouldRender(false), 300); // Wait for exit animation
             return () => clearTimeout(timer);
         }
@@ -43,10 +48,12 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
 
     // Handle ESC key
     useEffect(() => {
+        if (!isOpen) return;
+
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape') onClose();
         };
-        if (isOpen) window.addEventListener('keydown', handleEsc);
+        window.addEventListener('keydown', handleEsc);
         return () => window.removeEventListener('keydown', handleEsc);
     }, [isOpen, onClose]);
 
@@ -59,7 +66,7 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
             aria-modal="true"
         >
             {/* Tech Background Container - Fixed & Full Screen */}
-            <div className={`fixed inset-0 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
+            <div className={`fixed inset-0 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
                 {/* Dark Overlay for contrast */}
                 <div className="absolute inset-0 bg-[#0b132b] bg-opacity-90" onClick={onClose}></div>
                 {/* Animated Particles */}
@@ -70,17 +77,18 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
             <div
                 className={`
                     relative z-10 w-full max-w-[420px] mx-4
-                    bg-white rounded-2xl shadow-[0_0_40px_rgba(76,201,240,0.3)]
+                    bg-white dark:bg-gray-900/90 backdrop-blur-sm
+                    rounded-2xl shadow-[0_0_40px_rgba(76,201,240,0.3)]
                     p-8 flex flex-col items-center
-                    transform transition-all duration-300
-                    ${isOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}
+                    transform transition-all duration-300 ease-out
+                    ${isVisible ? 'scale-100 opacity-100 translate-y-0' : 'scale-90 opacity-0 translate-y-4'}
                 `}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 transition-colors rounded-full hover:bg-gray-100"
+                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                     aria-label="Close"
                 >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -100,7 +108,7 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
                 </div>
 
                 {/* Header Info */}
-                <h2 className="text-2xl font-bold text-gray-900 text-center mb-1">{member.name}</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-1">{member.name}</h2>
                 <div className="flex items-center gap-2 mb-6">
                     <span className="h-1.5 w-1.5 rounded-full bg-cyan-500"></span>
                     <p className="text-sm font-medium text-cyan-600 uppercase tracking-wider">
@@ -130,13 +138,13 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
                 {/* Contact & Socials */}
                 <div className="w-full space-y-3">
                     {member.email && (
-                        <div className="flex items-center justify-center gap-2 text-gray-500 hover:text-cyan-600 transition-colors">
+                        <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors">
                             <FaEnvelope size={14} />
                             <a href={`mailto:${member.email}`} className="text-sm font-medium">{member.email}</a>
                         </div>
                     )}
 
-                    <div className="flex justify-center gap-6 mt-4 pt-6 border-t border-gray-100 w-full">
+                    <div className="flex justify-center gap-6 mt-4 pt-6 border-t border-gray-100 dark:border-gray-700 w-full">
                         {member.linkedin && (
                             <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-transform hover:scale-110">
                                 <FaLinkedin size={24} />
