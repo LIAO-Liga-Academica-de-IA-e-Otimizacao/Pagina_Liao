@@ -24,13 +24,19 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
 
         let animationFrameId: number;
         let particles: Particle[] = [];
+        let lastTime = 0;
 
         // Configuration
         const particleCount = 60;
         const connectionDistance = 150;
-        const maxSpeed = 0.6; // Limits the chaos
-        const boundaryMargin = 100; // Distance from edge to start turning
-        const turnSpeed = 0.05; // How fast they turn away from edges
+
+        // Physics constants (adjusted for Delta Time in seconds)
+        // Previous maxSpeed was 0.6 px/frame. At 60fps that's 36px/sec.
+        // We want slower, ambient feel. Let's try 15-20 px/sec.
+        const maxSpeed = 20;
+        const boundaryMargin = 100;
+        const turnSpeed = 200; // Force to apply when hitting boundary (per second)
+        const wanderStrength = 5; // Random force intensity
 
         // Resize handling
         const resizeCanvas = () => {
@@ -59,34 +65,36 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
                 this.x = Math.random() * canvas!.width;
                 this.y = Math.random() * canvas!.height;
 
-                // Initial gentle velocity
+                // Initial velocity
                 const angle = Math.random() * Math.PI * 2;
-                this.vx = Math.cos(angle) * maxSpeed;
-                this.vy = Math.sin(angle) * maxSpeed;
+                // Initialize with random fraction of maxSpeed
+                const startSpeed = maxSpeed * (0.5 + Math.random() * 0.5);
+                this.vx = Math.cos(angle) * startSpeed;
+                this.vy = Math.sin(angle) * startSpeed;
 
                 this.size = Math.random() * 2 + 1;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.wanderAngle = Math.random() * Math.PI * 2;
             }
 
-            update() {
+            update(dt: number) {
                 // Organic Wander Force
-                // Changes the angle slightly every frame for fluidity like a swimming fish/organism
-                this.wanderAngle += (Math.random() - 0.5) * 0.2; // Wiggle range
+                // Wiggle angle over time
+                this.wanderAngle += (Math.random() - 0.5) * 5 * dt;
 
                 // Add wander vector to velocity
-                const wanderWeight = 0.05;
-                this.vx += Math.cos(this.wanderAngle) * wanderWeight;
-                this.vy += Math.sin(this.wanderAngle) * wanderWeight;
+                this.vx += Math.cos(this.wanderAngle) * wanderStrength * dt;
+                this.vy += Math.sin(this.wanderAngle) * wanderStrength * dt;
 
                 // Soft Boundary (Steering) - Avoid walls smoothly
-                if (this.x < boundaryMargin) this.vx += turnSpeed;
-                if (this.x > canvas!.width - boundaryMargin) this.vx -= turnSpeed;
-                if (this.y < boundaryMargin) this.vy += turnSpeed;
-                if (this.y > canvas!.height - boundaryMargin) this.vy -= turnSpeed;
+                // We add force relative to how close we are to edge? 
+                // Simple constant force is stable enough if tuned.
+                if (this.x < boundaryMargin) this.vx += turnSpeed * dt;
+                if (this.x > canvas!.width - boundaryMargin) this.vx -= turnSpeed * dt;
+                if (this.y < boundaryMargin) this.vy += turnSpeed * dt;
+                if (this.y > canvas!.height - boundaryMargin) this.vy -= turnSpeed * dt;
 
                 // Speed Limit (Damping)
-                // Keeps them stable, preventing infinite acceleration
                 const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
                 if (speed > maxSpeed) {
                     this.vx = (this.vx / speed) * maxSpeed;
@@ -94,15 +102,13 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
                 }
 
                 // Apply velocity
-                this.x += this.vx;
-                this.y += this.vy;
+                this.x += this.vx * dt;
+                this.y += this.vy * dt;
 
-                // Hard clamp just in case (e.g. resize) to keep them on screen
-                // But try not to hit this in normal flow to avoid "teleporting"
-                if (this.x < 0) this.x = 0;
-                if (this.x > canvas!.width) this.x = canvas!.width;
-                if (this.y < 0) this.y = 0;
-                if (this.y > canvas!.height) this.y = canvas!.height;
+                // REMOVED HARD CLAMP
+                // We let them go slightly offscreen if momentum carries them, 
+                // the steering force will naturally bring them back.
+                // This prevents the "hit wall and stop/teleport" effect.
             }
 
             draw() {
@@ -121,8 +127,17 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
             }
         };
 
-        const animate = () => {
+        const animate = (timestamp: number) => {
             if (!ctx || !canvas) return;
+
+            // Calculate Delta Time (in seconds)
+            if (!lastTime) lastTime = timestamp;
+            const dt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            // Cap dt to prevent huge jumps if tab was inactive (e.g. max 0.1s)
+            const safeDt = Math.min(dt, 0.1);
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw Background
@@ -133,7 +148,7 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
 
             // Update & Draw
             particles.forEach((particle, index) => {
-                particle.update();
+                particle.update(safeDt);
                 particle.draw();
 
                 // Connections
@@ -149,9 +164,9 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
                         gradient.addColorStop(1, particles[j].color);
 
                         ctx.strokeStyle = gradient;
-                        // Smooth cubic fade-out for opacity: (1 - x)^3 falls off slower then drops
+                        // Smooth cubic fade-out
                         const alpha = 1 - (distance / connectionDistance);
-                        ctx.globalAlpha = alpha * alpha * alpha; // Softer falloff
+                        ctx.globalAlpha = alpha * alpha * alpha;
 
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particle.x, particle.y);
@@ -166,7 +181,8 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
         };
 
         init();
-        animate();
+        // Start animation loop
+        requestAnimationFrame(animate);
 
         return () => {
             window.removeEventListener('resize', resizeCanvas);
