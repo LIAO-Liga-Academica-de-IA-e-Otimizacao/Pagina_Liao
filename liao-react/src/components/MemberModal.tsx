@@ -79,15 +79,19 @@ const MemberModal: React.FC<MemberModalProps> = ({ member, isOpen, onClose }) =>
                 `}
                 aria-hidden="true"
             >
-                {/* Background Click Handler */}
-                <div className="absolute inset-0 bg-[#0b132b] bg-opacity-95" onClick={onClose}></div>
+                {/* Background Click Handler - Using Tutor Details Gradient */}
+                <div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-indigo-800/95"
+                    onClick={onClose}
+                ></div>
 
-                {/* Tech Background: Strictly configured */}
-                <div className="absolute inset-0 pointer-events-none opacity-60">
+                {/* Tech Background: Strictly configured to match TutorDetails */}
+                <div className="absolute inset-0 pointer-events-none">
                     <TechBackground
                         mode="absolute"
                         backgroundColor="transparent"
-                        colors={['#4cc9f0', '#00f5d4', '#0b132b']}
+                        colors={['#ef4444', '#eab308', '#22c55e', '#3b82f6']} // Red, Yellow, Green, Blue
+                        opacity={0.6}
                     />
                 </div>
             </div>
