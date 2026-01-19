@@ -15,10 +15,8 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
-
     useEffect(() => {
         const canvas = canvasRef.current;
-
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
@@ -30,10 +28,12 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
         // Configuration
         const particleCount = 60;
         const connectionDistance = 150;
+        const maxSpeed = 0.6; // Limits the chaos
+        const boundaryMargin = 100; // Distance from edge to start turning
+        const turnSpeed = 0.05; // How fast they turn away from edges
 
         // Resize handling
         const resizeCanvas = () => {
-            // If mode is absolute, size to parent container if possible, else window
             if (mode === 'absolute' && canvas.parentElement) {
                 canvas.width = canvas.parentElement.clientWidth;
                 canvas.height = canvas.parentElement.clientHeight;
@@ -46,7 +46,6 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Particle Class
         class Particle {
             x: number;
             y: number;
@@ -54,25 +53,56 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
             vy: number;
             size: number;
             color: string;
+            wanderAngle: number;
 
             constructor() {
                 this.x = Math.random() * canvas!.width;
                 this.y = Math.random() * canvas!.height;
-                // Slow movement
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
 
+                // Initial gentle velocity
+                const angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(angle) * maxSpeed;
+                this.vy = Math.sin(angle) * maxSpeed;
+
+                this.size = Math.random() * 2 + 1;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.wanderAngle = Math.random() * Math.PI * 2;
             }
 
             update() {
+                // Organic Wander Force
+                // Changes the angle slightly every frame for fluidity like a swimming fish/organism
+                this.wanderAngle += (Math.random() - 0.5) * 0.2; // Wiggle range
+
+                // Add wander vector to velocity
+                const wanderWeight = 0.05;
+                this.vx += Math.cos(this.wanderAngle) * wanderWeight;
+                this.vy += Math.sin(this.wanderAngle) * wanderWeight;
+
+                // Soft Boundary (Steering) - Avoid walls smoothly
+                if (this.x < boundaryMargin) this.vx += turnSpeed;
+                if (this.x > canvas!.width - boundaryMargin) this.vx -= turnSpeed;
+                if (this.y < boundaryMargin) this.vy += turnSpeed;
+                if (this.y > canvas!.height - boundaryMargin) this.vy -= turnSpeed;
+
+                // Speed Limit (Damping)
+                // Keeps them stable, preventing infinite acceleration
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > maxSpeed) {
+                    this.vx = (this.vx / speed) * maxSpeed;
+                    this.vy = (this.vy / speed) * maxSpeed;
+                }
+
+                // Apply velocity
                 this.x += this.vx;
                 this.y += this.vy;
 
-                // Bounce off edges
-                if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
+                // Hard clamp just in case (e.g. resize) to keep them on screen
+                // But try not to hit this in normal flow to avoid "teleporting"
+                if (this.x < 0) this.x = 0;
+                if (this.x > canvas!.width) this.x = canvas!.width;
+                if (this.y < 0) this.y = 0;
+                if (this.y > canvas!.height) this.y = canvas!.height;
             }
 
             draw() {
@@ -84,7 +114,6 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
             }
         }
 
-        // Initialize particles
         const init = () => {
             particles = [];
             for (let i = 0; i < particleCount; i++) {
@@ -92,10 +121,9 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
             }
         };
 
-        // Animation Loop
         const animate = () => {
             if (!ctx || !canvas) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear screen
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             // Draw Background
             if (backgroundColor !== 'transparent') {
@@ -103,26 +131,28 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // Update and draw particles
+            // Update & Draw
             particles.forEach((particle, index) => {
                 particle.update();
                 particle.draw();
 
-                // Draw Connections
-                for (let j = index; j < particles.length; j++) {
+                // Connections
+                for (let j = index + 1; j < particles.length; j++) {
                     const dx = particle.x - particles[j].x;
                     const dy = particle.y - particles[j].y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
                     if (distance < connectionDistance) {
                         ctx.beginPath();
-                        // Use the particle's color for the line to create colorful connections
                         const gradient = ctx.createLinearGradient(particle.x, particle.y, particles[j].x, particles[j].y);
                         gradient.addColorStop(0, particle.color);
                         gradient.addColorStop(1, particles[j].color);
 
                         ctx.strokeStyle = gradient;
-                        ctx.globalAlpha = 1 - distance / connectionDistance;
+                        // Smooth cubic fade-out for opacity: (1 - x)^3 falls off slower then drops
+                        const alpha = 1 - (distance / connectionDistance);
+                        ctx.globalAlpha = alpha * alpha * alpha; // Softer falloff
+
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particle.x, particle.y);
                         ctx.lineTo(particles[j].x, particles[j].y);
