@@ -32,11 +32,41 @@ export const getMemberById = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+// Restricted Director Roles
+const RESTRICTED_ROLES = [
+    'Diretor Geral',
+    'Vice Diretor',
+    'Dir. Secretaria Geral',
+    'Dir. Acadêmica',
+    'Dir. Relações Públicas',
+    'Dir. Extensão',
+    'Dir. Científico'
+];
+
 export const createMember = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, email, role, photo, bio, course, isFounder, linkedin, github, year, isActive } = req.body;
 
-        // Validation for Founding Members limit
+        // 1. Validation for Restricted Roles (Directors)
+        if (RESTRICTED_ROLES.includes(role) && isActive !== false) {
+            // Check if role is already taken by an active member
+            const existingDirector = await prisma.member.findFirst({
+                where: {
+                    role: role,
+                    isActive: true, // Only active members hold the seat
+                }
+            });
+
+            if (existingDirector) {
+                res.status(400).json({
+                    success: false,
+                    error: `O cargo de ${role} já está ocupado por ${existingDirector.name}.`,
+                });
+                return;
+            }
+        }
+
+        // 2. Validation for Founding Members limit
         if (isFounder) {
             const founderCount = await prisma.member.count({
                 where: { isFounder: true },
@@ -79,11 +109,33 @@ export const updateMember = async (req: Request, res: Response): Promise<void> =
         const { id } = req.params;
         const { name, email, role, photo, bio, course, isFounder, linkedin, github, year, isActive } = req.body;
 
-        // Validation for Founding Members limit if checking the box
+        const memberId = Number(id);
+
+        // 1. Validation for Restricted Roles (Directors)
+        if (RESTRICTED_ROLES.includes(role) && isActive !== false) {
+            // Check if role is taken by SOMEONE ELSE who is active
+            const existingDirector = await prisma.member.findFirst({
+                where: {
+                    role: role,
+                    isActive: true,
+                    id: { not: memberId } // Exclude current member
+                }
+            });
+
+            if (existingDirector) {
+                res.status(400).json({
+                    success: false,
+                    error: `O cargo de ${role} já está ocupado por ${existingDirector.name}.`,
+                });
+                return;
+            }
+        }
+
+        // 2. Validation for Founding Members limit if checking the box
         if (isFounder) {
             // Check if this member is ALREADY a founder (no change needed)
             const currentMember = await prisma.member.findUnique({
-                where: { id: Number(id) },
+                where: { id: memberId },
                 select: { isFounder: true }
             });
 
@@ -104,7 +156,7 @@ export const updateMember = async (req: Request, res: Response): Promise<void> =
         }
 
         const member = await prisma.member.update({
-            where: { id: Number(id) },
+            where: { id: memberId },
             data: {
                 name,
                 email,

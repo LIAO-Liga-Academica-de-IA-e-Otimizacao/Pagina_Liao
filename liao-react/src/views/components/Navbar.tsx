@@ -114,7 +114,6 @@ const Navbar: React.FC = () => {
                                 {link.name}
                             </Link>
                         ))}
-                        ))}
 
                         {/* Theme Toggle (Mobile) */}
                         <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700 mt-2">
