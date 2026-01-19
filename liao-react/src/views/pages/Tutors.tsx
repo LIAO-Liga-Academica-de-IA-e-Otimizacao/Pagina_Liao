@@ -45,11 +45,11 @@ const Tutors: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 py-12 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                    <h1 className="section-title">Nossos Tutores</h1>
-                    <p className="text-xl text-gray-600">
+                    <h1 className="section-title dark:text-white">Nossos Tutores</h1>
+                    <p className="text-xl text-gray-600 dark:text-gray-400">
                         Nossos tutores estão prontos para ajudar você
                     </p>
                 </div>
@@ -61,8 +61,8 @@ const Tutors: React.FC = () => {
                 </div>
 
                 {tutors.length === 0 && (
-                    <div className="text-center py-12 bg-white rounded-xl shadow-sm">
-                        <p className="text-gray-500 text-lg">
+                    <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                        <p className="text-gray-500 dark:text-gray-400 text-lg">
                             Nenhum tutor disponível no momento.
                         </p>
                     </div>

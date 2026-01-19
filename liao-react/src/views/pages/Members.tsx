@@ -157,12 +157,12 @@ const Members: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 py-12 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header and Tabs (Unchanged code omitted for brevity matching existing context) */}
                 <div className="text-center mb-12">
-                    <h1 className="section-title">Nossos Membros</h1>
-                    <p className="text-xl text-gray-600">Conheça as pessoas que fazem a LIAO acontecer</p>
+                    <h1 className="section-title dark:text-white">Nossos Membros</h1>
+                    <p className="text-xl text-gray-600 dark:text-gray-400">Conheça as pessoas que fazem a LIAO acontecer</p>
                 </div>
 
                 <div className="flex justify-center mb-8 space-x-4">
@@ -172,7 +172,7 @@ const Members: React.FC = () => {
                             onClick={() => setActiveTab(tab as any)}
                             className={`px-6 py-2 rounded-full font-bold transition-all ${activeTab === tab
                                 ? 'bg-gradient-to-r from-black to-green-900 text-white shadow-lg scale-105'
-                                : 'bg-white text-gray-600 hover:bg-gray-100'
+                                : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                 }`}
                         >
                             {tab === 'directors' ? 'Diretoria Atual' : tab === 'members' ? 'Membros' : 'Fundadores'}
@@ -191,7 +191,7 @@ const Members: React.FC = () => {
                                         onClick={() => setSelectedYear(year)}
                                         className={`flex flex-col items-center justify-center w-16 h-16 rounded-xl border-2 transition-all ${selectedYear === year
                                             ? 'border-green-600 bg-green-50 text-green-700 shadow-md scale-110'
-                                            : 'border-gray-200 bg-white text-gray-400 hover:border-gray-300'
+                                            : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-400 dark:text-gray-400 hover:border-gray-300'
                                             }`}
                                     >
                                         <span className="text-xs font-semibold uppercase">Ano</span>
@@ -201,8 +201,8 @@ const Members: React.FC = () => {
                             </div>
                         </div>
                         <div className="flex space-x-3 mt-4">
-                            <button onClick={() => setRoleFilter('all')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${roleFilter === 'all' ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}>Todos</button>
-                            <button onClick={() => setRoleFilter('directors')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${roleFilter === 'directors' ? 'bg-gray-800 text-white' : 'bg-white text-gray-600'}`}>Apenas Diretores</button>
+                            <button onClick={() => setRoleFilter('all')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border dark:border-gray-600 ${roleFilter === 'all' ? 'bg-gray-800 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Todos</button>
+                            <button onClick={() => setRoleFilter('directors')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border dark:border-gray-600 ${roleFilter === 'directors' ? 'bg-gray-800 text-white' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300'}`}>Apenas Diretores</button>
                         </div>
                     </div>
                 )}
@@ -215,7 +215,7 @@ const Members: React.FC = () => {
                         {/* Mobile View Toggle */}
                         {filteredMembers.length > 0 && (
                             <div className="flex justify-end px-4 mb-2">
-                                <div className="bg-white rounded-lg p-1 shadow-sm border border-gray-100 flex gap-1">
+                                <div className="bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-100 dark:border-gray-700 flex gap-1">
                                     <button
                                         onClick={() => setIsPaused(!isPaused)}
                                         className={`p-2 rounded-md transition-all ${isPaused ? 'bg-red-50 text-red-600' : 'text-gray-400 hover:text-green-600'}`}
@@ -276,8 +276,8 @@ const Members: React.FC = () => {
                                             ))}
                                         </div>
                                     ) : (
-                                        <div className="text-center py-12 bg-white rounded-xl shadow-sm">
-                                            <p className="text-gray-500 text-lg">
+                                        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                                            <p className="text-gray-500 dark:text-gray-400 text-lg">
                                                 Nenhum membro encontrado nesta categoria.
                                             </p>
                                         </div>
@@ -304,7 +304,7 @@ const Members: React.FC = () => {
                                         <button
                                             key={member.id}
                                             onClick={() => handleCardClick(member)}
-                                            className="flex flex-col items-center bg-white p-2 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95"
+                                            className="flex flex-col items-center bg-white dark:bg-gray-800 p-2 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition-all active:scale-95"
                                         >
                                             <div className="w-full aspect-square mb-2 relative overflow-hidden rounded-lg">
                                                 <img
@@ -318,10 +318,10 @@ const Members: React.FC = () => {
                                                     <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-400 rounded-full shadow-sm"></div>
                                                 )}
                                             </div>
-                                            <span className="text-xs font-semibold text-gray-800 text-center line-clamp-2 leading-tight w-full">
+                                            <span className="text-xs font-semibold text-gray-800 dark:text-white text-center line-clamp-2 leading-tight w-full">
                                                 {member.name}
                                             </span>
-                                            <span className="text-[10px] text-gray-500 mt-1 truncate w-full text-center">
+                                            <span className="text-[10px] text-gray-500 dark:text-gray-400 mt-1 truncate w-full text-center">
                                                 {member.role === 'member' ? 'Membro' : member.role}
                                             </span>
                                         </button>
@@ -347,8 +347,8 @@ const Members: React.FC = () => {
                                 </div>
                             ))
                         ) : (
-                            <div className="col-span-full text-center py-12 bg-white rounded-xl shadow-sm">
-                                <p className="text-gray-500 text-lg">
+                            <div className="col-span-full text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
+                                <p className="text-gray-500 dark:text-gray-400 text-lg">
                                     Nenhum membro encontrado nesta categoria.
                                 </p>
                             </div>

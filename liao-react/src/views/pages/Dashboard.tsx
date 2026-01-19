@@ -161,8 +161,8 @@ const Dashboard: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-white">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-gray-900 border-opacity-50"></div>
+            <div className="flex items-center justify-center min-h-screen bg-white dark:bg-zinc-900">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-gray-900 dark:border-gray-100 border-opacity-50"></div>
             </div>
         );
     }
@@ -182,31 +182,31 @@ const Dashboard: React.FC = () => {
             </section>
 
             {/* Stats Section - Clean & Modern */}
-            <section className="py-20 bg-white">
+            <section className="py-20 bg-white dark:bg-zinc-900 transition-colors duration-200">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <span className="text-sm font-bold text-blue-600 uppercase tracking-widest">Nossa Comunidade</span>
-                        <h2 className="text-3xl font-bold mt-2 text-gray-900">Impacto em Números</h2>
+                        <h2 className="text-3xl font-bold mt-2 text-gray-900 dark:text-white">Impacto em Números</h2>
                     </div>
 
                     <div className="grid grid-cols-3 gap-2 md:gap-12 text-center">
-                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all">
                             <div className="text-2xl md:text-6xl font-black text-gray-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500">
                                 {stats.members}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-gray-700 uppercase tracking-wider">Membros Ativos</div>
+                            <div className="text-[10px] md:text-lg font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Membros Ativos</div>
                         </div>
-                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all">
                             <div className="text-2xl md:text-6xl font-black text-gray-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">
                                 {stats.projects}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-gray-700 uppercase tracking-wider">Projetos Realizados</div>
+                            <div className="text-[10px] md:text-lg font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Projetos Realizados</div>
                         </div>
-                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-shadow">
+                        <div className="p-2 md:p-8 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-all">
                             <div className="text-2xl md:text-6xl font-black text-gray-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-emerald-500">
                                 {stats.tutors}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-gray-700 uppercase tracking-wider">Tutores Disponíveis</div>
+                            <div className="text-[10px] md:text-lg font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Tutores Disponíveis</div>
                         </div>
                     </div>
                 </div>
