@@ -81,8 +81,8 @@ const TechBackground: React.FC<TechBackgroundProps> = ({
                 // PRINCIPLE 3: Gradual Direction Change (Deterministic, No Random in Loop)
                 // We use Sine waves to create infinite, predictable, organic energy.
                 // This acts as the "External Influence" (dx, dy) to keep them moving against friction.
-                // Low frequency (0.001) ensures very long, smooth curves.
-                const time = Date.now() * 0.001;
+                // Low frequency (0.0002) ensures very long, smooth curves (~30s cycles).
+                const time = Date.now() * 0.0002;
 
                 const dx = Math.cos(time + this.phaseX);
                 const dy = Math.sin(time + this.phaseY);
