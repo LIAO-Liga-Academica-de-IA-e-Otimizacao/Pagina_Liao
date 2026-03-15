@@ -1,13 +1,14 @@
-
 import React, { useMemo } from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
+import { useTheme } from '../hooks/useTheme';
 
 interface ThreeDCarouselProps {
     partners: Partner[];
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
+    const { theme } = useTheme();
     // Determine the number of cards
     const count = partners.length;
 
@@ -29,7 +30,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
     if (!count) return null;
 
     return (
-        <div className="carousel-view">
+        <div className={`carousel-view ${theme}`}>
             <div className="carousel-container">
                 {/* The Ring rotates, carrying all cards with it */}
                 <div className="carousel-ring">

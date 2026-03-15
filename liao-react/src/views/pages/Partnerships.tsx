@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import type { Partner } from '../../models/Partner';
 import ThreeDCarousel from '../../components/ThreeDCarousel';
+import { useTheme } from '../../hooks/useTheme';
 
 const Partnerships: React.FC = () => {
+    const { theme } = useTheme();
     const [partners, setPartners] = useState<Partner[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -82,8 +84,8 @@ const Partnerships: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-12">
-            <div className="bg-gray-900 text-white py-12 px-4">
+        <div className={`min-h-screen pb-12 transition-colors duration-200 ${theme === 'dark' ? 'dark bg-zinc-950' : 'bg-gray-50'}`}>
+            <div className={`py-12 px-4 transition-colors ${theme === 'dark' ? 'bg-black/60 backdrop-blur-md border-b border-zinc-800 text-white' : 'bg-gray-900 text-white'}`}>
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Nossos Parceiros</h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
@@ -94,8 +96,8 @@ const Partnerships: React.FC = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {partners.length === 0 ? (
-                    <div className="text-center py-12 bg-white rounded-xl shadow-sm">
-                        <p className="text-gray-500 text-lg">
+                    <div className="text-center py-12 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border dark:border-zinc-800 transition-colors">
+                        <p className="text-gray-500 dark:text-gray-400 text-lg">
                             Estamos em busca de novas parcerias! Entre em contato.
                         </p>
                     </div>
@@ -119,7 +121,7 @@ const Partnerships: React.FC = () => {
                                             style={{ width: '100%' }}
                                             className="shrink-0 px-4"
                                         >
-                                            <div className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 group h-64">
+                                            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-xl transition-all duration-300 group h-64 border dark:border-zinc-800">
                                                 {partner.websiteUrl ? (
                                                     <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="block transform transition-transform group-hover:scale-105">
                                                         <img
@@ -132,10 +134,10 @@ const Partnerships: React.FC = () => {
                                                     <img
                                                         src={partner.imageUrl}
                                                         alt={partner.name}
-                                                        className="h-32 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300"
+                                                        className="h-32 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300 dark:brightness-200"
                                                     />
                                                 )}
-                                                <h3 className="text-lg font-semibold text-gray-800 mt-2">{partner.name}</h3>
+                                                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mt-2">{partner.name}</h3>
                                             </div>
                                         </div>
                                     ))}
