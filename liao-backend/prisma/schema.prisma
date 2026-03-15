@@ -1,10 +1,25 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  description String
+  coverImage  String
+  date        DateTime
+  location    String?
+  speakers    String[]
+  gallery     String[]
+  highlights  String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model User {
@@ -106,19 +121,4 @@ model Partner {
   websiteUrl String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-}
-
-model Event {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
-  title       String
-  description String
-  coverImage  String
-  date        DateTime
-  location    String?
-  speakers    String[]
-  gallery     String[]
-  highlights  String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 }
