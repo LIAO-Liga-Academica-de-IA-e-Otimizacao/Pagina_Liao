@@ -23,14 +23,14 @@ const Events: React.FC = () => {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 pb-12">
+        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 pt-24 pb-12 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Header Section */}
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
                         Eventos LIAO
                     </h1>
-                    <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                    <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                         Fique por dentro das nossas palestras, workshops, maratonas e encontros sobre inteligência artificial e otimização.
                     </p>
                 </div>
@@ -46,12 +46,12 @@ const Events: React.FC = () => {
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-                        <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="text-center py-20 bg-white dark:bg-zinc-800 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-700">
+                        <svg className="w-16 h-16 text-gray-300 dark:text-zinc-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <h3 className="text-xl font-medium text-gray-900">Nenhum evento encontrado</h3>
-                        <p className="text-gray-500 mt-2">Em breve teremos novidades por aqui!</p>
+                        <h3 className="text-xl font-medium text-gray-900 dark:text-white">Nenhum evento encontrado</h3>
+                        <p className="text-gray-500 dark:text-gray-400 mt-2">Em breve teremos novidades por aqui!</p>
                     </div>
                 )}
             </div>

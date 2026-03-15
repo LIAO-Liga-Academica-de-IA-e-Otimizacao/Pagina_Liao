@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     return (
         <Link 
             to={`/events/${event.slug}`}
-            className="group block bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 h-full transform hover:-translate-y-2"
+            className="group block bg-white dark:bg-zinc-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-gray-100 dark:border-zinc-700 h-full transform hover:-translate-y-2"
         >
             {/* Image Container */}
             <div className="relative h-56 overflow-hidden">
@@ -34,7 +34,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                     </span>
                 </div>
                 <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm text-indigo-600 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
+                    <span className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm text-indigo-600 dark:text-indigo-400 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
                         {eventDate}
                     </span>
                 </div>
@@ -42,11 +42,11 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
 
             {/* Content Container */}
             <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-indigo-600 transition-colors line-clamp-2">
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2">
                     {event.title}
                 </h3>
                 
-                <div className="flex items-center text-gray-500 text-sm mb-4 gap-4">
+                <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm mb-4 gap-4">
                     {event.location && (
                         <div className="flex items-center gap-1.5">
                             <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,15 +58,15 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                     )}
                 </div>
 
-                <p className="text-gray-600 text-sm line-clamp-2 mb-4">
+                <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-2 mb-4">
                     {event.description}
                 </p>
 
-                <div className="pt-4 border-t border-gray-100 flex justify-between items-center">
-                    <span className="text-xs font-semibold text-indigo-500 uppercase tracking-wider">
+                <div className="pt-4 border-t border-gray-100 dark:border-zinc-700 flex justify-between items-center">
+                    <span className="text-xs font-semibold text-indigo-500 dark:text-indigo-400 uppercase tracking-wider">
                         Saber mais
                     </span>
-                    <div className="w-8 h-8 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-zinc-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 dark:group-hover:bg-indigo-500 group-hover:text-white transition-colors">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
