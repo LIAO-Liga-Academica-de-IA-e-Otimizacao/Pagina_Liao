@@ -1,24 +1,15 @@
 import React, { useMemo } from 'react';
 import './ThreeDCarousel.css';
 import type { Partner } from '../models/Partner';
-import { useTheme } from '../hooks/useTheme';
 
 interface ThreeDCarouselProps {
     partners: Partner[];
 }
 
 const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
-    const { theme } = useTheme();
     // Determine the number of cards
     const count = partners.length;
 
-    // Radius calculation
-    // We want a closed ring. 
-    // Card Width = 160px (from CSS)
-    // Gap = 20px (Tighter, as requested)
-    // Formula: r = (w + gap) / (2 * tan(PI / N))
-
-    // Safety check for low count to prevent huge radius or overlap
     const radius = useMemo(() => {
         if (count === 0) return 0;
         if (count < 3) return 200; // Minimum visual radius for 1-2 items
@@ -30,7 +21,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
     if (!count) return null;
 
     return (
-        <div className={`carousel-view ${theme}`}>
+        <div className="carousel-view">
             <div className="carousel-container">
                 {/* The Ring rotates, carrying all cards with it */}
                 <div className="carousel-ring">
@@ -43,9 +34,6 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
                                 key={partner.id}
                                 className="carousel-card-wrapper"
                                 style={{
-                                    // PRECISE POSITIONING:
-                                    // Rotate to angle, then push out by radius.
-                                    // This locks the card to its slot in the "Ring".
                                     transform: `rotateY(${angle}deg) translateZ(${radius}px)`
                                 }}
                             >

@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import type { Partner } from '../../models/Partner';
 import ThreeDCarousel from '../../components/ThreeDCarousel';
-import { useTheme } from '../../hooks/useTheme';
 
 const Partnerships: React.FC = () => {
-    const { theme } = useTheme();
     const [partners, setPartners] = useState<Partner[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -84,8 +82,8 @@ const Partnerships: React.FC = () => {
     }
 
     return (
-        <div className={`min-h-screen pb-12 transition-colors duration-200 ${theme === 'dark' ? 'dark bg-zinc-950' : 'bg-gray-50'}`}>
-            <div className={`py-12 px-4 transition-colors ${theme === 'dark' ? 'bg-black/60 backdrop-blur-md border-b border-zinc-800 text-white' : 'bg-gray-900 text-white'}`}>
+        <div className="min-h-screen pb-12 transition-colors duration-200 bg-gray-50 dark:bg-zinc-950">
+            <div className="py-12 px-4 transition-colors bg-gray-900 text-white dark:bg-black/60 dark:backdrop-blur-md dark:border-b dark:border-zinc-800">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Nossos Parceiros</h1>
                     <p className="text-xl text-gray-300 max-w-2xl mx-auto">
