@@ -65,7 +65,7 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
 
                                     {/* Back Face (LIAO Logo) */}
                                     <div className="carousel-card-back">
-                                        <img src="/luxury-lion.png" alt="LIAO" className="back-logo" />
+                                        <img src="/liao_dourado-removebg-preview.png" alt="LIAO" className="back-logo" />
                                     </div>
                                 </div>
                             </div>
