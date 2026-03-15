@@ -209,6 +209,22 @@ export const apiService = {
         reqCache.clear('/partners');
         return api.delete(`/partners/${id}`);
     },
+
+    // Events
+    getEvents: () => getCached('/events'),
+    getEventBySlug: (slug: string) => getCached(`/events/${slug}`),
+    createEvent: (data: any) => {
+        reqCache.clear('/events');
+        return api.post('/events', data);
+    },
+    updateEvent: (id: number, data: any) => {
+        reqCache.clear('/events');
+        return api.put(`/events/${id}`, data);
+    },
+    deleteEvent: (id: number) => {
+        reqCache.clear('/events');
+        return api.delete(`/events/${id}`);
+    },
 };
 
 export default api;

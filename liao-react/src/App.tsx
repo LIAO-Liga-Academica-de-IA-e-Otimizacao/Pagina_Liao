@@ -11,6 +11,8 @@ import Projects from './views/pages/Projects';
 import ProjectDetails from './views/pages/ProjectDetails';
 import Login from './views/pages/Login';
 import Admin from './views/pages/Admin';
+import Events from './views/pages/Events';
+import EventDetails from './views/pages/EventDetails';
 import ProtectedRoute from './components/ProtectedRoute';
 
 import About from './views/pages/About';
@@ -32,6 +34,8 @@ function App() {
           <Route path="projects/:id" element={<ProjectDetails />} />
           <Route path="partnerships" element={<Partnerships />} />
           <Route path="about" element={<About />} />
+          <Route path="events" element={<Events />} />
+          <Route path="events/:slug" element={<EventDetails />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={

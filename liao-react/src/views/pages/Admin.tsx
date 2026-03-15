@@ -6,6 +6,8 @@ import TutorForm from '../../components/TutorForm';
 import ProjectForm from '../../components/ProjectForm';
 import ArticleForm from '../../components/ArticleForm';
 import PartnerForm from '../../components/PartnerForm';
+import EventForm from '../../components/EventForm';
+import type { Event } from '../../models/Event';
 
 const Admin: React.FC = () => {
     const navigate = useNavigate();
@@ -37,6 +39,11 @@ const Admin: React.FC = () => {
     const [partners, setPartners] = useState<any[]>([]);
     const [editingPartner, setEditingPartner] = useState<any>(null);
     const [showPartnerForm, setShowPartnerForm] = useState(false);
+
+    // Events State
+    const [events, setEvents] = useState<Event[]>([]);
+    const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+    const [showEventForm, setShowEventForm] = useState(false);
 
     const [config, setConfig] = useState({ proselOpen: false });
 
@@ -114,12 +121,22 @@ const Admin: React.FC = () => {
         }
     };
 
+    const fetchEvents = async () => {
+        try {
+            const response = await apiService.getEvents();
+            setEvents(response.data.data || []);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    };
+
     useEffect(() => {
         if (activeSection === 'members') fetchMembers();
         if (activeSection === 'tutors') fetchTutors();
         if (activeSection === 'projects') fetchProjects();
         if (activeSection === 'articles') fetchArticles();
         if (activeSection === 'partners') fetchPartners();
+        if (activeSection === 'events') fetchEvents();
         if (activeSection === 'config') {
             fetchConfig();
             fetchAdmins();
@@ -210,8 +227,70 @@ const Admin: React.FC = () => {
     };
     const handlePartnerSuccess = () => { setShowPartnerForm(false); setEditingPartner(null); fetchPartners(); };
 
+    // --- Events Logic ---
+    const handleDeleteEvent = async (id: number) => {
+        if (window.confirm('Tem certeza que deseja excluir este evento?')) {
+            await apiService.deleteEvent(id);
+            fetchEvents();
+        }
+    };
+    const handleEventSuccess = () => { setShowEventForm(false); setEditingEvent(null); fetchEvents(); };
+
 
     // --- Renders ---
+
+    const renderEventsSection = () => (
+        <div className="space-y-6">
+            <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold text-gray-900">Gerenciar Eventos</h2>
+                <button
+                    onClick={() => { setEditingEvent(null); setShowEventForm(true); }}
+                    className="btn-primary"
+                >
+                    Novo Evento
+                </button>
+            </div>
+            {showEventForm ? (
+                <EventForm
+                    event={editingEvent}
+                    onSuccess={handleEventSuccess}
+                    onCancel={() => { setShowEventForm(false); setEditingEvent(null); }}
+                />
+            ) : (
+                <div className="bg-white shadow rounded-lg overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                        <thead className="bg-gray-50">
+                            <tr>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evento / Data</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Local</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-white divide-y divide-gray-200">
+                            {events.map((event) => (
+                                <tr key={event.id}>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="flex items-center">
+                                            <img className="h-10 w-16 object-cover mr-3 rounded" src={event.coverImage} alt="" />
+                                            <div>
+                                                <div className="text-sm font-medium text-gray-900">{event.title}</div>
+                                                <div className="text-xs text-gray-500">{new Date(event.date).toLocaleDateString('pt-BR')}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{event.location || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button onClick={() => { setEditingEvent(event); setShowEventForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeleteEvent(event.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
+        </div>
+    );
 
     const renderConfigSection = () => (
         <div className="space-y-6">
@@ -671,6 +750,7 @@ const Admin: React.FC = () => {
                 {activeSection === 'projects' && renderProjectsSection()}
                 {activeSection === 'articles' && renderArticlesSection()}
                 {activeSection === 'partners' && renderPartnersSection()}
+                {activeSection === 'events' && renderEventsSection()}
                 {activeSection === 'config' && renderConfigSection()}
 
                 {!activeSection && (
@@ -727,6 +807,15 @@ const Admin: React.FC = () => {
                             </div>
                             <p className="text-gray-600 mb-4">Processo Seletivo e sistema.</p>
                             <button className="btn-primary w-full">Configurar</button>
+                        </div>
+
+                        <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('events')}>
+                            <div className="flex items-center justify-between mb-4">
+                                <h3 className="text-xl font-bold text-gray-900">Eventos</h3>
+                                <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            </div>
+                            <p className="text-gray-600 mb-4">Gerenciar eventos e palestras.</p>
+                            <button className="btn-primary w-full">Gerenciar</button>
                         </div>
                     </div>
                 )}
