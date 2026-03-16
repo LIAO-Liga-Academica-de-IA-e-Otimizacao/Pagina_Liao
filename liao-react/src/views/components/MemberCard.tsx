@@ -10,7 +10,7 @@ interface MemberCardProps {
 
 const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
     return (
-        <Card className="group flex flex-col h-full hover:shadow-2xl transition-shadow duration-300">
+        <Card premium={true} className="group flex flex-col h-full hover:shadow-2xl transition-shadow duration-300">
             <div className="relative overflow-hidden">
                 {/* Photo */}
                 <div className="aspect-square overflow-hidden bg-gray-200 relative">

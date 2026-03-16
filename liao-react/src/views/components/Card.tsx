@@ -7,15 +7,16 @@ interface CardProps {
     hover?: boolean;
 }
 
-const Card: React.FC<CardProps> = ({
+const Card: React.FC<CardProps & { premium?: boolean }> = ({
     children,
     className = '',
     onClick,
-    hover = true
+    hover = true,
+    premium = false
 }) => {
     return (
         <div
-            className={`card ${hover ? 'hover:scale-105 cursor-pointer' : ''} ${className}`}
+            className={`${premium ? 'card-premium' : 'card'} ${hover ? 'hover:scale-105 cursor-pointer' : ''} ${className}`}
             onClick={onClick}
         >
             {children}
