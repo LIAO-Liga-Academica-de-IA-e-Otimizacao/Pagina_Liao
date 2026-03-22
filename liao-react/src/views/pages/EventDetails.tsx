@@ -175,6 +175,27 @@ const EventDetails: React.FC = () => {
     // Helper for event speakers to safely access their Member properties
     const speakersList = event.speakers || [];
 
+    const handleAddToCalendar = () => {
+        if (!event) return;
+
+        const startDate = new Date(event.date as string);
+        // Assuming a standard 2-hour duration for the event if end date is not available
+        const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
+
+        const formatGCalDate = (date: Date) => {
+            return date.toISOString().replace(/-|:|\.\d\d\d/g, "");
+        };
+
+        const title = encodeURIComponent(event.title);
+        const details = encodeURIComponent(event.description || "");
+        const location = encodeURIComponent(event.location || "");
+        const dates = `${formatGCalDate(startDate)}/${formatGCalDate(endDate)}`;
+
+        const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&details=${details}&location=${location}&dates=${dates}`;
+        
+        window.open(googleCalendarUrl, '_blank', 'noopener,noreferrer');
+    };
+
     return (
         <div 
             className={`relative min-h-screen bg-zinc-950 text-zinc-50 overflow-x-hidden ${fontClass}`}
@@ -512,6 +533,7 @@ const EventDetails: React.FC = () => {
                                         </p>
                                     </div>
                                     <button 
+                                        onClick={handleAddToCalendar}
                                         className="w-full py-4 bg-white text-zinc-950 font-bold hover:bg-zinc-200 transition-colors shadow-lg shadow-white/10 active:scale-[0.98] transition-all"
                                         style={{ borderRadius: 'var(--event-radius-sm)' }}
                                     >
