@@ -15,12 +15,15 @@ console.log('[DEBUG] partnerRoutes imported type:', typeof partnerRoutes);
 import { errorHandler } from './middleware/errorHandler';
 import { getConfig, updateConfig } from './controllers/configController';
 import { authenticate, requireAdmin } from './middleware/auth';
+import { setupSwagger } from './config/swagger';
 
 // Load environment variables
 dotenv.config();
 
 const app: Application = express();
 const PORT = process.env.PORT || 3001;
+
+setupSwagger(app);
 
 // Middleware
 app.use(cors({

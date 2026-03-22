@@ -3,3 +3,5 @@ node_modules
 .env
 
 /src/generated/prisma
+openapi.json
+src/types/api.ts

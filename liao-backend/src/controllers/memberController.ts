@@ -1,6 +1,27 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+/**
+ * @openapi
+ * /api/members:
+ *   get:
+ *     summary: getMembers operation
+ *     tags: [Members]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Member'
+ */
 export const getMembers = async (req: Request, res: Response): Promise<void> => {
     try {
         const members = await prisma.member.findMany({
@@ -13,6 +34,27 @@ export const getMembers = async (req: Request, res: Response): Promise<void> => 
     }
 };
 
+/**
+ * @openapi
+ * /api/members:
+ *   get:
+ *     summary: getMemberById operation
+ *     tags: [Members]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Member'
+ */
 export const getMemberById = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
@@ -43,6 +85,27 @@ const RESTRICTED_ROLES = [
     'Dir. Científico'
 ];
 
+/**
+ * @openapi
+ * /api/members:
+ *   post:
+ *     summary: createMember operation
+ *     tags: [Members]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Member'
+ */
 export const createMember = async (req: Request, res: Response): Promise<void> => {
     try {
         const { name, email, role, photo, bio, course, isFounder, linkedin, github, year, isActive } = req.body;
@@ -104,6 +167,27 @@ export const createMember = async (req: Request, res: Response): Promise<void> =
     }
 };
 
+/**
+ * @openapi
+ * /api/members:
+ *   put:
+ *     summary: updateMember operation
+ *     tags: [Members]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Member'
+ */
 export const updateMember = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
@@ -179,6 +263,27 @@ export const updateMember = async (req: Request, res: Response): Promise<void> =
     }
 };
 
+/**
+ * @openapi
+ * /api/members:
+ *   delete:
+ *     summary: deleteMember operation
+ *     tags: [Members]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Member'
+ */
 export const deleteMember = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;

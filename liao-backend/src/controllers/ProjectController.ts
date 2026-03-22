@@ -1,6 +1,27 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+/**
+ * @openapi
+ * /api/projects:
+ *   post:
+ *     summary: createProject operation
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Project'
+ */
 export const createProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const { title, description, images, date } = req.body;
@@ -26,6 +47,27 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * @openapi
+ * /api/projects:
+ *   get:
+ *     summary: getProjects operation
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Project'
+ */
 export const getProjects = async (req: Request, res: Response): Promise<void> => {
     try {
         const { sort } = req.query; // 'recent' or 'oldest'
@@ -43,6 +85,27 @@ export const getProjects = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+/**
+ * @openapi
+ * /api/projects:
+ *   delete:
+ *     summary: deleteProject operation
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Project'
+ */
 export const deleteProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
@@ -56,6 +119,27 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * @openapi
+ * /api/projects:
+ *   put:
+ *     summary: updateProject operation
+ *     tags: [Projects]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Project'
+ */
 export const updateProject = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;

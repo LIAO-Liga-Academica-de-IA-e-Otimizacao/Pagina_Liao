@@ -38,6 +38,10 @@ npx prisma migrate dev --name init
 # Generate Prisma Client
 npx prisma generate
 
+# Seed the database with example data (Initial admin, members, tutors, etc.)
+# This is recommended for first-time setup to see how the site looks.
+npx prisma db seed
+
 # Start backend server
 npm run dev
 ```
@@ -224,12 +228,27 @@ curl -X POST http://localhost:3001/api/auth/login \
    cd liao-react && npm run dev
    ```
 
-3. **Database Management:**
+3. **Database Management & Type Sync:**
    ```bash
    cd liao-backend
-   npx prisma studio  # Visual database editor
-   npx prisma migrate dev  # Create new migration
+   npx prisma studio         # Visual database editor
+   npx prisma migrate dev    # Create new migration
+   npm run generate:types    # Sync OpenAPI spec and frontend-ready types
    ```
+
+## 📜 OpenAPI & Automated Type Generation
+
+The project uses an OpenAPI-driven workflow to ensure the backend and frontend stay in sync without manual type definitions.
+
+- **Automation:** `prisma-json-schema-generator` automatically converts Prisma models into OpenAPI schemas.
+- **Documentation:** Swagger UI is available at `/api/docs` when the backend is running.
+- **Type Safety:** `openapi-typescript` generates a single source of truth for types in `liao-backend/src/types/api.ts`.
+- **Future-Proof:** This setup allows splitting the frontend and backend into separate repositories seamlessly by fetching the `openapi.json` via URL.
+
+Whenever you change the database schema in `schema.prisma`, simply run:
+```bash
+cd liao-backend && npm run generate:types
+```
 
 ## 🚢 Production Deployment
 

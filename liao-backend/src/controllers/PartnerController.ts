@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import prisma from '../config/database';
 
 // Get all partners
+/**
+ * @openapi
+ * /api/partners:
+ *   get:
+ *     summary: getAllPartners operation
+ *     tags: [Partners]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Partner'
+ */
 export const getAllPartners = async (req: Request, res: Response) => {
     try {
         const partners = await prisma.partner.findMany({
@@ -21,6 +42,27 @@ export const getAllPartners = async (req: Request, res: Response) => {
 };
 
 // Create a new partner
+/**
+ * @openapi
+ * /api/partners:
+ *   post:
+ *     summary: createPartner operation
+ *     tags: [Partners]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Partner'
+ */
 export const createPartner = async (req: Request, res: Response) => {
     console.log('Creating partner:', req.body);
     try {
@@ -50,6 +92,27 @@ export const createPartner = async (req: Request, res: Response) => {
 };
 
 // Update a partner
+/**
+ * @openapi
+ * /api/partners:
+ *   put:
+ *     summary: updatePartner operation
+ *     tags: [Partners]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Partner'
+ */
 export const updatePartner = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
@@ -82,6 +145,27 @@ export const updatePartner = async (req: Request, res: Response) => {
 };
 
 // Delete a partner
+/**
+ * @openapi
+ * /api/partners:
+ *   delete:
+ *     summary: deletePartner operation
+ *     tags: [Partners]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Partner'
+ */
 export const deletePartner = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;

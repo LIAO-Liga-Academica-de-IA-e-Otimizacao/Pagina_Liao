@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import prisma from '../config/database';
 
 // Get all tutors
+/**
+ * @openapi
+ * /api/tutors:
+ *   get:
+ *     summary: getAllTutors operation
+ *     tags: [Tutors]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Tutor'
+ */
 export const getAllTutors = async (
     req: Request,
     res: Response
@@ -25,6 +46,27 @@ export const getAllTutors = async (
 };
 
 // Get tutor by ID
+/**
+ * @openapi
+ * /api/tutors:
+ *   get:
+ *     summary: getTutorById operation
+ *     tags: [Tutors]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Tutor'
+ */
 export const getTutorById = async (
     req: Request,
     res: Response
@@ -58,6 +100,27 @@ export const getTutorById = async (
 };
 
 // Create tutor (admin only)
+/**
+ * @openapi
+ * /api/tutors:
+ *   post:
+ *     summary: createTutor operation
+ *     tags: [Tutors]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Tutor'
+ */
 export const createTutor = async (
     req: Request,
     res: Response
@@ -118,6 +181,27 @@ export const createTutor = async (
 };
 
 // Update tutor (admin only)
+/**
+ * @openapi
+ * /api/tutors:
+ *   put:
+ *     summary: updateTutor operation
+ *     tags: [Tutors]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Tutor'
+ */
 export const updateTutor = async (
     req: Request,
     res: Response
@@ -162,6 +246,27 @@ export const updateTutor = async (
 };
 
 // Delete tutor (admin only)
+/**
+ * @openapi
+ * /api/tutors:
+ *   delete:
+ *     summary: deleteTutor operation
+ *     tags: [Tutors]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Tutor'
+ */
 export const deleteTutor = async (
     req: Request,
     res: Response

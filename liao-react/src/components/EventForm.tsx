@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { apiService } from '../services/api';
-import type { Event } from '../models/Event';
+import type { EventApi } from '../models/Event';
 
 interface EventFormProps {
-    event?: Event | null;
+    event?: EventApi | null;
     onSuccess: () => void;
     onCancel: () => void;
 }
@@ -14,11 +14,11 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         slug: event?.slug || '',
         description: event?.description || '',
         coverImage: event?.coverImage || '',
-        date: event?.date ? new Date(event.date).toISOString().split('T')[0] : '',
+        date: event?.date ? new Date(event.date as string).toISOString().split('T')[0] : '',
         location: event?.location || '',
-        speakers: event?.speakers || [],
-        gallery: event?.gallery || [],
-        highlights: event?.highlights || []
+        speakers: (event?.speakers as any[]) || [],
+        gallery: (event?.gallery as string[]) || [],
+        highlights: (event?.highlights as string[]) || []
     });
 
     const [newSpeaker, setNewSpeaker] = useState('');
@@ -30,7 +30,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         e.preventDefault();
         setLoading(true);
         try {
-            if (event) {
+            if (event && event.id !== undefined) {
                 await apiService.updateEvent(event.id, formData);
             } else {
                 await apiService.createEvent(formData);

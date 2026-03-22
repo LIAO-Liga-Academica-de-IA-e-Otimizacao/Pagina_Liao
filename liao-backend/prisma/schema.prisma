@@ -3,23 +3,57 @@ generator client {
   previewFeatures = ["driverAdapters"]
 }
 
+generator jsonSchema {
+  provider = "prisma-json-schema-generator"
+  output   = "./json-schema"
+}
+
 datasource db {
   provider = "postgresql"
 }
 
 model Event {
-  id          Int      @id @default(autoincrement())
-  slug        String   @unique
+  id          Int            @id @default(autoincrement())
+  slug        String         @unique
   title       String
   description String
   coverImage  String
   date        DateTime
   location    String?
-  speakers    String[]
   gallery     String[]
   highlights  String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  palette      String[]
+  fontClass    String?
+  borderRadius String?        @default("round")
+  agenda       AgendaItem[]
+  speakers    EventSpeaker[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+model AgendaItem {
+  id          Int      @id @default(autoincrement())
+  eventId     Int
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  time        String
+  title       String
+  description String?
+  speakerName String?
+}
+
+model EventSpeaker {
+  id          Int      @id @default(autoincrement())
+  eventId     Int
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  
+  memberId    Int?
+  member      Member?  @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  name        String?
+  role        String?
+  photo       String?
+  company     String?
+  link        String?
 }
 
 model User {
@@ -48,6 +82,7 @@ model Member {
   isActive  Boolean  @default(true)
   isFounder Boolean  @default(false)
   year      Int      @default(2025)
+  eventSpeakers EventSpeaker[]
 }
 
 model Tutor {

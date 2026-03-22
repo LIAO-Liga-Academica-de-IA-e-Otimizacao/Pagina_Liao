@@ -59,9 +59,12 @@ api.interceptors.request.use(
     }
 );
 
-// Response interceptor for error handling
+// Response interceptor for error handling and data unwrapping
 api.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        // Automatically extract the main data payload so components don't need to do response.data.data
+        return response.data;
+    },
     (error: AxiosError) => {
         if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
             // Token expired or invalid
@@ -80,12 +83,12 @@ const getCached = async (url: string, params?: any) => {
 
     if (cached) {
         // Return a promise that resolves immediately with cached data
-        // We simulate an axios response structure
-        return Promise.resolve({ data: cached });
+        return Promise.resolve(cached);
     }
 
     const response = await api.get(url, { params });
-    reqCache.set(key, response.data);
+    // Since interceptor now returns response.data directly, we just store and return it
+    reqCache.set(key, response);
     return response;
 };
 

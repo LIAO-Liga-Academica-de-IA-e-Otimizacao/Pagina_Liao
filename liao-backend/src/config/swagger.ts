@@ -1,0 +1,61 @@
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import { Application } from 'express';
+import fs from 'fs';
+import path from 'path';
+
+// Automatically import generated schemas from Prisma
+let prismaSchemas = {};
+try {
+    const jsonSchemaPath = path.join(__dirname, '../../prisma/json-schema/json-schema.json');
+    if (fs.existsSync(jsonSchemaPath)) {
+        const jsonSchema = JSON.parse(fs.readFileSync(jsonSchemaPath, 'utf8'));
+        
+        // Deeply replace #/definitions with #/components/schemas
+        const fixRefs = (obj: any) => {
+            for (const key in obj) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    fixRefs(obj[key]);
+                } else if (key === '$ref' && typeof obj[key] === 'string' && obj[key].startsWith('#/definitions/')) {
+                    obj[key] = obj[key].replace('#/definitions/', '#/components/schemas/');
+                }
+            }
+        };
+
+        prismaSchemas = jsonSchema.definitions || {};
+        fixRefs(prismaSchemas);
+        
+        console.log(`[SWAGGER] Automatically loaded ${Object.keys(prismaSchemas).length} schemas from Prisma`);
+    }
+} catch (error) {
+    console.error('[SWAGGER] Error loading Prisma schemas:', error);
+}
+
+const options: swaggerJsdoc.Options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'LIAO Backend API',
+            version: '1.0.0',
+            description: 'API documentation for LIAO Backend',
+        },
+        components: {
+            schemas: {
+                ...prismaSchemas,
+                // Add any non-Prisma schemas here
+            },
+        },
+    },
+    apis: ['./src/controllers/*.ts', './src/routes/*.ts'],
+};
+
+export const swaggerSpec = swaggerJsdoc(options);
+
+export const setupSwagger = (app: Application) => {
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+    
+    app.get('/api/openapi.json', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
+};

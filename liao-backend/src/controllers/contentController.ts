@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import prisma from '../config/database';
 
 // Get content by type
+/**
+ * @openapi
+ * /api/content:
+ *   get:
+ *     summary: getContentByType operation
+ *     tags: [Contents]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Content'
+ */
 export const getContentByType = async (
     req: Request,
     res: Response
@@ -40,6 +61,27 @@ export const getContentByType = async (
 };
 
 // Get content by ID
+/**
+ * @openapi
+ * /api/content:
+ *   get:
+ *     summary: getContentById operation
+ *     tags: [Contents]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Content'
+ */
 export const getContentById = async (
     req: Request,
     res: Response
@@ -73,6 +115,27 @@ export const getContentById = async (
 };
 
 // Create content (admin only)
+/**
+ * @openapi
+ * /api/content:
+ *   post:
+ *     summary: createContent operation
+ *     tags: [Contents]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Content'
+ */
 export const createContent = async (
     req: Request,
     res: Response
@@ -123,6 +186,27 @@ export const createContent = async (
 };
 
 // Update content (admin only)
+/**
+ * @openapi
+ * /api/content:
+ *   put:
+ *     summary: updateContent operation
+ *     tags: [Contents]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Content'
+ */
 export const updateContent = async (
     req: Request,
     res: Response
@@ -176,6 +260,27 @@ export const updateContent = async (
 };
 
 // Delete content (admin only)
+/**
+ * @openapi
+ * /api/content:
+ *   delete:
+ *     summary: deleteContent operation
+ *     tags: [Contents]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Content'
+ */
 export const deleteContent = async (
     req: Request,
     res: Response

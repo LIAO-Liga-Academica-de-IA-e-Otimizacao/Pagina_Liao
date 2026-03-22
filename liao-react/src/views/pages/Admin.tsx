@@ -7,7 +7,7 @@ import ProjectForm from '../../components/ProjectForm';
 import ArticleForm from '../../components/ArticleForm';
 import PartnerForm from '../../components/PartnerForm';
 import EventForm from '../../components/EventForm';
-import type { Event } from '../../models/Event';
+import type { EventApi } from '../../models/Event';
 
 const Admin: React.FC = () => {
     const navigate = useNavigate();
@@ -41,8 +41,8 @@ const Admin: React.FC = () => {
     const [showPartnerForm, setShowPartnerForm] = useState(false);
 
     // Events State
-    const [events, setEvents] = useState<Event[]>([]);
-    const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+    const [events, setEvents] = useState<EventApi[]>([]);
+    const [editingEvent, setEditingEvent] = useState<EventApi | null>(null);
     const [showEventForm, setShowEventForm] = useState(false);
 
     const [config, setConfig] = useState({ proselOpen: false });
@@ -123,8 +123,8 @@ const Admin: React.FC = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await apiService.getEvents();
-            setEvents(response.data.data || []);
+            const response = await apiService.getEvents() as any;
+            setEvents(response.data || []);
         } catch (error) {
             console.error('Error fetching events:', error);
         }
@@ -274,14 +274,14 @@ const Admin: React.FC = () => {
                                             <img className="h-10 w-16 object-cover mr-3 rounded" src={event.coverImage} alt="" />
                                             <div>
                                                 <div className="text-sm font-medium text-gray-900">{event.title}</div>
-                                                <div className="text-xs text-gray-500">{new Date(event.date).toLocaleDateString('pt-BR')}</div>
+                                                <div className="text-xs text-gray-500">{new Date(event.date as string).toLocaleDateString('pt-BR')}</div>
                                             </div>
                                         </div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{event.location || '-'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <button onClick={() => { setEditingEvent(event); setShowEventForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteEvent(event.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => handleDeleteEvent(event.id as number)} className="text-red-600 hover:text-red-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}

@@ -2,6 +2,27 @@ import { Request, Response } from 'express';
 import prisma from '../config/database';
 
 // Get ProSel info (just returns latest application stats)
+/**
+ * @openapi
+ * /api/prosel:
+ *   get:
+ *     summary: getProSelInfo operation
+ *     tags: [Prosel]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const getProSelInfo = async (
     req: Request,
     res: Response
@@ -34,6 +55,27 @@ export const getProSelInfo = async (
 };
 
 // Submit application
+/**
+ * @openapi
+ * /api/prosel:
+ *   get:
+ *     summary: submitApplication operation
+ *     tags: [Prosel]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const submitApplication = async (
     req: Request,
     res: Response
@@ -75,6 +117,27 @@ export const submitApplication = async (
 };
 
 // Get all applications (admin only)
+/**
+ * @openapi
+ * /api/prosel:
+ *   get:
+ *     summary: getAllApplications operation
+ *     tags: [Prosel]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const getAllApplications = async (
     req: Request,
     res: Response
@@ -98,6 +161,27 @@ export const getAllApplications = async (
 };
 
 // Update application status (admin only)
+/**
+ * @openapi
+ * /api/prosel:
+ *   put:
+ *     summary: updateApplicationStatus operation
+ *     tags: [Prosel]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const updateApplicationStatus = async (
     req: Request,
     res: Response

@@ -1,9 +1,30 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+/**
+ * @openapi
+ * /api/events:
+ *   post:
+ *     summary: createEvent operation
+ *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ */
 export const createEvent = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, slug, description, coverImage, date, location, speakers, gallery, highlights } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights } = req.body;
 
         const event = await prisma.event.create({
             data: {
@@ -13,10 +34,31 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
                 coverImage,
                 date: new Date(date),
                 location,
-                speakers: speakers || [],
                 gallery: gallery || [],
                 highlights: highlights || [],
+                speakers: {
+                    create: speakers?.map((s: any) => ({
+                        memberId: s.memberId || null,
+                        name: s.name,
+                        role: s.role,
+                        photo: s.photo,
+                        company: s.company,
+                        link: s.link
+                    })) || []
+                },
+                agenda: {
+                    create: agenda?.map((a: any) => ({
+                        time: a.time,
+                        title: a.title,
+                        description: a.description,
+                        speakerName: a.speakerName
+                    })) || []
+                }
             },
+            include: {
+                speakers: { include: { member: true } },
+                agenda: true
+            }
         });
 
         res.status(201).json({ success: true, data: event });
@@ -30,10 +72,35 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+/**
+ * @openapi
+ * /api/events:
+ *   get:
+ *     summary: getEvents operation
+ *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ */
 export const getEvents = async (req: Request, res: Response): Promise<void> => {
     try {
         const events = await prisma.event.findMany({
             orderBy: { date: 'desc' },
+            include: {
+                speakers: { include: { member: true } },
+                agenda: true
+            }
         });
 
         res.json({ success: true, data: events });
@@ -43,11 +110,36 @@ export const getEvents = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+/**
+ * @openapi
+ * /api/events/{slug}:
+ *   get:
+ *     summary: getEventBySlug operation
+ *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ */
 export const getEventBySlug = async (req: Request, res: Response): Promise<void> => {
     try {
         const { slug } = req.params;
         const event = await prisma.event.findUnique({
             where: { slug },
+            include: {
+                speakers: { include: { member: true } },
+                agenda: true
+            }
         });
 
         if (!event) {
@@ -62,10 +154,31 @@ export const getEventBySlug = async (req: Request, res: Response): Promise<void>
     }
 };
 
+/**
+ * @openapi
+ * /api/events/{id}:
+ *   put:
+ *     summary: updateEvent operation
+ *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ */
 export const updateEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, slug, description, coverImage, date, location, speakers, gallery, highlights } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights } = req.body;
 
         const event = await prisma.event.update({
             where: { id: Number(id) },
@@ -76,10 +189,33 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
                 coverImage,
                 date: date ? new Date(date) : undefined,
                 location,
-                speakers,
                 gallery,
                 highlights,
+                speakers: speakers ? {
+                    deleteMany: {}, // Clear old speakers and re-insert
+                    create: speakers.map((s: any) => ({
+                        memberId: s.memberId || null,
+                        name: s.name,
+                        role: s.role,
+                        photo: s.photo,
+                        company: s.company,
+                        link: s.link
+                    }))
+                } : undefined,
+                agenda: agenda ? {
+                    deleteMany: {}, // Clear old agenda and re-insert
+                    create: agenda.map((a: any) => ({
+                        time: a.time,
+                        title: a.title,
+                        description: a.description,
+                        speakerName: a.speakerName
+                    }))
+                } : undefined
             },
+            include: {
+                speakers: { include: { member: true } },
+                agenda: true
+            }
         });
 
         res.json({ success: true, data: event });
@@ -89,6 +225,27 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+/**
+ * @openapi
+ * /api/events/{id}:
+ *   delete:
+ *     summary: deleteEvent operation
+ *     tags: [Events]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Event'
+ */
 export const deleteEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;

@@ -2,6 +2,27 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+/**
+ * @openapi
+ * /api/config:
+ *   get:
+ *     summary: getConfig operation
+ *     tags: [Config]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const getConfig = async (req: Request, res: Response): Promise<void> => {
     try {
         const { key } = req.params;
@@ -19,6 +40,27 @@ export const getConfig = async (req: Request, res: Response): Promise<void> => {
     }
 };
 
+/**
+ * @openapi
+ * /api/config:
+ *   put:
+ *     summary: updateConfig operation
+ *     tags: [Config]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const updateConfig = async (req: Request, res: Response): Promise<void> => {
     try {
         const { key } = req.params;

@@ -1,6 +1,27 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
 
+/**
+ * @openapi
+ * /api/articles:
+ *   post:
+ *     summary: createArticle operation
+ *     tags: [Articles]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Article'
+ */
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
     try {
         const { title, description, content, images, tags, isPublished } = req.body;
@@ -28,6 +49,27 @@ export const createArticle = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * @openapi
+ * /api/articles:
+ *   get:
+ *     summary: getArticles operation
+ *     tags: [Articles]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Article'
+ */
 export const getArticles = async (req: Request, res: Response): Promise<void> => {
     try {
         const { tag, search } = req.query;
@@ -71,6 +113,27 @@ export const getArticles = async (req: Request, res: Response): Promise<void> =>
     }
 };
 
+/**
+ * @openapi
+ * /api/articles:
+ *   delete:
+ *     summary: deleteArticle operation
+ *     tags: [Articles]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Article'
+ */
 export const deleteArticle = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
@@ -84,6 +147,27 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
     }
 };
 
+/**
+ * @openapi
+ * /api/articles:
+ *   put:
+ *     summary: updateArticle operation
+ *     tags: [Articles]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    $ref: '#/components/schemas/Article'
+ */
 export const updateArticle = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;

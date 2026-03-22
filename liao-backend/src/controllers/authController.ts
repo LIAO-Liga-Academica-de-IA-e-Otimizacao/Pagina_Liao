@@ -5,6 +5,27 @@ import prisma from '../config/database';
 import { AuthRequest, JWTPayload } from '../types';
 
 // Login
+/**
+ * @openapi
+ * /api/auth:
+ *   post:
+ *     summary: login operation
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password } = req.body;
@@ -73,6 +94,27 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Register (admin only)
+/**
+ * @openapi
+ * /api/auth:
+ *   post:
+ *     summary: register operation
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
         // Enforce Master Admin permission
@@ -143,6 +185,27 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Get current user
+/**
+ * @openapi
+ * /api/auth:
+ *   get:
+ *     summary: getCurrentUser operation
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const getCurrentUser = async (
     req: Request,
     res: Response
@@ -192,6 +255,27 @@ export const getCurrentUser = async (
 
 
 // Get all admins
+/**
+ * @openapi
+ * /api/auth:
+ *   get:
+ *     summary: getAdmins operation
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const getAdmins = async (req: Request, res: Response): Promise<void> => {
     try {
         const users = await prisma.user.findMany({
@@ -223,6 +307,27 @@ export const getAdmins = async (req: Request, res: Response): Promise<void> => {
 
 
 // Delete admin
+/**
+ * @openapi
+ * /api/auth:
+ *   delete:
+ *     summary: deleteUser operation
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+                    type: object
+ */
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const actingUser = (req as any).user;

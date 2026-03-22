@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { Event } from '../models/Event';
+import type { EventApi } from '../models/Event';
 
-interface EventCardProps {
-    event: Event;
-}
+type EventCardProps = {
+    event: EventApi;
+};
 
 const EventCard: React.FC<EventCardProps> = ({ event }) => {
-    const eventDate = new Date(event.date).toLocaleDateString('pt-BR', {
+    const eventDate = new Date(event.date as string).toLocaleDateString('pt-BR', {
         day: '2-digit',
         month: 'short',
         year: 'numeric'

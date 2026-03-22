@@ -101,7 +101,11 @@ npm start
 - `GET /api/prosel/applications` - List applications (🔒 admin)
 - `PUT /api/prosel/applications/:id` - Update application status (🔒 admin)
 
-## Database Management
+### Seeding
+Populate the database with example data (admin, members, tutors, events):
+```bash
+npx prisma db seed
+```
 
 ### Prisma Studio
 Open Prisma Studio to manage database visually:
@@ -119,6 +123,22 @@ npx prisma migrate dev --name migration_name
 ```bash
 npx prisma migrate reset
 ```
+
+## 📜 OpenAPI & Type Generation
+
+This project uses an automated OpenAPI workflow. You **no longer need** to manually update `swagger.ts` when changing database models.
+
+### Automated Workflow
+1. **Update Schema:** Modify `prisma/schema.prisma`.
+2. **Generate Types:** Run `npm run generate:types`.
+
+### Scripts
+- `npm run generate:openapi`: Extracts models from Prisma and generates a static `openapi.json`.
+- `npm run generate:types`: Generates TypeScript interfaces from the `openapi.json` into `src/types/api.ts`.
+
+### Documentation
+- **Swagger UI:** Accessible at `/api/docs` (Development only).
+- **Raw Spec:** Accessible at `/api/openapi.json`.
 
 ## Project Structure
 

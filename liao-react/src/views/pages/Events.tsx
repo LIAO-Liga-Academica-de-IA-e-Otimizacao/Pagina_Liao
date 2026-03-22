@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
-import type { Event } from '../../models/Event';
+import type { EventApi } from '../../models/Event';
 import EventCard from '../../components/EventCard';
 
 const Events: React.FC = () => {
-    const [events, setEvents] = useState<Event[]>([]);
+    const [events, setEvents] = useState<EventApi[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await apiService.getEvents();
-                setEvents(response.data.data);
+                const response = await apiService.getEvents() as any;
+                setEvents(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
             } finally {
