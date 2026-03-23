@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon",
+    "dev": "prisma generate && nodemon",
     "build": "prisma generate && tsc",
     "vercel-build": "prisma generate && tsc",
     "postinstall": "prisma generate && npm run generate:types",

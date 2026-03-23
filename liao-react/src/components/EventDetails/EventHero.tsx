@@ -4,7 +4,8 @@ import {
     IoArrowBack as ArrowLeft,
     IoCalendarOutline as Calendar,
     IoLocationOutline as MapPin,
-    IoSparkles as Sparkles
+    IoSparkles as Sparkles,
+    IoRocketOutline as Rocket
 } from 'react-icons/io5';
 import type { EventApi } from '../../models/Event';
 import FadeInSection from './FadeInSection';
@@ -81,6 +82,25 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                             </div>
                         </div>
                     </div>
+
+                    {(event as any).subscribe && (
+                        <div className="pt-4">
+                            <a 
+                                href={(event as any).subscribe} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group"
+                                style={{ 
+                                    background: `linear-gradient(135deg, rgb(var(--event-primary-rgb)), rgb(var(--event-secondary-rgb)))`,
+                                    borderRadius: 'var(--event-radius)',
+                                    boxShadow: `0 10px 30px -10px rgb(var(--event-primary-rgb) / 0.5)`
+                                }}
+                            >
+                                <Rocket size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                Realizar Inscrição
+                            </a>
+                        </div>
+                    )}
                 </div>
 
                 <div 
@@ -100,3 +120,4 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
 };
 
 export default EventHero;
+

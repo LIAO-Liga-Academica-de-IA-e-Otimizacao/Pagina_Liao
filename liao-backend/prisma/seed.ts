@@ -66,6 +66,7 @@ async function main() {
     palette: ['#4F46E5', '#761515'],
     borderRadius: 'squared',
     fontClass: 'font-mono',
+    subscribe: "https://example.com/subscribe",
   }; 
 
   const event = await prisma.event.upsert({

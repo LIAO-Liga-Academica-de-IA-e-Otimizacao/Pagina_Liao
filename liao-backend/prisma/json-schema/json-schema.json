@@ -60,6 +60,12 @@
           ],
           "default": "round"
         },
+        "subscribe": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "agenda": {
           "type": "array",
           "items": {

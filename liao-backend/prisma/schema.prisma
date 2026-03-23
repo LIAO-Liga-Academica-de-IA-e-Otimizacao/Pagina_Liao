@@ -26,6 +26,7 @@ model Event {
   palette      String[]
   fontClass    String?
   borderRadius String?        @default("round")
+  subscribe    String?
   agenda       AgendaItem[]
   speakers    EventSpeaker[]
   createdAt   DateTime       @default(now())

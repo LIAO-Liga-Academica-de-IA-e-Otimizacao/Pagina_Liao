@@ -24,7 +24,7 @@ import prisma from '../config/database';
  */
 export const createEvent = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
 
         const event = await prisma.event.create({
             data: {
@@ -36,6 +36,10 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
                 location,
                 gallery: gallery || [],
                 highlights: highlights || [],
+                palette: palette || [],
+                fontClass,
+                borderRadius,
+                subscribe,
                 speakers: {
                     create: speakers?.map((s: any) => ({
                         memberId: s.memberId || null,
@@ -178,7 +182,7 @@ export const getEventBySlug = async (req: Request, res: Response): Promise<void>
 export const updateEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
 
         const event = await prisma.event.update({
             where: { id: Number(id) },
@@ -191,6 +195,10 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
                 location,
                 gallery,
                 highlights,
+                palette,
+                fontClass,
+                borderRadius,
+                subscribe,
                 speakers: speakers ? {
                     deleteMany: {}, // Clear old speakers and re-insert
                     create: speakers.map((s: any) => ({
