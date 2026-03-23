@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { apiService } from '../services/api';
-import type { EventApi } from '../models/Event';
+import { apiService } from '../../services/api';
+import type { EventApi } from '../../models/Event';
 
 interface EventFormProps {
     event?: EventApi | null;

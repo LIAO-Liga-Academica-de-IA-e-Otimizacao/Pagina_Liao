@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { apiService } from '../services/api';
-import type { Article } from '../models/Article';
+import { apiService } from '../../services/api';
+import type { Project } from '../../models/Project';
 
-interface ArticleFormProps {
-    article?: Article;
+interface ProjectFormProps {
+    project?: Project;
     onSuccess: () => void;
     onCancel: () => void;
 }
 
-const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel }) => {
-    const [title, setTitle] = useState(article?.title || '');
-    const [description, setDescription] = useState(article?.description || '');
-    const [content, setContent] = useState(article?.content || '');
-    const [images, setImages] = useState<string[]>(article?.images || ['']);
-    const [tagsInput, setTagsInput] = useState(article?.tags?.join(', ') || '');
-    const [isPublished, setIsPublished] = useState(article?.isPublished !== false);
+const ProjectForm: React.FC<ProjectFormProps> = ({ project, onSuccess, onCancel }) => {
+    const [title, setTitle] = useState(project?.title || '');
+    const [description, setDescription] = useState(project?.description || '');
+    const [date, setDate] = useState(project?.date ? new Date(project.date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]);
+    const [images, setImages] = useState<string[]>(project?.images || ['']);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -25,7 +23,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
     };
 
     const addImageField = () => {
-        if (images.length < 5) {
+        if (images.length < 10) {
             setImages([...images, '']);
         }
     };
@@ -42,11 +40,8 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
 
         const filteredImages = images.filter(img => img.trim() !== '');
 
-        // Process tags: split by comma, trim whitespace, remove empty str
-        const tagsArray = tagsInput.split(',').map(t => t.trim()).filter(t => t !== '');
-
-        if (filteredImages.length > 5) {
-            setError('Máximo de 5 imagens por artigo/newsletter.');
+        if (filteredImages.length > 10) {
+            setError('Máximo de 10 imagens por projeto.');
             setLoading(false);
             return;
         }
@@ -54,21 +49,19 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
         const data = {
             title,
             description,
-            content,
+            date,
             images: filteredImages,
-            tags: tagsArray,
-            isPublished
         };
 
         try {
-            if (article) {
-                await apiService.updateArticle(article.id, data);
+            if (project) {
+                await apiService.updateProject(project.id, data);
             } else {
-                await apiService.createArticle(data);
+                await apiService.createProject(data);
             }
             onSuccess();
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Erro ao salvar artigo');
+            setError(err.response?.data?.error || 'Erro ao salvar projeto');
         } finally {
             setLoading(false);
         }
@@ -77,7 +70,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                {article ? 'Editar Artigo/Newsletter' : 'Nova Publicação'}
+                {project ? 'Editar Projeto' : 'Novo Projeto'}
             </h2>
 
             {error && (
@@ -99,55 +92,29 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Descrição / Resumo (Aparece no Card)</label>
+                    <label className="block text-sm font-medium text-gray-700">Descrição</label>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        rows={3}
-                        className="input-field mt-1"
-                        placeholder="Breve resumo para atrair leitores..."
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Conteúdo Completo (Aparece ao clicar)</label>
-                    <textarea
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
                         required
-                        rows={6}
+                        rows={4}
                         className="input-field mt-1"
-                        placeholder="Escreva o conteúdo da notícia ou artigo aqui..."
                     />
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Tags (Separadas por vírgula)</label>
+                    <label className="block text-sm font-medium text-gray-700">Data de Realização</label>
                     <input
-                        type="text"
-                        value={tagsInput}
-                        onChange={(e) => setTagsInput(e.target.value)}
-                        placeholder="Ex: Eventos, IA, Tecnologia"
+                        type="date"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
                         className="input-field mt-1"
                     />
                 </div>
 
-                <div className="flex items-center mt-4">
-                    <input
-                        type="checkbox"
-                        id="isPublished"
-                        checked={isPublished}
-                        onChange={(e) => setIsPublished(e.target.checked)}
-                        className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
-                    />
-                    <label htmlFor="isPublished" className="ml-2 block text-sm text-gray-900">
-                        Publicado (Visível no site)
-                    </label>
-                </div>
-
-                <div className="mt-6">
+                <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Imagens (Max 5)
+                        Imagens do Projeto (Max 10)
                         <span className="text-xs text-gray-500 ml-2">Cole as URLs das imagens</span>
                     </label>
 
@@ -172,7 +139,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                         </div>
                     ))}
 
-                    {images.length < 5 && (
+                    {images.length < 10 && (
                         <button
                             type="button"
                             onClick={addImageField}
@@ -196,7 +163,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                         disabled={loading}
                         className="btn-primary"
                     >
-                        {loading ? 'Salvando...' : 'Salvar Publicação'}
+                        {loading ? 'Salvando...' : 'Salvar Projeto'}
                     </button>
                 </div>
             </form>
@@ -204,4 +171,4 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
     );
 };
 
-export default ArticleForm;
+export default ProjectForm;

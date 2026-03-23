@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
-import EventCard from '../../components/EventCard';
+import EventCard from '../../components/domain/EventCard';
 
 const Events: React.FC = () => {
     const [events, setEvents] = useState<EventApi[]>([]);

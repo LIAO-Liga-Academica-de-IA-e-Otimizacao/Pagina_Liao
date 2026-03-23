@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import type { Partner } from '../../models/Partner';
-import ThreeDCarousel from '../../components/ThreeDCarousel';
+import ThreeDCarousel from '../../components/ui/ThreeDCarousel';
 
 const Partnerships: React.FC = () => {
     const [partners, setPartners] = useState<Partner[]>([]);

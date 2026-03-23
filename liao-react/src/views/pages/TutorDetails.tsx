@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Tutor } from '../../models/Tutor';
-import TechBackground from '../../components/TechBackground';
+import TechBackground from '../../components/ui/TechBackground';
 
 const TutorDetails: React.FC = () => {
     const { id } = useParams<{ id: string }>();

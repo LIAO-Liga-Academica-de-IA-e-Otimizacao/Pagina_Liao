@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
-import MemberForm from '../../components/MemberForm';
-import TutorForm from '../../components/TutorForm';
-import ProjectForm from '../../components/ProjectForm';
-import ArticleForm from '../../components/ArticleForm';
-import PartnerForm from '../../components/PartnerForm';
-import EventForm from '../../components/EventForm';
+import MemberForm from '../../components/forms/MemberForm';
+import TutorForm from '../../components/forms/TutorForm';
+import ProjectForm from '../../components/forms/ProjectForm';
+import ArticleForm from '../../components/forms/ArticleForm';
+import PartnerForm from '../../components/forms/PartnerForm';
+import EventForm from '../../components/forms/EventForm';
 import type { EventApi } from '../../models/Event';
 
 const Admin: React.FC = () => {

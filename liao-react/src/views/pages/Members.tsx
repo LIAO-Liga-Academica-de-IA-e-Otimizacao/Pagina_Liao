@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
-import MemberCard from '../../components/MemberCard';
-import MemberModal from '../../components/MemberModal';
+import MemberCard from '../../components/domain/MemberCard';
+import MemberModal from '../../components/ui/MemberModal';
 
 interface Member {
     id: number;

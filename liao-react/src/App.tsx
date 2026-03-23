@@ -13,7 +13,7 @@ import Login from './views/pages/Login';
 import Admin from './views/pages/Admin';
 import Events from './views/pages/Events';
 import EventDetails from './views/pages/EventDetails';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ui/ProtectedRoute';
 
 import About from './views/pages/About';
 import Partnerships from './views/pages/Partnerships';

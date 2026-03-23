@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { apiService } from '../services/api';
-import type { Partner } from '../models/Partner';
+import { apiService } from '../../services/api';
+import type { Partner } from '../../models/Partner';
 
 interface PartnerFormProps {
     partner?: Partner | null;

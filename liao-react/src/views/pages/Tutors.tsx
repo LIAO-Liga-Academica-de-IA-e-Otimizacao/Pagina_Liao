@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
-import TutorCard from '../../components/TutorCard';
+import TutorCard from '../../components/domain/TutorCard';
 import type { Tutor } from '../../models/Tutor';
 
 const Tutors: React.FC = () => {
