@@ -80,7 +80,18 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "slug",
+        "title",
+        "description",
+        "coverImage",
+        "date",
+        "gallery",
+        "highlights",
+        "palette",
+        "updatedAt"
+      ]
     },
     "AgendaItem": {
       "type": "object",
@@ -109,7 +120,12 @@
             "null"
           ]
         }
-      }
+      },
+      "required": [
+        "eventId",
+        "time",
+        "title"
+      ]
     },
     "EventSpeaker": {
       "type": "object",
@@ -160,7 +176,10 @@
             "null"
           ]
         }
-      }
+      },
+      "required": [
+        "eventId"
+      ]
     },
     "User": {
       "type": "object",
@@ -189,7 +208,13 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "email",
+        "password",
+        "name",
+        "updatedAt"
+      ]
     },
     "Member": {
       "type": "object",
@@ -263,7 +288,14 @@
             "$ref": "#/definitions/EventSpeaker"
           }
         }
-      }
+      },
+      "required": [
+        "name",
+        "email",
+        "role",
+        "updatedAt",
+        "course"
+      ]
     },
     "Tutor": {
       "type": "object",
@@ -309,7 +341,13 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "name",
+        "email",
+        "subjects",
+        "updatedAt"
+      ]
     },
     "Content": {
       "type": "object",
@@ -350,7 +388,13 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "type",
+        "title",
+        "content",
+        "updatedAt"
+      ]
     },
     "Application": {
       "type": "object",
@@ -391,7 +435,15 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "name",
+        "email",
+        "course",
+        "semester",
+        "motivation",
+        "updatedAt"
+      ]
     },
     "SystemConfig": {
       "type": "object",
@@ -402,7 +454,11 @@
         "value": {
           "type": "string"
         }
-      }
+      },
+      "required": [
+        "key",
+        "value"
+      ]
     },
     "Project": {
       "type": "object",
@@ -434,7 +490,13 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "title",
+        "description",
+        "images",
+        "updatedAt"
+      ]
     },
     "Article": {
       "type": "object",
@@ -478,7 +540,14 @@
             "null"
           ]
         }
-      }
+      },
+      "required": [
+        "title",
+        "content",
+        "images",
+        "tags",
+        "updatedAt"
+      ]
     },
     "Partner": {
       "type": "object",
@@ -506,7 +575,12 @@
           "type": "string",
           "format": "date-time"
         }
-      }
+      },
+      "required": [
+        "name",
+        "imageUrl",
+        "updatedAt"
+      ]
     }
   },
   "type": "object",
