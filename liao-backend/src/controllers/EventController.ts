@@ -24,7 +24,7 @@ import prisma from '../config/database';
  */
 export const createEvent = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
 
         const event = await prisma.event.create({
             data: {
@@ -57,11 +57,15 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
                         description: a.description,
                         speakerName: a.speakerName
                     })) || []
-                }
+                },
+                partners: partners ? {
+                    connect: partners.map((id: number) => ({ id }))
+                } : undefined
             },
             include: {
                 speakers: { include: { member: true } },
-                agenda: true
+                agenda: true,
+                partners: true
             }
         });
 
@@ -103,7 +107,8 @@ export const getEvents = async (req: Request, res: Response): Promise<void> => {
             orderBy: { date: 'desc' },
             include: {
                 speakers: { include: { member: true } },
-                agenda: true
+                agenda: true,
+                partners: true
             }
         });
 
@@ -142,7 +147,8 @@ export const getEventBySlug = async (req: Request, res: Response): Promise<void>
             where: { slug },
             include: {
                 speakers: { include: { member: true } },
-                agenda: true
+                agenda: true,
+                partners: true
             }
         });
 
@@ -182,7 +188,7 @@ export const getEventBySlug = async (req: Request, res: Response): Promise<void>
 export const updateEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, slug, description, coverImage, date, location, speakers, agenda, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
 
         const event = await prisma.event.update({
             where: { id: Number(id) },
@@ -218,11 +224,15 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
                         description: a.description,
                         speakerName: a.speakerName
                     }))
+                } : undefined,
+                partners: partners ? {
+                    set: partners.map((id: number) => ({ id }))
                 } : undefined
             },
             include: {
                 speakers: { include: { member: true } },
-                agenda: true
+                agenda: true,
+                partners: true
             }
         });
 

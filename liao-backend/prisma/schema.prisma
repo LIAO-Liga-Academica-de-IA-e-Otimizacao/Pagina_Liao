@@ -29,6 +29,7 @@ model Event {
   subscribe    String?
   agenda       AgendaItem[]
   speakers    EventSpeaker[]
+  partners    Partner[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 }
@@ -156,6 +157,7 @@ model Partner {
   name       String
   imageUrl   String
   websiteUrl String?
+  events     Event[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }

@@ -11,6 +11,7 @@ import EventAgenda from '../../components/EventDetails/EventAgenda';
 import EventGallery from '../../components/EventDetails/EventGallery';
 import EventSpeakers from '../../components/EventDetails/EventSpeakers';
 import EventCTA from '../../components/EventDetails/EventCTA';
+import EventPartners from '../../components/EventDetails/EventPartners';
 
 const FONT_MAP: Record<string, { family: string; url: string }> = {
     'font-serif': { 
@@ -178,6 +179,13 @@ const EventDetails: React.FC = () => {
                         <EventCTA event={event} />
                     </div>
                 </div>
+
+                {/* Partners Section */}
+                {event.partners && event.partners.length > 0 && (
+                    <div className="mt-16">
+                        <EventPartners partners={event.partners} />
+                    </div>
+                )}
             </div>
         </div>
     );
