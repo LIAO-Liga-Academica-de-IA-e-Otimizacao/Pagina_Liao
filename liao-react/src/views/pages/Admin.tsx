@@ -242,7 +242,7 @@ const Admin: React.FC = () => {
     const renderEventsSection = () => (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Gerenciar Eventos</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">Gerenciar Eventos</h2>
                 <button
                     onClick={() => { setEditingEvent(null); setShowEventForm(true); }}
                     className="btn-primary"
@@ -258,30 +258,30 @@ const Admin: React.FC = () => {
                 />
             ) : (
                 <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evento / Data</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Local</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Evento / Data</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Local</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {events.map((event) => (
                                 <tr key={event.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <img className="h-10 w-16 object-cover mr-3 rounded" src={event.coverImage} alt="" />
                                             <div>
-                                                <div className="text-sm font-medium text-gray-900">{event.title}</div>
-                                                <div className="text-xs text-gray-500">{new Date(event.date as string).toLocaleDateString('pt-BR')}</div>
+                                                <div className="text-sm font-medium text-neutral-900">{event.title}</div>
+                                                <div className="text-xs text-neutral-500">{new Date(event.date as string).toLocaleDateString('pt-BR')}</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{event.location || '-'}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{event.location || '-'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingEvent(event); setShowEventForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteEvent(event.id as number)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => { setEditingEvent(event); setShowEventForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeleteEvent(event.id as number)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}
@@ -294,12 +294,12 @@ const Admin: React.FC = () => {
 
     const renderConfigSection = () => (
         <div className="space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Configurações do Sistema</h2>
+            <h2 className="text-2xl font-bold text-neutral-900">Configurações do Sistema</h2>
             <div className="bg-white shadow rounded-lg p-6">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-lg font-medium text-gray-900">Processo Seletivo</h3>
-                        <p className="text-gray-500">
+                        <h3 className="text-lg font-medium text-neutral-900">Processo Seletivo</h3>
+                        <p className="text-neutral-500">
                             {config.proselOpen
                                 ? 'O formulário de inscrição está ABERTO para todos.'
                                 : 'O formulário está FECHADO. Visitantes verão uma mensagem de aguardo.'}
@@ -307,7 +307,7 @@ const Admin: React.FC = () => {
                     </div>
                     <button
                         onClick={handleToggleProSel}
-                        className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${config.proselOpen ? 'bg-indigo-600' : 'bg-gray-200'}`}
+                        className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${config.proselOpen ? 'bg-primary-600' : 'bg-neutral-200'}`}
                     >
                         <span className="sr-only">Toggle ProSel</span>
                         <span
@@ -321,11 +321,11 @@ const Admin: React.FC = () => {
             {/* Admin Management Section */}
             <div className="bg-white shadow rounded-lg p-6 mt-6">
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-lg font-medium text-gray-900">Administradores Permitidos</h3>
+                    <h3 className="text-lg font-medium text-neutral-900">Administradores Permitidos</h3>
                     {['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'].includes(user.email) && (
                         <button
                             onClick={() => setShowAdminForm(!showAdminForm)}
-                            className="text-sm bg-indigo-600 text-white px-3 py-2 rounded-md hover:bg-indigo-700"
+                            className="text-sm bg-primary-600 text-white px-3 py-2 rounded-md hover:bg-primary-700"
                         >
                             {showAdminForm ? 'Cancelar' : 'Adicionar Admin'}
                         </button>
@@ -333,45 +333,45 @@ const Admin: React.FC = () => {
                 </div>
 
                 {showAdminForm && (
-                    <form onSubmit={handleCreateAdmin} className="mb-6 bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <form onSubmit={handleCreateAdmin} className="mb-6 bg-neutral-50 p-4 rounded-md border border-neutral-200">
                         <h4 className="text-sm font-bold mb-3">Novo Administrador</h4>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Nome</label>
+                                <label className="block text-sm font-medium text-neutral-700">Nome</label>
                                 <input
                                     type="text"
                                     required
                                     value={newAdmin.name}
                                     autoComplete="off"
                                     onChange={(e) => setNewAdmin({ ...newAdmin, name: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Email</label>
+                                <label className="block text-sm font-medium text-neutral-700">Email</label>
                                 <input
                                     type="email"
                                     required
                                     value={newAdmin.email}
                                     autoComplete="off"
                                     onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 />
                             </div>
                             <div className="sm:col-span-2">
-                                <label className="block text-sm font-medium text-gray-700">Senha</label>
+                                <label className="block text-sm font-medium text-neutral-700">Senha</label>
                                 <input
                                     type="password"
                                     required
                                     value={newAdmin.password}
                                     autoComplete="new-password"
                                     onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
-                                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                    className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
                                 />
                             </div>
                         </div>
                         <div className="mt-4 flex justify-end">
-                            <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">
+                            <button type="submit" className="bg-success-600 text-white px-4 py-2 rounded-md hover:bg-success-700">
                                 Salvar
                             </button>
                         </div>
@@ -379,16 +379,16 @@ const Admin: React.FC = () => {
                 )}
 
                 <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Cadastro</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Data Cadastro</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {admins.map((admin) => {
                                 const isSelf = admin.email === user.email;
                                 const isActingMaster = ['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'].includes(user.email);
@@ -398,16 +398,16 @@ const Admin: React.FC = () => {
 
                                 return (
                                     <tr key={admin.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{admin.name}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{admin.email}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">{admin.name}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{admin.email}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                                             {new Date(admin.createdAt).toLocaleDateString('pt-BR')}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             {canDelete && (
                                                 <button
                                                     onClick={() => handleDeleteAdmin(admin.id)}
-                                                    className="text-red-600 hover:text-red-900"
+                                                    className="text-danger-600 hover:text-danger-900"
                                                 >
                                                     Excluir
                                                 </button>
@@ -433,14 +433,14 @@ const Admin: React.FC = () => {
         return (
             <div className="space-y-6">
                 <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h2 className="text-2xl font-bold text-gray-900">Gerenciar Membros</h2>
+                    <h2 className="text-2xl font-bold text-neutral-900">Gerenciar Membros</h2>
 
                     <div className="flex items-center gap-4">
                         {/* Year Filter Dropdown */}
                         <select
                             value={selectedMemberYear}
                             onChange={(e) => setSelectedMemberYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                            className="block rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            className="block rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
                         >
                             <option value="all">Todos os Anos</option>
                             {years.map(year => (
@@ -465,31 +465,31 @@ const Admin: React.FC = () => {
                     />
                 ) : (
                     <div className="bg-white shadow rounded-lg overflow-x-auto">
-                        <table className="min-w-full divide-y divide-gray-200">
-                            <thead className="bg-gray-50">
+                        <table className="min-w-full divide-y divide-neutral-200">
+                            <thead className="bg-neutral-50">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ano</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Ano</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody className="bg-white divide-y divide-gray-200">
+                            <tbody className="bg-white divide-y divide-neutral-200">
                                 {filteredMembers.map((member) => (
                                     <tr key={member.id}>
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
                                                 {member.photo && <img className="h-8 w-8 rounded-full mr-3" src={member.photo} alt="" />}
-                                                <div className="text-sm font-medium text-gray-900">{member.name}</div>
+                                                <div className="text-sm font-medium text-neutral-900">{member.name}</div>
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.email}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-bold">{member.year || 2025}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{member.isFounder ? 'Fundador' : member.role}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{member.email}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 font-bold">{member.year || 2025}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{member.isFounder ? 'Fundador' : member.role}</td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                            <button onClick={() => handleDeleteMember(member.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                            <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                            <button onClick={() => handleDeleteMember(member.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                         </td>
                                     </tr>
                                 ))}
@@ -497,7 +497,7 @@ const Admin: React.FC = () => {
                         </table>
 
                         {filteredMembers.length === 0 && (
-                            <div className="text-center py-8 text-gray-500">
+                            <div className="text-center py-8 text-neutral-500">
                                 Nenhum membro encontrado para este filtro.
                             </div>
                         )}
@@ -510,7 +510,7 @@ const Admin: React.FC = () => {
     const renderTutorsSection = () => (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Gerenciar Tutores</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">Gerenciar Tutores</h2>
                 <button
                     onClick={() => { setEditingTutor(null); setShowTutorForm(true); }}
                     className="btn-primary"
@@ -526,29 +526,29 @@ const Admin: React.FC = () => {
                 />
             ) : (
                 <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Áreas de Atuação</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Áreas de Atuação</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {tutors.map((tutor) => (
                                 <tr key={tutor.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             {tutor.photo && <img className="h-8 w-8 rounded-full mr-3" src={tutor.photo} alt="" />}
-                                            <div className="text-sm font-medium text-gray-900">{tutor.name}</div>
+                                            <div className="text-sm font-medium text-neutral-900">{tutor.name}</div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tutor.email}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tutor.subjects?.join(', ')}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{tutor.email}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">{tutor.subjects?.join(', ')}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingTutor(tutor); setShowTutorForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteTutor(tutor.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => { setEditingTutor(tutor); setShowTutorForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeleteTutor(tutor.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}
@@ -562,7 +562,7 @@ const Admin: React.FC = () => {
     const renderProjectsSection = () => (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Projetos</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">Projetos</h2>
                 <button
                     onClick={() => { setEditingProject(null); setShowProjectForm(true); }}
                     className="btn-primary"
@@ -578,28 +578,28 @@ const Admin: React.FC = () => {
                 />
             ) : (
                 <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Imagens</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Título</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Data</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Imagens</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {projects.map((project) => (
                                 <tr key={project.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{project.title}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">{project.title}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                                         {new Date(project.date).toLocaleDateString('pt-BR')}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                                         {project.images?.length || 0}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingProject(project); setShowProjectForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteProject(project.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => { setEditingProject(project); setShowProjectForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeleteProject(project.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}
@@ -613,7 +613,7 @@ const Admin: React.FC = () => {
     const renderArticlesSection = () => (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Newsletter & Artigos</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">Newsletter & Artigos</h2>
                 <button
                     onClick={() => { setEditingArticle(null); setShowArticleForm(true); }}
                     className="btn-primary"
@@ -629,34 +629,34 @@ const Admin: React.FC = () => {
                 />
             ) : (
                 <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tags</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Título</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Tags</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {articles.map((article) => (
                                 <tr key={article.id}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{article.title}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900">{article.title}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                                         {article.tags?.map((tag: string) => (
-                                            <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800 mr-1">
+                                            <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-neutral-100 text-neutral-800 mr-1">
                                                 {tag}
                                             </span>
                                         ))}
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${article.isPublished ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${article.isPublished ? 'bg-success-100 text-success-800' : 'bg-danger-100 text-danger-800'}`}>
                                             {article.isPublished ? 'Publicado' : 'Rascunho'}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingArticle(article); setShowArticleForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeleteArticle(article.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => { setEditingArticle(article); setShowArticleForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeleteArticle(article.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}
@@ -670,7 +670,7 @@ const Admin: React.FC = () => {
     const renderPartnersSection = () => (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Gerenciar Parcerias</h2>
+                <h2 className="text-2xl font-bold text-neutral-900">Gerenciar Parcerias</h2>
                 <button
                     onClick={() => { setEditingPartner(null); setShowPartnerForm(true); }}
                     className="btn-primary"
@@ -686,33 +686,33 @@ const Admin: React.FC = () => {
                 />
             ) : (
                 <div className="bg-white shadow rounded-lg overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                    <table className="min-w-full divide-y divide-neutral-200">
+                        <thead className="bg-neutral-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Logo / Nome</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Site</th>
-                                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Ações</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Logo / Nome</th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Site</th>
+                                <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                             </tr>
                         </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
+                        <tbody className="bg-white divide-y divide-neutral-200">
                             {partners.map((partner) => (
                                 <tr key={partner.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <img className="h-10 w-10 object-contain mr-3 border rounded p-1" src={partner.imageUrl} alt="" />
-                                            <div className="text-sm font-medium text-gray-900">{partner.name}</div>
+                                            <div className="text-sm font-medium text-neutral-900">{partner.name}</div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
                                         {partner.websiteUrl ? (
-                                            <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                            <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
                                                 Link
                                             </a>
                                         ) : '-'}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingPartner(partner); setShowPartnerForm(true); }} className="text-indigo-600 hover:text-indigo-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeletePartner(partner.id)} className="text-red-600 hover:text-red-900">Excluir</button>
+                                        <button onClick={() => { setEditingPartner(partner); setShowPartnerForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                        <button onClick={() => handleDeletePartner(partner.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
                                     </td>
                                 </tr>
                             ))}
@@ -724,12 +724,12 @@ const Admin: React.FC = () => {
     );
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-neutral-50 py-12">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center mb-8">
                     <div>
                         <h1 className="section-title">Painel Administrativo</h1>
-                        <p className="text-gray-600">Bem-vindo, {user.name}!</p>
+                        <p className="text-neutral-600">Bem-vindo, {user.name}!</p>
                     </div>
                     <div className="flex space-x-2 md:space-x-4">
                         {activeSection && (
@@ -757,64 +757,64 @@ const Admin: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('members')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Membros</h3>
-                                <svg className="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                <h3 className="text-xl font-bold text-neutral-900">Membros</h3>
+                                <svg className="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Gerenciar diretoria e membros.</p>
+                            <p className="text-neutral-600 mb-4">Gerenciar diretoria e membros.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('tutors')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Tutores</h3>
-                                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
+                                <h3 className="text-xl font-bold text-neutral-900">Tutores</h3>
+                                <svg className="w-8 h-8 text-success-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Gerenciar professores e tutores.</p>
+                            <p className="text-neutral-600 mb-4">Gerenciar professores e tutores.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('projects')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Projetos</h3>
-                                <svg className="w-8 h-8 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                <h3 className="text-xl font-bold text-neutral-900">Projetos</h3>
+                                <svg className="w-8 h-8 text-accent-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Galeria de projetos realizados.</p>
+                            <p className="text-neutral-600 mb-4">Galeria de projetos realizados.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('articles')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Newsletter</h3>
+                                <h3 className="text-xl font-bold text-neutral-900">Newsletter</h3>
                                 <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Notícias, artigos e novidades.</p>
+                            <p className="text-neutral-600 mb-4">Notícias, artigos e novidades.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('partners')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Parcerias</h3>
+                                <h3 className="text-xl font-bold text-neutral-900">Parcerias</h3>
                                 <svg className="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Gerenciar empresas e instituições parceiras.</p>
+                            <p className="text-neutral-600 mb-4">Gerenciar empresas e instituições parceiras.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('config')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Configurações</h3>
-                                <svg className="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                                <h3 className="text-xl font-bold text-neutral-900">Configurações</h3>
+                                <svg className="w-8 h-8 text-neutral-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Processo Seletivo e sistema.</p>
+                            <p className="text-neutral-600 mb-4">Processo Seletivo e sistema.</p>
                             <button className="btn-primary w-full">Configurar</button>
                         </div>
 
                         <div className="card p-6 hover:shadow-xl transition-shadow cursor-pointer" onClick={() => setActiveSection('events')}>
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-gray-900">Eventos</h3>
-                                <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                <h3 className="text-xl font-bold text-neutral-900">Eventos</h3>
+                                <svg className="w-8 h-8 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                             </div>
-                            <p className="text-gray-600 mb-4">Gerenciar eventos e palestras.</p>
+                            <p className="text-neutral-600 mb-4">Gerenciar eventos e palestras.</p>
                             <button className="btn-primary w-full">Gerenciar</button>
                         </div>
                     </div>

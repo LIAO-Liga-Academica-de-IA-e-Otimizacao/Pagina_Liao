@@ -34,7 +34,7 @@ const EventHighlights: React.FC<EventHighlightsProps> = ({ highlights }) => {
                             >
                                 <Sparkles size={16} />
                             </div>
-                            <p className="text-zinc-300 leading-relaxed">{highlight}</p>
+                            <p className="text-neutral-300 leading-relaxed">{highlight}</p>
                         </div>
                     ))}
                 </div>

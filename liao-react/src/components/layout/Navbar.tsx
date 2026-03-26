@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
     ];
 
     return (
-        <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-200">
+        <nav className="bg-white dark:bg-neutral-900 shadow-md sticky top-0 z-50 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center h-16">
                     {/* Logo */}
@@ -40,8 +40,8 @@ const Navbar: React.FC = () => {
                                 key={link.path}
                                 to={link.path}
                                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${isActive(link.path)
-                                    ? 'bg-blue-800 text-white'
-                                    : 'text-gray-600 hover:text-blue-800 hover:bg-blue-50'
+                                    ? 'bg-primary-800 text-white'
+                                    : 'text-neutral-600 hover:text-primary-800 hover:bg-primary-50'
                                     }`}
                             >
                                 {link.name}
@@ -60,10 +60,10 @@ const Navbar: React.FC = () => {
                     {/* Theme Toggle (Desktop) */}
                     <button
                         onClick={toggleTheme}
-                        className="hidden md:flex p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300 ml-2"
+                        className="hidden md:flex p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors text-neutral-600 dark:text-neutral-300 ml-2"
                         aria-label="Alternar tema"
                     >
-                        {theme === 'dark' ? <FaSun className="w-5 h-5 text-yellow-400" /> : <FaMoon className="w-5 h-5" />}
+                        {theme === 'dark' ? <FaSun className="w-5 h-5 text-warning-400" /> : <FaMoon className="w-5 h-5" />}
                     </button>
 
                     {/* Mobile section spacer - keeps mobile menu button to the right if logos are hidden */}
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
                     {/* Mobile menu button */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden ml-auto p-2 rounded-lg hover:bg-gray-100"
+                        className="md:hidden ml-auto p-2 rounded-lg hover:bg-neutral-100"
                     >
                         <svg
                             className="w-6 h-6"
@@ -108,8 +108,8 @@ const Navbar: React.FC = () => {
                                 to={link.path}
                                 onClick={() => setIsOpen(false)}
                                 className={`block px-4 py-2 rounded-lg font-medium transition-all ${isActive(link.path)
-                                    ? 'bg-blue-100 text-blue-700'
-                                    : 'text-gray-700 hover:bg-gray-100'
+                                    ? 'bg-primary-100 text-primary-700'
+                                    : 'text-neutral-700 hover:bg-neutral-100'
                                     }`}
                             >
                                 {link.name}
@@ -117,14 +117,14 @@ const Navbar: React.FC = () => {
                         ))}
 
                         {/* Theme Toggle (Mobile) */}
-                        <div className="px-4 py-2 border-t border-gray-100 dark:border-gray-700 mt-2">
+                        <div className="px-4 py-2 border-t border-neutral-100 dark:border-neutral-700 mt-2">
                             <button
                                 onClick={toggleTheme}
-                                className="flex items-center space-x-2 text-gray-700 dark:text-gray-300 w-full"
+                                className="flex items-center space-x-2 text-neutral-700 dark:text-neutral-300 w-full"
                             >
                                 {theme === 'dark' ? (
                                     <>
-                                        <FaSun className="w-5 h-5 text-yellow-400" />
+                                        <FaSun className="w-5 h-5 text-warning-400" />
                                         <span>Modo Claro</span>
                                     </>
                                 ) : (

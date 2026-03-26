@@ -87,7 +87,7 @@ const EventDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+            <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
                 <div className="relative">
                     <div className="w-16 h-16 border-4 border-white/10 border-t-white rounded-full animate-spin"></div>
                     <div className="absolute inset-0 bg-white/5 blur-xl rounded-full"></div>
@@ -98,10 +98,10 @@ const EventDetails: React.FC = () => {
 
     if (!event) {
         return (
-            <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-zinc-400">
+            <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-neutral-400">
                 <Calendar size={48} className="mb-4 opacity-50" />
                 <h2 className="text-2xl font-bold text-white mb-2">Evento não encontrado</h2>
-                <Link to="/events" className="text-zinc-400 hover:text-white flex items-center gap-2">
+                <Link to="/events" className="text-neutral-400 hover:text-white flex items-center gap-2">
                     <ArrowLeft size={20} /> Voltar para eventos
                 </Link>
             </div>
@@ -146,7 +146,7 @@ const EventDetails: React.FC = () => {
 
     return (
         <div 
-            className={`relative min-h-screen bg-zinc-950 text-zinc-50 overflow-x-hidden ${fontClass}`}
+            className={`relative min-h-screen bg-neutral-950 text-neutral-50 overflow-x-hidden ${fontClass}`}
             style={styleVariables}
         >
             {/* Background Effects */}

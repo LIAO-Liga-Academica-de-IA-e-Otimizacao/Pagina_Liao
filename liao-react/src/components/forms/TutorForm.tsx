@@ -47,12 +47,12 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800">
                 {tutor ? 'Editar Tutor' : 'Novo Tutor'}
             </h2>
 
             {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
+                <div className="mb-4 p-4 bg-danger-50 border border-danger-200 rounded text-danger-700">
                     {error}
                 </div>
             )}
@@ -60,7 +60,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Nome</label>
+                        <label className="block text-sm font-medium text-neutral-700">Nome</label>
                         <input
                             type="text"
                             value={name}
@@ -70,7 +70,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-sm font-medium text-neutral-700">Email</label>
                         <input
                             type="email"
                             value={email}
@@ -82,7 +82,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Áreas de Atuação (separadas por vírgula)</label>
+                    <label className="block text-sm font-medium text-neutral-700">Áreas de Atuação (separadas por vírgula)</label>
                     <input
                         type="text"
                         value={subjects}
@@ -94,7 +94,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Foto URL</label>
+                    <label className="block text-sm font-medium text-neutral-700">Foto URL</label>
                     <input
                         type="url"
                         value={photo}
@@ -106,7 +106,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
 
                 {/* Availability field hidden as per request */}
                 {/* <div>
-                    <label className="block text-sm font-medium text-gray-700">Disponibilidade</label>
+                    <label className="block text-sm font-medium text-neutral-700">Disponibilidade</label>
                     <input
                         type="text"
                         value={availability}
@@ -117,7 +117,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                 </div> */}
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Informações sobre o tutor</label>
+                    <label className="block text-sm font-medium text-neutral-700">Informações sobre o tutor</label>
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
@@ -130,7 +130,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        className="px-4 py-2 border border-neutral-300 rounded-md text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                         Cancelar
                     </button>

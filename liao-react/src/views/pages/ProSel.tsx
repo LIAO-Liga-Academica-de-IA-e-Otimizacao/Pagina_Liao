@@ -68,18 +68,18 @@ const ProSel: React.FC = () => {
 
     if (checkingConfig) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-neutral-50 py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h1 className="section-title">Processo Seletivo</h1>
-                    <p className="text-xl text-gray-600">
+                    <p className="text-xl text-neutral-600">
                         {isOpen
                             ? 'Faça parte da LIAO! Preencha o formulário abaixo.'
                             : 'O período de inscrições não está aberto no momento.'}
@@ -88,13 +88,13 @@ const ProSel: React.FC = () => {
 
                 {!isOpen ? (
                     <div className="card p-12 text-center">
-                        <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-indigo-100 mb-6">
-                            <svg className="h-12 w-12 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-primary-100 mb-6">
+                            <svg className="h-12 w-12 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900 mb-4">Aguarde a próxima edição!</h3>
-                        <p className="text-gray-600 max-w-lg mx-auto mb-8">
+                        <h3 className="text-2xl font-bold text-neutral-900 mb-4">Aguarde a próxima edição!</h3>
+                        <p className="text-neutral-600 max-w-lg mx-auto mb-8">
                             Fique atento às nossas redes sociais para saber quando abriremos novas vagas.
                             Enquanto isso, você pode conferir nossos conteúdos e projetos.
                         </p>
@@ -105,22 +105,22 @@ const ProSel: React.FC = () => {
                 ) : (
                     <div className="card p-8">
                         {success && (
-                            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                                <p className="text-green-800 font-medium">
+                            <div className="mb-6 p-4 bg-success-50 border border-success-200 rounded-lg">
+                                <p className="text-success-800 font-medium">
                                     Inscrição enviada com sucesso! Entraremos em contato em breve.
                                 </p>
                             </div>
                         )}
 
                         {error && (
-                            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                                <p className="text-red-800">{error}</p>
+                            <div className="mb-6 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                                <p className="text-danger-800">{error}</p>
                             </div>
                         )}
 
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Nome Completo *
                                 </label>
                                 <input
@@ -134,7 +134,7 @@ const ProSel: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Email *
                                 </label>
                                 <input
@@ -148,7 +148,7 @@ const ProSel: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Telefone
                                 </label>
                                 <input
@@ -161,7 +161,7 @@ const ProSel: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Curso *
                                 </label>
                                 <input
@@ -175,7 +175,7 @@ const ProSel: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Semestre *
                                 </label>
                                 <input
@@ -191,7 +191,7 @@ const ProSel: React.FC = () => {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                <label className="block text-sm font-medium text-neutral-700 mb-2">
                                     Por que você quer fazer parte da LIAO? *
                                 </label>
                                 <textarea

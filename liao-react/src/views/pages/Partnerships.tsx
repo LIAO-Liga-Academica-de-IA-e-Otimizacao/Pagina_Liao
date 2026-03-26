@@ -76,17 +76,17 @@ const Partnerships: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-indigo-600"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen pb-12 transition-colors duration-200 bg-gray-50 dark:bg-zinc-950">
-            <div className="py-12 px-4 transition-colors bg-gray-900 text-white dark:bg-black/60 dark:backdrop-blur-md dark:border-b dark:border-zinc-800">
+        <div className="min-h-screen pb-12 transition-colors duration-200 bg-neutral-50 dark:bg-neutral-950">
+            <div className="py-12 px-4 transition-colors bg-neutral-900 text-white dark:bg-black/60 dark:backdrop-blur-md dark:border-b dark:border-neutral-800">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Nossos Parceiros</h1>
-                    <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+                    <p className="text-xl text-neutral-300 max-w-2xl mx-auto">
                         Empresas e instituições que colaboram conosco.
                     </p>
                 </div>
@@ -94,8 +94,8 @@ const Partnerships: React.FC = () => {
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {partners.length === 0 ? (
-                    <div className="text-center py-12 bg-white dark:bg-zinc-900 rounded-xl shadow-sm border dark:border-zinc-800 transition-colors">
-                        <p className="text-gray-500 dark:text-gray-400 text-lg">
+                    <div className="text-center py-12 bg-white dark:bg-neutral-900 rounded-xl shadow-sm border dark:border-neutral-800 transition-colors">
+                        <p className="text-neutral-500 dark:text-neutral-400 text-lg">
                             Estamos em busca de novas parcerias! Entre em contato.
                         </p>
                     </div>
@@ -119,7 +119,7 @@ const Partnerships: React.FC = () => {
                                             style={{ width: '100%' }}
                                             className="shrink-0 px-4"
                                         >
-                                            <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-xl transition-all duration-300 group h-64 border dark:border-zinc-800">
+                                            <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-md p-6 flex flex-col items-center justify-center hover:shadow-xl transition-all duration-300 group h-64 border dark:border-neutral-800">
                                                 {partner.websiteUrl ? (
                                                     <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="block transform transition-transform group-hover:scale-105">
                                                         <img
@@ -135,7 +135,7 @@ const Partnerships: React.FC = () => {
                                                         className="h-32 object-contain mb-4 grayscale hover:grayscale-0 transition-all duration-300 dark:brightness-200"
                                                     />
                                                 )}
-                                                <h3 className="text-lg font-semibold text-gray-800 dark:text-white mt-2">{partner.name}</h3>
+                                                <h3 className="text-lg font-semibold text-neutral-800 dark:text-white mt-2">{partner.name}</h3>
                                             </div>
                                         </div>
                                     ))}
@@ -147,7 +147,7 @@ const Partnerships: React.FC = () => {
                                         {partners.map((_, idx) => (
                                             <div
                                                 key={idx}
-                                                className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-indigo-600' : 'bg-gray-300'}`}
+                                                className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-primary-600' : 'bg-neutral-300'}`}
                                             />
                                         ))}
                                     </div>

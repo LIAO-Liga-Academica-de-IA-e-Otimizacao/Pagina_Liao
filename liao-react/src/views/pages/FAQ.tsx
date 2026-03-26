@@ -24,13 +24,13 @@ const FAQ: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-neutral-50 py-12">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className="section-title text-center mb-12">Perguntas Frequentes</h1>
 
@@ -39,13 +39,13 @@ const FAQ: React.FC = () => {
                         <div key={faq.id} className="card overflow-hidden">
                             <button
                                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                                className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-50 transition-colors"
+                                className="w-full p-6 text-left flex justify-between items-center hover:bg-neutral-50 transition-colors"
                             >
-                                <h3 className="text-lg font-semibold text-gray-900 pr-4">
+                                <h3 className="text-lg font-semibold text-neutral-900 pr-4">
                                     {faq.title}
                                 </h3>
                                 <svg
-                                    className={`w-6 h-6 text-gray-500 transition-transform ${openIndex === index ? 'transform rotate-180' : ''
+                                    className={`w-6 h-6 text-neutral-500 transition-transform ${openIndex === index ? 'transform rotate-180' : ''
                                         }`}
                                     fill="none"
                                     stroke="currentColor"
@@ -60,7 +60,7 @@ const FAQ: React.FC = () => {
                                 </svg>
                             </button>
                             {openIndex === index && (
-                                <div className="px-6 pb-6 text-gray-600">
+                                <div className="px-6 pb-6 text-neutral-600">
                                     {faq.content}
                                 </div>
                             )}
@@ -70,7 +70,7 @@ const FAQ: React.FC = () => {
 
                 {faqs.length === 0 && (
                     <div className="text-center py-12">
-                        <p className="text-gray-600 text-lg">Nenhuma pergunta no momento.</p>
+                        <p className="text-neutral-600 text-lg">Nenhuma pergunta no momento.</p>
                     </div>
                 )}
             </div>

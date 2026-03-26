@@ -9,16 +9,16 @@
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 font-sans dark:bg-zinc-900 dark:text-gray-100 transition-colors duration-200;
+  @apply bg-neutral-50 text-neutral-900 font-sans dark:bg-neutral-900 dark:text-neutral-100 transition-colors duration-200;
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-3 bg-gradient-to-r from-black to-green-900 text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
+    @apply px-6 py-3 bg-gradient-to-r from-black to-success-900 text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg;
   }
 
   .btn-premium {
-    @apply px-6 py-3 bg-gradient-to-r from-gray-900 to-black text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg relative overflow-hidden;
+    @apply px-6 py-3 bg-gradient-to-r from-neutral-900 to-black text-white rounded-lg font-medium hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg relative overflow-hidden;
     border: 1px solid transparent;
     background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0)), linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
     background-origin: border-box;
@@ -26,7 +26,7 @@ body {
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-all duration-200;
+    @apply px-6 py-3 bg-neutral-200 text-neutral-800 rounded-lg font-medium hover:bg-neutral-300 transition-all duration-200;
   }
 
   .card {
@@ -41,20 +41,20 @@ body {
   }
 
   .dark .card-premium {
-    @apply bg-zinc-900;
+    @apply bg-neutral-900;
     background-image: linear-gradient(#18181b, #18181b), linear-gradient(135deg, #bf953f88, #fcf6ba88, #b3872888);
   }
 
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+    @apply w-full px-4 py-3 border border-neutral-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all;
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 mb-6;
+    @apply text-3xl md:text-4xl font-bold text-neutral-900 mb-6;
   }
 
   .gradient-bg {
-    @apply bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700;
+    @apply bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700;
   }
 }
 
@@ -64,7 +64,7 @@ body {
   }
 
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-700;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-primary-700;
   }
 }
 

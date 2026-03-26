@@ -18,7 +18,7 @@ interface EventHeroProps {
 const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
     return (
         <FadeInSection>
-            <Link to="/events" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-12 group transition-colors">
+            <Link to="/events" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 group transition-colors">
                 <div className="p-2 bg-white/5 rounded-full group-hover:bg-white/10 transition-colors">
                     <ArrowLeft size={20} />
                 </div>
@@ -43,12 +43,12 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                         {event.title}
                     </h1>
                     
-                    <p className="text-xl text-zinc-400 leading-relaxed font-light max-w-xl">
+                    <p className="text-xl text-neutral-400 leading-relaxed font-light max-w-xl">
                         {event.description}
                     </p>
 
                     <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-white/10">
-                        <div className="flex items-center gap-3 text-zinc-300">
+                        <div className="flex items-center gap-3 text-neutral-300">
                             <div 
                                 className="p-3"
                                 style={{ 
@@ -60,12 +60,12 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                                 <Calendar size={24} />
                             </div>
                             <div>
-                                <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-0.5">Data</p>
+                                <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-0.5">Data</p>
                                 <p className="font-medium text-white">{eventDate}</p>
                             </div>
                         </div>
                         <div className="w-px h-12 bg-white/10 hidden sm:block"></div>
-                        <div className="flex items-center gap-3 text-zinc-300">
+                        <div className="flex items-center gap-3 text-neutral-300">
                             <div 
                                 className="p-3"
                                 style={{ 
@@ -77,7 +77,7 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                                 <MapPin size={24} />
                             </div>
                             <div>
-                                <p className="text-xs text-zinc-500 uppercase tracking-wider font-semibold mb-0.5">Local</p>
+                                <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-0.5">Local</p>
                                 <p className="font-medium text-white">{event.location}</p>
                             </div>
                         </div>
@@ -107,7 +107,7 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                     className="relative lg:h-[600px] overflow-hidden group border border-white/10 shadow-2xl shadow-[var(--event-primary)]/5"
                     style={{ borderRadius: 'var(--event-radius-lg)' }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent z-10"></div>
                     <img 
                         src={event.coverImage || ''} 
                         alt={event.title} 

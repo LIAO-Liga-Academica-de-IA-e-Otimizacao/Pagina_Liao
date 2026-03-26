@@ -29,7 +29,7 @@ const Tutors: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-600"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-danger-600"></div>
             </div>
         );
     }
@@ -37,19 +37,19 @@ const Tutors: React.FC = () => {
     if (error) {
         return (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <p className="text-red-800">{error}</p>
+                <div className="bg-danger-50 border border-danger-200 rounded-lg p-6 text-center">
+                    <p className="text-danger-800">{error}</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 py-12 transition-colors duration-200">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-12 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h1 className="section-title dark:text-white">Nossos Tutores</h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400">
+                    <p className="text-xl text-neutral-600 dark:text-neutral-400">
                         Nossos tutores estão prontos para ajudar você
                     </p>
                 </div>
@@ -61,8 +61,8 @@ const Tutors: React.FC = () => {
                 </div>
 
                 {tutors.length === 0 && (
-                    <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-                        <p className="text-gray-500 dark:text-gray-400 text-lg">
+                    <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                        <p className="text-neutral-500 dark:text-neutral-400 text-lg">
                             Nenhum tutor disponível no momento.
                         </p>
                     </div>

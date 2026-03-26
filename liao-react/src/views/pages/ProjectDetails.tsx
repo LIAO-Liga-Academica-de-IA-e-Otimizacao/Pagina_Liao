@@ -31,19 +31,19 @@ const ProjectDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     if (!project) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-600">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 text-neutral-600">
                 <h2 className="text-2xl font-bold mb-4">Projeto não encontrado 😕</h2>
                 <button
                     onClick={() => navigate('/projects')}
-                    className="text-blue-600 hover:text-blue-800 font-medium hover:underline"
+                    className="text-primary-600 hover:text-primary-800 font-medium hover:underline"
                 >
                     &larr; Voltar para Projetos
                 </button>
@@ -54,7 +54,7 @@ const ProjectDetails: React.FC = () => {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <div className="w-full bg-gray-900 h-64 md:h-96 relative overflow-hidden">
+            <div className="w-full bg-neutral-900 h-64 md:h-96 relative overflow-hidden">
                 <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
                 {project.images && project.images.length > 0 ? (
                     <img
@@ -63,7 +63,7 @@ const ProjectDetails: React.FC = () => {
                         className="w-full h-full object-cover opacity-80"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-900 to-black">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-primary-900 to-black">
                         <span className="text-white opacity-20 text-9xl font-bold">LIAO</span>
                     </div>
                 )}
@@ -71,7 +71,7 @@ const ProjectDetails: React.FC = () => {
                     <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4 drop-shadow-lg">
                         {project.title}
                     </h1>
-                    <div className="flex items-center text-gray-300 text-sm font-medium">
+                    <div className="flex items-center text-neutral-300 text-sm font-medium">
                         <span>{new Date(project.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
                     </div>
                 </div>
@@ -80,14 +80,14 @@ const ProjectDetails: React.FC = () => {
             {/* Content Section */}
             <article className="max-w-3xl mx-auto px-6 py-12 md:py-20">
                 {/* Main Content */}
-                <div className="prose prose-lg prose-blue mx-auto text-gray-800 whitespace-pre-wrap leading-loose">
+                <div className="prose prose-lg prose-blue mx-auto text-neutral-800 whitespace-pre-wrap leading-loose">
                     {project.description}
                 </div>
 
                 {/* Gallery if more images */}
                 {project.images && project.images.length > 1 && (
-                    <div className="mt-16 pt-12 border-t border-gray-100">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-8">Galeria</h3>
+                    <div className="mt-16 pt-12 border-t border-neutral-100">
+                        <h3 className="text-2xl font-bold text-neutral-900 mb-8">Galeria</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {project.images.slice(1).map((img, idx) => (
                                 <img
@@ -102,10 +102,10 @@ const ProjectDetails: React.FC = () => {
                 )}
 
                 {/* Back Button Footer */}
-                <div className="mt-16 pt-8 border-t border-gray-200 flex justify-between items-center">
+                <div className="mt-16 pt-8 border-t border-neutral-200 flex justify-between items-center">
                     <button
                         onClick={() => navigate('/projects')}
-                        className="flex items-center text-gray-500 hover:text-blue-600 font-bold transition-colors group"
+                        className="flex items-center text-neutral-500 hover:text-primary-600 font-bold transition-colors group"
                     >
                         <span className="transform group-hover:-translate-x-1 transition-transform inline-block mr-2">&larr;</span>
                         Voltar para Projetos
