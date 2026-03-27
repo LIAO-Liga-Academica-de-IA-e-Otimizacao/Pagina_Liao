@@ -12,10 +12,11 @@ const ThreeDCarousel: React.FC<ThreeDCarouselProps> = ({ partners }) => {
 
     const radius = useMemo(() => {
         if (count === 0) return 0;
-        if (count < 3) return 200; // Minimum visual radius for 1-2 items
-        const width = 160;
-        const gap = 140; // Increased gap drastically as requested
-        return Math.round((width + gap) / (2 * Math.tan(Math.PI / count)));
+        const minRadius = 450; // Increased base radius for better spacing
+        const width = 180;
+        const gap = 160; 
+        const calcRadius = Math.round((width + gap) / (2 * Math.tan(Math.PI / count)));
+        return Math.max(calcRadius, minRadius);
     }, [count]);
 
     if (!count) return null;
