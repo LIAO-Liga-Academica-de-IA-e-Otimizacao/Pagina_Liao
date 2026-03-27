@@ -6,6 +6,11 @@ import { Pool } from 'pg';
 // Load environment variables
 dotenv.config();
 
+console.log('[Database] DATABASE_URL present:', !!process.env.DATABASE_URL);
+if (process.env.DATABASE_URL) {
+    console.log('[Database] DATABASE_URL starts with:', process.env.DATABASE_URL.substring(0, 20));
+}
+
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined
