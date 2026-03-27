@@ -54,7 +54,7 @@ const ProSel: React.FC = () => {
         const checkStatus = async () => {
             try {
                 const response = await apiService.getConfig('prosel_open');
-                setIsOpen(response.data.data === 'true');
+                setIsOpen(response.data === 'true');
             } catch (error) {
                 console.error('Error checking status:', error);
                 // Default to closed on error for safety

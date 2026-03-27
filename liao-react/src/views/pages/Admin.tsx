@@ -61,7 +61,7 @@ const Admin: React.FC = () => {
     const fetchMembers = async () => {
         try {
             const response = await apiService.getMembers();
-            setMembers(response.data.data);
+            setMembers(response.data);
         } catch (error) {
             console.error('Error fetching members:', error);
         }
@@ -70,7 +70,7 @@ const Admin: React.FC = () => {
     const fetchTutors = async () => {
         try {
             const response = await apiService.getTutors();
-            setTutors(response.data.data.tutors || []); // Ensure array
+            setTutors(response.data.tutors || []); // Ensure array
         } catch (error) {
             console.error('Error fetching tutors:', error);
         }
@@ -79,7 +79,7 @@ const Admin: React.FC = () => {
     const fetchProjects = async () => {
         try {
             const response = await apiService.getProjects();
-            setProjects(response.data.data || []);
+            setProjects(response.data || []);
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
@@ -88,7 +88,7 @@ const Admin: React.FC = () => {
     const fetchArticles = async () => {
         try {
             const response = await apiService.getArticles();
-            setArticles(response.data.data || []);
+            setArticles(response.data || []);
         } catch (error) {
             console.error('Error fetching articles:', error);
         }
@@ -97,7 +97,7 @@ const Admin: React.FC = () => {
     const fetchPartners = async () => {
         try {
             const response = await apiService.getPartners();
-            setPartners(response.data.data || []);
+            setPartners(response.data || []);
         } catch (error) {
             console.error('Error fetching partners:', error);
         }
@@ -106,7 +106,7 @@ const Admin: React.FC = () => {
     const fetchConfig = async () => {
         try {
             const response = await apiService.getConfig('prosel_open');
-            setConfig({ proselOpen: response.data.data === 'true' });
+            setConfig({ proselOpen: response.data === 'true' });
         } catch (error) {
             console.error('Error fetching config:', error);
         }
@@ -115,7 +115,7 @@ const Admin: React.FC = () => {
     const fetchAdmins = async () => {
         try {
             const response = await apiService.getAdmins();
-            setAdmins(response.data.data || []);
+            setAdmins(response.data || []);
         } catch (error) {
             console.error('Error fetching admins:', error);
         }

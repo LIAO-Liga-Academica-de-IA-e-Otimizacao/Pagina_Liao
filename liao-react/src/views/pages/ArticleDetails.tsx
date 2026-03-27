@@ -22,7 +22,7 @@ const ArticleDetails: React.FC = () => {
                 // Let's rely on getArticles for now or add getById. 
                 // To simple start, let's fetch all and filter client side to avoid backend redeploy if unnecessary.
                 const res = await apiService.getArticles();
-                const data = Array.isArray(res.data.data) ? res.data.data : [];
+                const data = Array.isArray(res.data) ? res.data : [];
                 const found = data.find((a: Article) => a.id === Number(id));
                 setArticle(found || null);
             } catch (error) {

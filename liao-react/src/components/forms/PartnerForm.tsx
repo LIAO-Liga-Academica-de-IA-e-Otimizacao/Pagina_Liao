@@ -40,9 +40,9 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
             }
 
             onSuccess();
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            setError('Erro ao salvar parceria.');
+            setError(err.response?.data?.error || 'Erro ao salvar parceria.');
         } finally {
             setLoading(false);
         }

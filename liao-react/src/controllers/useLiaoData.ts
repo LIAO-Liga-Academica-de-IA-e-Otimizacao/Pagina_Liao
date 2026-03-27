@@ -27,11 +27,11 @@ export const useLiaoData = () => {
                     apiService.getContentByType('video'),
                 ]);
 
-            setMembers(Array.isArray(membersRes.data.data) ? membersRes.data.data : []);
-            setTutors(Array.isArray(tutorsRes.data.data) ? tutorsRes.data.data : []);
-            setNotices(Array.isArray(noticesRes.data.data) ? noticesRes.data.data : []);
-            setFaqs(Array.isArray(faqsRes.data.data) ? faqsRes.data.data : []);
-            setVideos(Array.isArray(videosRes.data.data) ? videosRes.data.data : []);
+            setMembers(Array.isArray(membersRes.data) ? membersRes.data : []);
+            setTutors(Array.isArray(tutorsRes.data) ? tutorsRes.data : []);
+            setNotices(Array.isArray(noticesRes.data) ? noticesRes.data : []);
+            setFaqs(Array.isArray(faqsRes.data) ? faqsRes.data : []);
+            setVideos(Array.isArray(videosRes.data) ? videosRes.data : []);
         } catch (err: any) {
             console.error('Error fetching data:', err);
             setError(err.message || 'Failed to fetch data');

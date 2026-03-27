@@ -16,7 +16,7 @@ const ProjectDetails: React.FC = () => {
                 // Fetch all projects and find the one we need since getProjectById is not explicitly available
                 // If backend supports getProjects({ id }) or similar we could use that, but this is safe
                 const res = await apiService.getProjects();
-                const data = Array.isArray(res.data.data) ? res.data.data : [];
+                const data = Array.isArray(res.data) ? res.data : [];
                 const found = data.find((p: Project) => p.id === Number(id));
                 setProject(found || null);
             } catch (error) {

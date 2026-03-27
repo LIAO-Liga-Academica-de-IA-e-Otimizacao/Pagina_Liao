@@ -11,7 +11,7 @@ const FAQ: React.FC = () => {
         const fetchFAQs = async () => {
             try {
                 const res = await apiService.getContentByType('faq');
-                setFaqs(res.data.data.content || []);
+                setFaqs(res.data || []);
             } catch (error) {
                 console.error('Error fetching FAQs:', error);
             } finally {

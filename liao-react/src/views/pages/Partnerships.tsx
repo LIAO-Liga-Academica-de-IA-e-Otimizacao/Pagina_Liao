@@ -18,7 +18,7 @@ const Partnerships: React.FC = () => {
         const fetchPartners = async () => {
             try {
                 const response = await apiService.getPartners();
-                setPartners(response.data.data || []);
+                setPartners(response.data || []);
             } catch (error) {
                 console.error('Error fetching partners:', error);
             } finally {

@@ -10,7 +10,7 @@ const Notices: React.FC = () => {
         const fetchNotices = async () => {
             try {
                 const res = await apiService.getContentByType('notice');
-                setNotices(res.data.data.content || []);
+                setNotices(res.data || []);
             } catch (error) {
                 console.error('Error fetching notices:', error);
             } finally {

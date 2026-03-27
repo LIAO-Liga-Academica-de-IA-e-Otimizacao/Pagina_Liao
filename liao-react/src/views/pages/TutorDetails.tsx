@@ -16,7 +16,7 @@ const TutorDetails: React.FC = () => {
             if (!id) return;
             try {
                 const response = await apiService.getTutorById(Number(id));
-                setTutor(response.data.data.tutor);
+                setTutor(response.data.tutor);
             } catch (err) {
                 console.error(err);
                 setError('Tutor não encontrado ou erro ao carregar.');
