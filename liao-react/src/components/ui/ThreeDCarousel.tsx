@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import './ThreeDCarousel.css';
-import type { Partner } from '../models/Partner';
+import type { Partner } from '../../models/Partner';
 
 interface ThreeDCarouselProps {
     partners: Partner[];

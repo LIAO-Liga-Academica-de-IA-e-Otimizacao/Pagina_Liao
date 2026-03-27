@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import type { Tutor } from '../models/Tutor';
+import type { Tutor } from '../../models/Tutor';
 
 interface TutorCardProps {
     tutor: Tutor;
@@ -38,7 +38,7 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
 
                     {/* Subjects */}
                     <div className="flex flex-wrap justify-center gap-1 mb-1">
-                        {tutor.subjects?.slice(0, 3).map((subject, index) => (
+                        {tutor.subjects?.slice(0, 3).map((subject: string, index: number) => (
                             <span key={index} className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
                                 {subject}
                             </span>
