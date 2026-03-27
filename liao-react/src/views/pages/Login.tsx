@@ -16,7 +16,8 @@ const Login: React.FC = () => {
 
         try {
             const response = await apiService.login(email, password);
-            const { token, user } = response.data.data;
+            // The API interceptor returns response.data, which contains { success: true, data: { token, user } }
+            const { token, user } = (response as any).data;
 
             localStorage.setItem('token', token);
             localStorage.setItem('user', JSON.stringify(user));
