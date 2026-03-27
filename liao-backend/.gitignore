@@ -4,4 +4,3 @@ node_modules
 
 /src/generated/prisma
 openapi.json
-src/types/api.ts
