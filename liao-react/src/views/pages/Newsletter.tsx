@@ -14,7 +14,7 @@ const Newsletter: React.FC = () => {
         const fetchArticles = async () => {
             try {
                 const res = await apiService.getArticles();
-                const data = Array.isArray(res.data.data) ? res.data.data : [];
+                const data = (res.success && Array.isArray(res.data)) ? res.data : [];
                 setArticles(data);
             } catch (error) {
                 console.error('Error fetching articles:', error);

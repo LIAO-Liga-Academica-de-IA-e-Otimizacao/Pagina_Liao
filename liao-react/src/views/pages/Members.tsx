@@ -43,7 +43,7 @@ const Members: React.FC = () => {
         const fetchMembers = async () => {
             try {
                 const response = await apiService.getMembers();
-                const data = Array.isArray(response.data.data) ? response.data.data : [];
+                const data = (response.success && Array.isArray(response.data)) ? response.data : [];
                 setMembers(data);
             } catch (err) {
                 console.error(err);

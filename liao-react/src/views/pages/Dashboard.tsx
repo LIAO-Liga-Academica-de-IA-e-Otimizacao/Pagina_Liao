@@ -128,11 +128,10 @@ const Dashboard: React.FC = () => {
                 ]);
 
                 // Extract data safely
-                const members = Array.isArray(membersRes.data.data) ? membersRes.data.data : [];
-                const tutors = Array.isArray(tutorsRes.data.data?.tutors || tutorsRes.data.data) ? (tutorsRes.data.data?.tutors || tutorsRes.data.data) : [];
-                // API for projects might be wrapped differently? Default to data.data check
-                const projects = Array.isArray(projectsRes.data.data) ? projectsRes.data.data : [];
-                const articles = Array.isArray(articlesRes.data.data) ? articlesRes.data.data : [];
+                const members = (membersRes.success && Array.isArray(membersRes.data)) ? membersRes.data : [];
+                const tutors = (tutorsRes.success && Array.isArray(tutorsRes.data?.tutors || tutorsRes.data)) ? (tutorsRes.data?.tutors || tutorsRes.data) : [];
+                const projects = (projectsRes.success && Array.isArray(projectsRes.data)) ? projectsRes.data : [];
+                const articles = (articlesRes.success && Array.isArray(articlesRes.data)) ? articlesRes.data : [];
 
                 setStats({
                     members: members.filter((m: Member) => m.isActive !== false).length,

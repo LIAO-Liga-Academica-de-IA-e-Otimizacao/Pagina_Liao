@@ -14,7 +14,7 @@ const Projects: React.FC = () => {
         const fetchProjects = async () => {
             try {
                 const res = await apiService.getProjects({ sort: sortOrder });
-                const data = Array.isArray(res.data.data) ? res.data.data : [];
+                const data = (res.success && Array.isArray(res.data)) ? res.data : [];
                 setProjects(data);
             } catch (error) {
                 console.error('Error fetching projects:', error);

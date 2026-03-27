@@ -13,7 +13,7 @@ const Tutors: React.FC = () => {
             try {
                 const response = await apiService.getTutors();
                 // Ensure we handle the response structure correctly
-                const data = response.data.data?.tutors || response.data.data || [];
+                const data = (response.success && (response.data?.tutors || response.data)) || [];
                 setTutors(Array.isArray(data) ? data : []);
             } catch (err) {
                 console.error(err);
