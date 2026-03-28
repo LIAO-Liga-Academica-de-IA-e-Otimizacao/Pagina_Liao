@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import type { EventApi } from '../models/Event';
+import type { EventApi } from '../../models/Event';
 
 type EventCardProps = {
     event: EventApi;

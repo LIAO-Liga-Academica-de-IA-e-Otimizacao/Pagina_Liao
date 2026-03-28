@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Project } from '../../models/Project';
+import CollectionLayout from '../layouts/CollectionLayout';
 
 const Projects: React.FC = () => {
     const navigate = useNavigate();
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [sortOrder, setSortOrder] = useState<'recent' | 'oldest'>('recent');
-    const [viewMode, setViewMode] = useState<'card' | 'list' | 'grid'>('card');
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -26,79 +26,42 @@ const Projects: React.FC = () => {
         fetchProjects();
     }, [sortOrder]);
 
-    const getContainerClass = () => {
-        switch (viewMode) {
-            case 'list': return 'flex flex-col gap-4';
-            case 'grid': return 'grid grid-cols-2 md:grid-cols-4 gap-4';
-            default: return 'grid grid-cols-1 md:grid-cols-3 gap-8';
-        }
-    };
-
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-900">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-12 transition-colors duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
-                    <h1 className="section-title mb-4 md:mb-0 dark:text-white">Projetos Realizados</h1>
-
-                    <div className="flex flex-col sm:flex-row gap-4 items-center">
-                        {/* Sort Buttons */}
-                        <div className="flex bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-1">
-                            <button
-                                onClick={() => setSortOrder('recent')}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${sortOrder === 'recent'
-                                    ? 'bg-primary-100 text-primary-600'
-                                    : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-                                    }`}
-                            >
-                                Recentes
-                            </button>
-                            <button
-                                onClick={() => setSortOrder('oldest')}
-                                className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${sortOrder === 'oldest'
-                                    ? 'bg-primary-100 text-primary-600'
-                                    : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-                                    }`}
-                            >
-                                Antigos
-                            </button>
-                        </div>
-
-                        {/* View Switcher */}
-                        <div className="flex bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-1">
-                            <button
-                                onClick={() => setViewMode('card')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'card' ? 'bg-primary-100 text-primary-600' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Visualização em Cards"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                            </button>
-                            <button
-                                onClick={() => setViewMode('list')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-primary-100 text-primary-600' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Visualização em Lista"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-                            </button>
-                            <button
-                                onClick={() => setViewMode('grid')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-primary-100 text-primary-600' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Grid Compacto"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
-                            </button>
-                        </div>
-                    </div>
+        <CollectionLayout
+            title="Projetos Realizados"
+            renderControls={() => (
+                <div className="flex bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-1">
+                    <button
+                        onClick={() => setSortOrder('recent')}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${sortOrder === 'recent'
+                            ? 'bg-primary-100 text-primary-600'
+                            : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                            }`}
+                    >
+                        Recentes
+                    </button>
+                    <button
+                        onClick={() => setSortOrder('oldest')}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${sortOrder === 'oldest'
+                            ? 'bg-primary-100 text-primary-600'
+                            : 'text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                            }`}
+                    >
+                        Antigos
+                    </button>
                 </div>
-
-                <div className={getContainerClass()}>
+            )}
+        >
+            {(viewMode) => (
+                <>
                     {projects.map((project) => (
                         <div
                             key={project.id}
@@ -176,15 +139,15 @@ const Projects: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                </div>
 
-                {projects.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-neutral-600 text-lg">Nenhum projeto cadastrado no momento.</p>
-                    </div>
-                )}
-            </div>
-        </div>
+                    {projects.length === 0 && (
+                        <div className="col-span-full text-center py-12">
+                            <p className="text-neutral-600 text-lg">Nenhum projeto cadastrado no momento.</p>
+                        </div>
+                    )}
+                </>
+            )}
+        </CollectionLayout>
     );
 };
 

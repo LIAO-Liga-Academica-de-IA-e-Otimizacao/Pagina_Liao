@@ -1,20 +1,14 @@
 import React from 'react';
+import PageLayout from '../layouts/PageLayout';
 
 const About: React.FC = () => {
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors duration-200">
-            {/* Hero Section */}
-            <div className="bg-neutral-900 text-white py-20 px-4">
-                <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Sobre Nós</h1>
-                    <p className="text-xl text-neutral-300 max-w-2xl mx-auto">
-                        Conheça a Liga Acadêmica de Inteligência Artificial e Otimização
-                    </p>
-                </div>
-            </div>
-
+        <PageLayout
+            title="Sobre Nós"
+            subtitle="Conheça a Liga Acadêmica de Inteligência Artificial e Otimização"
+        >
             {/* Content Section */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="py-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                     <div>
                         <h2 className="text-3xl font-bold text-neutral-900 dark:text-white mb-6">Nossa Missão</h2>
@@ -56,7 +50,7 @@ const About: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </PageLayout>
     );
 };
 

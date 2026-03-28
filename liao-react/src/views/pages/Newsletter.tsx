@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Added useNavigate
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Article } from '../../models/Article';
+import CollectionLayout from '../layouts/CollectionLayout';
 
 const Newsletter: React.FC = () => {
     const navigate = useNavigate();
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [viewMode, setViewMode] = useState<'card' | 'list' | 'grid'>('card');
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -35,67 +35,29 @@ const Newsletter: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-900">
                 <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
-    const getContainerClass = () => {
-        switch (viewMode) {
-            case 'list': return 'flex flex-col gap-4';
-            case 'grid': return 'grid grid-cols-2 md:grid-cols-4 gap-4';
-            default: return 'grid grid-cols-1 md:grid-cols-3 gap-8';
-        }
-    };
-
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-12 transition-colors duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row justify-between items-center mb-10">
-                    <h1 className="section-title dark:text-white mb-4 md:mb-0">Newsletter & Artigos</h1>
-
-                    {/* Controls: Search + View Mode */}
-                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto items-center">
-                        {/* Search Bar */}
-                        <div className="w-full md:w-64">
-                            <input
-                                type="text"
-                                placeholder="Pesquisar..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm placeholder-neutral-500 dark:placeholder-neutral-400 transition-colors"
-                            />
-                        </div>
-
-                        {/* View Switcher */}
-                        <div className="flex bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-1 transition-colors">
-                            <button
-                                onClick={() => setViewMode('card')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'card' ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Visualização em Cards"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                            </button>
-                            <button
-                                onClick={() => setViewMode('list')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'list' ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Visualização em Lista"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
-                            </button>
-                            <button
-                                onClick={() => setViewMode('grid')}
-                                className={`p-2 rounded-md transition-all ${viewMode === 'grid' ? 'bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400' : 'text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-700'}`}
-                                title="Grid Compacto"
-                            >
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" /></svg>
-                            </button>
-                        </div>
-                    </div>
+        <CollectionLayout
+            title="Newsletter & Artigos"
+            renderControls={() => (
+                <div className="w-full md:w-64">
+                    <input
+                        type="text"
+                        placeholder="Pesquisar..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-sm placeholder-neutral-500 dark:placeholder-neutral-400 transition-colors"
+                    />
                 </div>
-
-                <div className={getContainerClass()}>
+            )}
+        >
+            {(viewMode) => (
+                <>
                     {filteredArticles.map((article) => (
                         <div
                             key={article.id}
@@ -176,17 +138,17 @@ const Newsletter: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                </div>
 
-                {filteredArticles.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-neutral-600 dark:text-neutral-400 text-lg">
-                            {searchTerm ? 'Nenhum resultado encontrado.' : 'Nenhuma notícia publicada ainda.'}
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
+                    {filteredArticles.length === 0 && (
+                        <div className="col-span-full text-center py-12">
+                            <p className="text-neutral-600 dark:text-neutral-400 text-lg">
+                                {searchTerm ? 'Nenhum resultado encontrado.' : 'Nenhuma notícia publicada ainda.'}
+                            </p>
+                        </div>
+                    )}
+                </>
+            )}
+        </CollectionLayout>
     );
 };
 
