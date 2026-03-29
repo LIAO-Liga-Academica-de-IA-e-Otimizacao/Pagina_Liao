@@ -5,6 +5,7 @@ export interface Article {
     content: string;
     images: string[];
     tags: string[];
+    references: string[]; // New field
     isPublished: boolean;
     createdAt: string;
     updatedAt: string;
