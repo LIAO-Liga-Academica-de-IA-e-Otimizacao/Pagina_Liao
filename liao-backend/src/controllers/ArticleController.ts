@@ -38,6 +38,7 @@ export const createArticle = async (req: Request, res: Response): Promise<void> 
                 content,
                 images: images || [],
                 tags: tags || [],
+                references: references || [],
                 isPublished: isPublished !== undefined ? isPublished : true,
             },
         });
@@ -186,6 +187,7 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
                 content,
                 images,
                 tags,
+                references,
                 isPublished,
             },
         });
