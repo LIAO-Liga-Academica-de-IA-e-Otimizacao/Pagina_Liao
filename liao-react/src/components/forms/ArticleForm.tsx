@@ -142,13 +142,13 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                                 <ul className="space-y-2">
                                     {filteredRefs.map((ref, i) => (
                                         <li key={i} className="text-sm text-neutral-600 dark:text-neutral-400 flex items-start gap-2">
-                                            <span className="text-primary-500 font-bold">•</span>
+                                            <span className="text-primary-500 font-bold flex-shrink-0">•</span>
                                             {ref.startsWith('http') ? (
-                                                <a href={ref} target="_blank" rel="noopener noreferrer" className="hover:text-primary-500 underline decoration-primary-500/30 transition-colors">
+                                                <a href={ref} target="_blank" rel="noopener noreferrer" className="hover:text-primary-500 underline decoration-primary-500/30 transition-colors break-words overflow-hidden">
                                                     {ref}
                                                 </a>
                                             ) : (
-                                                <span>{ref}</span>
+                                                <span className="leading-relaxed">{ref}</span>
                                             )}
                                         </li>
                                     ))}
