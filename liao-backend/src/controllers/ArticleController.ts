@@ -172,7 +172,7 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
 export const updateArticle = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, description, content, images, tags, isPublished } = req.body;
+        const { title, description, content, images, tags, references, isPublished } = req.body;
 
         if (images && images.length > 5) {
             res.status(400).json({ success: false, error: 'Maximum of 5 images allowed per article.' });
