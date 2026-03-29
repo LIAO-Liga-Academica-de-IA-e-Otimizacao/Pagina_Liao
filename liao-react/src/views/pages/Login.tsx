@@ -31,23 +31,23 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-neutral-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
             <div className="max-w-md w-full">
                 <div className="text-center mb-8">
                     <h1 className="text-4xl font-bold text-gradient mb-2">LIAO Admin</h1>
-                    <p className="text-gray-600">Faça login para acessar o painel administrativo</p>
+                    <p className="text-neutral-600">Faça login para acessar o painel administrativo</p>
                 </div>
 
                 <div className="card p-8">
                     {error && (
-                        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-                            <p className="text-red-800">{error}</p>
+                        <div className="mb-6 p-4 bg-danger-50 border border-danger-200 rounded-lg">
+                            <p className="text-danger-800">{error}</p>
                         </div>
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
                                 Email
                             </label>
                             <input
@@ -61,7 +61,7 @@ const Login: React.FC = () => {
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <label className="block text-sm font-medium text-neutral-700 mb-2">
                                 Senha
                             </label>
                             <input
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
                         </button>
 
                         <div className="text-center mt-4">
-                            <Link to="/" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium flex items-center justify-center">
+                            <Link to="/" className="text-sm text-primary-600 hover:text-primary-800 font-medium flex items-center justify-center">
                                 <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>

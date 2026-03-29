@@ -37,19 +37,19 @@ const ArticleDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-green-600"></div>
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-success-600"></div>
             </div>
         );
     }
 
     if (!article) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 text-gray-600">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 text-neutral-600">
                 <h2 className="text-2xl font-bold mb-4">Artigo não encontrado 😕</h2>
                 <button
                     onClick={() => navigate('/newsletter')}
-                    className="text-green-700 hover:text-green-900 font-medium hover:underline"
+                    className="text-success-700 hover:text-success-900 font-medium hover:underline"
                 >
                     &larr; Voltar para Newsletter
                 </button>
@@ -60,7 +60,7 @@ const ArticleDetails: React.FC = () => {
     return (
         <div className="min-h-screen bg-white">
             {/* Hero Section */}
-            <div className="w-full bg-gray-900 h-64 md:h-96 relative overflow-hidden">
+            <div className="w-full bg-neutral-900 h-64 md:h-96 relative overflow-hidden">
                 <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
                 {article.images && article.images.length > 0 ? (
                     <img
@@ -69,14 +69,14 @@ const ArticleDetails: React.FC = () => {
                         className="w-full h-full object-cover opacity-80"
                     />
                 ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-green-900 to-black">
+                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-success-900 to-black">
                         <span className="text-white opacity-20 text-9xl font-bold">LIAO</span>
                     </div>
                 )}
                 <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12 z-20 max-w-4xl mx-auto text-white">
                     <div className="flex gap-2 mb-4">
                         {article.tags.map(tag => (
-                            <span key={tag} className="px-3 py-1 bg-green-500 bg-opacity-90 text-white text-xs font-bold rounded-full uppercase tracking-wider">
+                            <span key={tag} className="px-3 py-1 bg-success-500 bg-opacity-90 text-white text-xs font-bold rounded-full uppercase tracking-wider">
                                 {tag}
                             </span>
                         ))}
@@ -84,7 +84,7 @@ const ArticleDetails: React.FC = () => {
                     <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-4 drop-shadow-lg">
                         {article.title}
                     </h1>
-                    <div className="flex items-center text-gray-300 text-sm font-medium">
+                    <div className="flex items-center text-neutral-300 text-sm font-medium">
                         <span>{new Date(article.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
                     </div>
                 </div>
@@ -94,20 +94,20 @@ const ArticleDetails: React.FC = () => {
             <article className="max-w-3xl mx-auto px-6 py-12 md:py-20">
                 {/* Intro / Description if exists */}
                 {article.description && (
-                    <div className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light mb-12 border-l-4 border-green-500 pl-6 italic">
+                    <div className="text-xl md:text-2xl text-neutral-600 leading-relaxed font-light mb-12 border-l-4 border-success-500 pl-6 italic">
                         {article.description}
                     </div>
                 )}
 
                 {/* Main Content */}
-                <div className="prose prose-lg prose-green mx-auto text-gray-800 whitespace-pre-wrap leading-loose">
+                <div className="prose prose-lg prose-success mx-auto text-neutral-800 whitespace-pre-wrap leading-loose">
                     {article.content}
                 </div>
 
                 {/* Gallery if more images */}
                 {article.images && article.images.length > 1 && (
-                    <div className="mt-16 pt-12 border-t border-gray-100">
-                        <h3 className="text-2xl font-bold text-gray-900 mb-8">Galeria</h3>
+                    <div className="mt-16 pt-12 border-t border-neutral-100">
+                        <h3 className="text-2xl font-bold text-neutral-900 mb-8">Galeria</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {article.images.slice(1).map((img, idx) => (
                                 <img
@@ -122,10 +122,10 @@ const ArticleDetails: React.FC = () => {
                 )}
 
                 {/* Back Button Footer */}
-                <div className="mt-16 pt-8 border-t border-gray-200 flex justify-between items-center">
+                <div className="mt-16 pt-8 border-t border-neutral-200 flex justify-between items-center">
                     <button
                         onClick={() => navigate('/newsletter')}
-                        className="flex items-center text-gray-500 hover:text-green-700 font-bold transition-colors group"
+                        className="flex items-center text-neutral-500 hover:text-success-700 font-bold transition-colors group"
                     >
                         <span className="transform group-hover:-translate-x-1 transition-transform inline-block mr-2">&larr;</span>
                         Voltar para Newsletter

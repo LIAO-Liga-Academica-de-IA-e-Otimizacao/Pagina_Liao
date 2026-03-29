@@ -78,6 +78,12 @@
             "$ref": "#/definitions/EventSpeaker"
           }
         },
+        "partners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Partner"
+          }
+        },
         "createdAt": {
           "type": "string",
           "format": "date-time"
@@ -572,6 +578,12 @@
             "string",
             "null"
           ]
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Event"
+          }
         },
         "createdAt": {
           "type": "string",

@@ -21,7 +21,7 @@ const EventAgenda: React.FC<EventAgendaProps> = ({ agenda, palette }) => {
                             <div key={idx} className="relative pl-8 group">
                                 <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10 group-last:bottom-auto group-last:h-full"></div>
                                 <div 
-                                    className="absolute left-[-4px] top-2 w-2 h-2 rounded-full ring-4 ring-zinc-950"
+                                    className="absolute left-[-4px] top-2 w-2 h-2 rounded-full ring-4 ring-neutral-950"
                                     style={{ backgroundColor: itemColor }}
                                 ></div>
                                 <div 
@@ -39,13 +39,13 @@ const EventAgenda: React.FC<EventAgendaProps> = ({ agenda, palette }) => {
                                             </div>
                                             <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
                                             {item.description && (
-                                                <p className="text-zinc-400 text-sm mt-1">{item.description}</p>
+                                                <p className="text-neutral-400 text-sm mt-1">{item.description}</p>
                                             )}
                                         </div>
                                         {item.speakerName && (
-                                            <div className="flex items-center gap-2 bg-zinc-900 px-4 py-2 rounded-xl border border-white/5 shrink-0">
-                                                <User size={14} className="text-zinc-500" />
-                                                <span className="text-sm font-medium text-zinc-300">{item.speakerName}</span>
+                                            <div className="flex items-center gap-2 bg-neutral-900 px-4 py-2 rounded-xl border border-white/5 shrink-0">
+                                                <User size={14} className="text-neutral-500" />
+                                                <span className="text-sm font-medium text-neutral-300">{item.speakerName}</span>
                                             </div>
                                         )}
                                     </div>

@@ -73,19 +73,19 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                             >
                                 <div className="relative">
                                     <div 
-                                        className="w-14 h-14 rounded-full overflow-hidden bg-zinc-800 border-2 border-zinc-700/50 transition-colors group-hover:border-[var(--hover-border)]"
+                                        className="w-14 h-14 rounded-full overflow-hidden bg-neutral-800 border-2 border-neutral-700/50 transition-colors group-hover:border-[var(--hover-border)]"
                                     >
                                         {speakerPhoto ? (
                                             <img src={speakerPhoto} alt={speakerName} className="w-full h-full object-cover" />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-xl font-bold text-zinc-500">
+                                            <div className="w-full h-full flex items-center justify-center text-xl font-bold text-neutral-500">
                                                 {speakerName.charAt(0)}
                                             </div>
                                         )}
                                     </div>
                                     {speaker.member && (
                                         <div 
-                                            className="absolute -bottom-1 -right-1 p-1 rounded-full border-2 border-zinc-900"
+                                            className="absolute -bottom-1 -right-1 p-1 rounded-full border-2 border-neutral-900"
                                             style={{ backgroundColor: speakerColor }}
                                         >
                                             <Sparkles size={10} className="text-white" />
@@ -107,13 +107,13 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-sm text-zinc-400 truncate">{speakerRole}</p>
+                                    <p className="text-sm text-neutral-400 truncate">{speakerRole}</p>
                                     {speaker.company && (
-                                        <p className="text-xs text-zinc-500 font-medium mt-0.5">{speaker.company}</p>
+                                        <p className="text-xs text-neutral-500 font-medium mt-0.5">{speaker.company}</p>
                                     )}
                                 </div>
                                 {(speaker.member || speaker.link) && (
-                                    <div className="text-zinc-600 group-hover:text-white transition-colors">
+                                    <div className="text-neutral-600 group-hover:text-white transition-colors">
                                         {speaker.member ? <ArrowRight size={16} /> : <ExternalLink size={16} />}
                                     </div>
                                 )}

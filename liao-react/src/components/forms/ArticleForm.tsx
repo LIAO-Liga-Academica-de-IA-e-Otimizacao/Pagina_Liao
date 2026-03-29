@@ -76,19 +76,19 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800">
                 {article ? 'Editar Artigo/Newsletter' : 'Nova Publicação'}
             </h2>
 
             {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
+                <div className="mb-4 p-4 bg-danger-50 border border-danger-200 rounded text-danger-700">
                     {error}
                 </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Título</label>
+                    <label className="block text-sm font-medium text-neutral-700">Título</label>
                     <input
                         type="text"
                         value={title}
@@ -99,7 +99,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Descrição / Resumo (Aparece no Card)</label>
+                    <label className="block text-sm font-medium text-neutral-700">Descrição / Resumo (Aparece no Card)</label>
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
@@ -110,7 +110,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Conteúdo Completo (Aparece ao clicar)</label>
+                    <label className="block text-sm font-medium text-neutral-700">Conteúdo Completo (Aparece ao clicar)</label>
                     <textarea
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
@@ -122,7 +122,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Tags (Separadas por vírgula)</label>
+                    <label className="block text-sm font-medium text-neutral-700">Tags (Separadas por vírgula)</label>
                     <input
                         type="text"
                         value={tagsInput}
@@ -138,17 +138,17 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                         id="isPublished"
                         checked={isPublished}
                         onChange={(e) => setIsPublished(e.target.checked)}
-                        className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-success-600 focus:ring-success-500 border-neutral-300 rounded"
                     />
-                    <label htmlFor="isPublished" className="ml-2 block text-sm text-gray-900">
+                    <label htmlFor="isPublished" className="ml-2 block text-sm text-neutral-900">
                         Publicado (Visível no site)
                     </label>
                 </div>
 
                 <div className="mt-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-neutral-700 mb-2">
                         Imagens (Max 5)
-                        <span className="text-xs text-gray-500 ml-2">Cole as URLs das imagens</span>
+                        <span className="text-xs text-neutral-500 ml-2">Cole as URLs das imagens</span>
                     </label>
 
                     {images.map((img, index) => (
@@ -164,7 +164,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                                 <button
                                     type="button"
                                     onClick={() => removeImageField(index)}
-                                    className="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200"
+                                    className="px-3 py-2 bg-danger-100 text-danger-600 rounded hover:bg-danger-200"
                                 >
                                     X
                                 </button>
@@ -176,7 +176,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                         <button
                             type="button"
                             onClick={addImageField}
-                            className="mt-2 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                            className="mt-2 text-sm text-primary-600 hover:text-primary-800 font-medium"
                         >
                             + Adicionar outra imagem
                         </button>
@@ -187,7 +187,7 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        className="px-4 py-2 border border-neutral-300 rounded-md text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                         Cancelar
                     </button>

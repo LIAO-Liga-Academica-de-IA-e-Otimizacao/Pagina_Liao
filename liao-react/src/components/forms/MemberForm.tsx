@@ -57,12 +57,12 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800">
                 {member ? 'Editar Membro' : 'Novo Membro'}
             </h2>
 
             {error && (
-                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded text-red-700">
+                <div className="mb-4 p-4 bg-danger-50 border border-danger-200 rounded text-danger-700">
                     {error}
                 </div>
             )}
@@ -70,7 +70,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Nome</label>
+                        <label className="block text-sm font-medium text-neutral-700">Nome</label>
                         <input
                             type="text"
                             value={name}
@@ -80,7 +80,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Email</label>
+                        <label className="block text-sm font-medium text-neutral-700">Email</label>
                         <input
                             type="email"
                             value={email}
@@ -92,7 +92,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Curso</label>
+                    <label className="block text-sm font-medium text-neutral-700">Curso</label>
                     <input
                         type="text"
                         value={course}
@@ -104,7 +104,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Função</label>
+                        <label className="block text-sm font-medium text-neutral-700 mb-2">Função</label>
                         <select
                             value={role}
                             onChange={(e) => setRole(e.target.value)}
@@ -126,16 +126,16 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             id="isFounder"
                             checked={isFounder}
                             onChange={(e) => setIsFounder(e.target.checked)}
-                            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
                         />
-                        <label htmlFor="isFounder" className="ml-2 block text-sm text-gray-900">
+                        <label htmlFor="isFounder" className="ml-2 block text-sm text-neutral-900">
                             Membro Fundador (Selo Especial)
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Foto URL</label>
+                    <label className="block text-sm font-medium text-neutral-700">Foto URL</label>
                     <input
                         type="url"
                         value={photo}
@@ -146,7 +146,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700">Bio</label>
+                    <label className="block text-sm font-medium text-neutral-700">Bio</label>
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
@@ -157,7 +157,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Ano de Ingresso/Vigência</label>
+                        <label className="block text-sm font-medium text-neutral-700">Ano de Ingresso/Vigência</label>
                         <input
                             type="number"
                             value={year}
@@ -171,9 +171,9 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             id="isActive"
                             checked={isActive}
                             onChange={(e) => setIsActive(e.target.checked)}
-                            className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                            className="h-4 w-4 text-success-600 focus:ring-success-500 border-neutral-300 rounded"
                         />
-                        <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
+                        <label htmlFor="isActive" className="ml-2 block text-sm text-neutral-900">
                             Membro Vigente/Ativo (Exibe na aba Diretoria/Membros do ano)
                         </label>
                     </div>
@@ -181,7 +181,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">LinkedIn URL</label>
+                        <label className="block text-sm font-medium text-neutral-700">LinkedIn URL</label>
                         <input
                             type="url"
                             value={linkedin}
@@ -190,7 +190,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">GitHub URL</label>
+                        <label className="block text-sm font-medium text-neutral-700">GitHub URL</label>
                         <input
                             type="url"
                             value={github}
@@ -204,7 +204,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                        className="px-4 py-2 border border-neutral-300 rounded-md text-sm font-medium text-neutral-700 hover:bg-neutral-50"
                     >
                         Cancelar
                     </button>

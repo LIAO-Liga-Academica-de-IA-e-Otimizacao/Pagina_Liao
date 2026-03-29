@@ -49,13 +49,13 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                     </div>
                     <div>
                         <h3 className="text-2xl font-bold text-white mb-2">Não perca!</h3>
-                        <p className="text-zinc-300 text-sm leading-relaxed">
+                        <p className="text-neutral-300 text-sm leading-relaxed">
                             Adicione este evento à sua agenda e fique por dentro de todas as novidades.
                         </p>
                     </div>
                     <button 
                         onClick={handleAddToCalendar}
-                        className="w-full py-4 bg-white text-zinc-950 font-bold hover:bg-zinc-200 transition-colors shadow-lg shadow-white/10 active:scale-[0.98] transition-all"
+                        className="w-full py-4 bg-white text-neutral-950 font-bold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10 active:scale-[0.98] transition-all"
                         style={{ borderRadius: 'var(--event-radius-sm)' }}
                     >
                         Notificar-me

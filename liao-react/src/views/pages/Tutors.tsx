@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import TutorCard from '../../components/domain/TutorCard';
 import type { Tutor } from '../../models/Tutor';
+import PageLayout from '../layouts/PageLayout';
 
 const Tutors: React.FC = () => {
     const [tutors, setTutors] = useState<Tutor[]>([]);
@@ -28,47 +29,41 @@ const Tutors: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-red-600"></div>
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-900">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-danger-600"></div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-                <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
-                    <p className="text-red-800">{error}</p>
+            <PageLayout>
+                <div className="bg-danger-50 border border-danger-200 rounded-lg p-6 text-center">
+                    <p className="text-danger-800">{error}</p>
                 </div>
-            </div>
+            </PageLayout>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 py-12 transition-colors duration-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h1 className="section-title dark:text-white">Nossos Tutores</h1>
-                    <p className="text-xl text-gray-600 dark:text-gray-400">
-                        Nossos tutores estão prontos para ajudar você
+        <PageLayout
+            title="Nossos Tutores"
+            subtitle="Nossos tutores estão prontos para ajudar você"
+        >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {tutors.map((tutor) => (
+                    <TutorCard key={tutor.id} tutor={tutor} />
+                ))}
+            </div>
+
+            {tutors.length === 0 && (
+                <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                    <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                        Nenhum tutor disponível no momento.
                     </p>
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {tutors.map((tutor) => (
-                        <TutorCard key={tutor.id} tutor={tutor} />
-                    ))}
-                </div>
-
-                {tutors.length === 0 && (
-                    <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl shadow-sm">
-                        <p className="text-gray-500 dark:text-gray-400 text-lg">
-                            Nenhum tutor disponível no momento.
-                        </p>
-                    </div>
-                )}
-            </div>
-        </div>
+            )}
+        </PageLayout>
     );
 };
 

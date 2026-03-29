@@ -23,13 +23,13 @@ const Notices: React.FC = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 py-12">
+        <div className="min-h-screen bg-neutral-50 py-12">
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className="section-title text-center mb-12">Parcerias</h1>
 
@@ -37,15 +37,15 @@ const Notices: React.FC = () => {
                     {notices.map((notice) => (
                         <div key={notice.id} className="card p-6">
                             <div className="flex justify-between items-start mb-3">
-                                <h2 className="text-2xl font-bold text-gray-900">{notice.title}</h2>
-                                <span className="text-sm text-gray-500">
+                                <h2 className="text-2xl font-bold text-neutral-900">{notice.title}</h2>
+                                <span className="text-sm text-neutral-500">
                                     {new Date(notice.createdAt).toLocaleDateString('pt-BR')}
                                 </span>
                             </div>
                             {notice.description && (
-                                <p className="text-gray-700 mb-3">{notice.description}</p>
+                                <p className="text-neutral-700 mb-3">{notice.description}</p>
                             )}
-                            <div className="prose max-w-none text-gray-600">
+                            <div className="prose max-w-none text-neutral-600">
                                 {notice.content}
                             </div>
                         </div>
@@ -54,7 +54,7 @@ const Notices: React.FC = () => {
 
                 {notices.length === 0 && (
                     <div className="text-center py-12">
-                        <p className="text-gray-600 text-lg">Nenhuma parceria no momento.</p>
+                        <p className="text-neutral-600 text-lg">Nenhuma parceria no momento.</p>
                     </div>
                 )}
             </div>

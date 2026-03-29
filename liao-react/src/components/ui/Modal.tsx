@@ -22,11 +22,11 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
             <div className="flex min-h-full items-center justify-center p-4">
                 <div className="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
                     {/* Header */}
-                    <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-                        <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+                    <div className="sticky top-0 bg-white border-b border-neutral-200 px-6 py-4 flex justify-between items-center">
+                        <h2 className="text-2xl font-bold text-neutral-900">{title}</h2>
                         <button
                             onClick={onClose}
-                            className="text-gray-400 hover:text-gray-600 transition-colors"
+                            className="text-neutral-400 hover:text-neutral-600 transition-colors"
                         >
                             <svg
                                 className="w-6 h-6"

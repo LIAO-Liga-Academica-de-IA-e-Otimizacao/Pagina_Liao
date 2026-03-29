@@ -45,6 +45,38 @@ async function main() {
     },
   });
 
+  // 1.5 Create Partners
+  console.log('Creating partners...');
+  const partner1 = await prisma.partner.upsert({
+    where: { id: 1 },
+    update: {},
+    create: {
+      name: 'Google Cloud',
+      imageUrl: 'https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg',
+      websiteUrl: 'https://cloud.google.com'
+    }
+  });
+
+  const partner2 = await prisma.partner.upsert({
+    where: { id: 2 },
+    update: {},
+    create: {
+      name: 'GitHub',
+      imageUrl: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png',
+      websiteUrl: 'https://github.com'
+    }
+  });
+
+  const partner3 = await prisma.partner.upsert({
+    where: { id: 3 },
+    update: {},
+    create: {
+      name: 'NVIDIA',
+      imageUrl: 'https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-p@2x.png',
+      websiteUrl: 'https://nvidia.com'
+    }
+  });
+
   // 2. Create a massive Event with relations
   console.log('Creating events...');
   const eventData = {
@@ -71,7 +103,12 @@ async function main() {
 
   const event = await prisma.event.upsert({
     where: { slug: 'workshop-ia-avancada-2026' },
-    update: eventData, // Now it will actually update existing events!
+    update: {
+        ...eventData,
+        partners: {
+            set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }]
+        }
+    },
     create: {
       ...eventData,
       slug: 'workshop-ia-avancada-2026',
@@ -98,6 +135,9 @@ async function main() {
             link: 'https://github.com/alice'
           }
         ]
+      },
+      partners: {
+        connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }]
       }
     }
   });
