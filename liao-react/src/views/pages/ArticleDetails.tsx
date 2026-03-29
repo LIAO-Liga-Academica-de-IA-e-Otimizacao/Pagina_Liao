@@ -13,14 +13,6 @@ const ArticleDetails: React.FC = () => {
         const fetchArticle = async () => {
             if (!id) return;
             try {
-                // Assuming we can fetch a single article or we fetch all and find one. 
-                // Ideally backend has getArticleById. 
-                // Looking at backend controller, it only has getArticles (plural) which filters.
-                // I might need to filter client side or update backend.
-                // For now, let's fetch all and find, or assume I can implement getById on backend quickly. 
-                // Actually, existing controller code (which I saw previously) only showed getArticles. 
-                // Let's rely on getArticles for now or add getById. 
-                // To simple start, let's fetch all and filter client side to avoid backend redeploy if unnecessary.
                 const res = await apiService.getArticles();
                 const data = Array.isArray(res.data) ? res.data : [];
                 const found = data.find((a: Article) => a.id === Number(id));
@@ -37,19 +29,19 @@ const ArticleDetails: React.FC = () => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-neutral-50">
-                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-success-600"></div>
+            <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
+                <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary-600"></div>
             </div>
         );
     }
 
     if (!article) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 text-neutral-600">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400">
                 <h2 className="text-2xl font-bold mb-4">Artigo não encontrado 😕</h2>
                 <button
                     onClick={() => navigate('/newsletter')}
-                    className="text-success-700 hover:text-success-900 font-medium hover:underline"
+                    className="text-primary-600 hover:text-primary-800 font-medium hover:underline"
                 >
                     &larr; Voltar para Newsletter
                 </button>
@@ -108,6 +100,34 @@ const ArticleDetails: React.FC = () => {
                 </div>
 
                 {/* References Section */}
+                {article.references && article.references.length > 0 && (
+                    <div className="mt-16 py-10 border-t dark:border-neutral-800">
+                        <h3 className="text-lg font-black text-neutral-900 dark:text-white uppercase tracking-wider mb-6 flex items-center gap-3">
+                            <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                            Referências Acadêmicas e Fontes
+                        </h3>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {article.references.map((ref, i) => (
+                                <li key={i} className="flex items-start gap-4 p-4 bg-neutral-50 dark:bg-neutral-800/40 rounded-xl border dark:border-neutral-800 group hover:border-primary-500/50 transition-all">
+                                    <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg bg-white dark:bg-neutral-700 shadow-sm text-primary-600 dark:text-primary-400 font-bold text-xs border dark:border-neutral-600">
+                                        {i + 1}
+                                    </span>
+                                    {ref.startsWith('http') ? (
+                                        <a href={ref} target="_blank" rel="noopener noreferrer" className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 break-words transition-colors underline decoration-neutral-300 dark:decoration-neutral-700 hover:decoration-primary-500">
+                                            {ref}
+                                        </a>
+                                    ) : (
+                                        <span className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">{ref}</span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
+                {/* Gallery if more images */}
+                {article.images && article.images.length > 1 && (
+                    <div className="mt-10 py-12 border-t dark:border-neutral-800">
                         <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-8 tracking-tight">Galeria de Imagens</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {article.images.slice(1).map((img, idx) => (
