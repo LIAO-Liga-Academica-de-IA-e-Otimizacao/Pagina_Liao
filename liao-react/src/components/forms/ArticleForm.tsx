@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiService } from '../../services/api';
-import { Article } from '../../models/Article';
+import type { Article } from '../../models/Article';
 
 interface ArticleFormProps {
     article?: Article;
