@@ -56,8 +56,8 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-neutral-800">
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-lg border dark:border-neutral-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800 dark:text-white">
                 {member ? 'Editar Membro' : 'Novo Membro'}
             </h2>
 
@@ -128,7 +128,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             onChange={(e) => setIsFounder(e.target.checked)}
                             className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-neutral-300 rounded"
                         />
-                        <label htmlFor="isFounder" className="ml-2 block text-sm text-neutral-900">
+                        <label htmlFor="isFounder" className="ml-2 block text-sm text-neutral-900 dark:text-neutral-300">
                             Membro Fundador (Selo Especial)
                         </label>
                     </div>
@@ -173,7 +173,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             onChange={(e) => setIsActive(e.target.checked)}
                             className="h-4 w-4 text-success-600 focus:ring-success-500 border-neutral-300 rounded"
                         />
-                        <label htmlFor="isActive" className="ml-2 block text-sm text-neutral-900">
+                        <label htmlFor="isActive" className="ml-2 block text-sm text-neutral-900 dark:text-neutral-300">
                             Membro Vigente/Ativo (Exibe na aba Diretoria/Membros do ano)
                         </label>
                     </div>
@@ -204,7 +204,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-neutral-300 rounded-md text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                     >
                         Cancelar
                     </button>

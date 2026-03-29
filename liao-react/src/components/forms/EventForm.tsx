@@ -57,60 +57,60 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-8 rounded-3xl shadow-sm border border-neutral-100 space-y-8">
+        <form onSubmit={handleSubmit} className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-100 dark:border-neutral-800 space-y-8 animate-in fade-in duration-500">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* Basic Info */}
                 <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-neutral-900 border-b pb-2">Informações Básicas</h3>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white border-b dark:border-neutral-800 pb-2">Informações Básicas</h3>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Título do Evento</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Título do Evento</label>
                         <input
                             type="text"
                             required
-                            className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                            className="input-field w-full"
                             value={formData.title}
                             onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Slug (URL amigável)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Slug (URL amigável)</label>
                         <input
                             type="text"
                             required
                             placeholder="ex: workshop-ia-2024"
-                            className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                            className="input-field w-full"
                             value={formData.slug}
                             onChange={(e) => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/ /g, '-') })}
                         />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-semibold text-neutral-700 mb-1">Data</label>
+                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Data</label>
                             <input
                                 type="date"
                                 required
-                                className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                                className="input-field w-full"
                                 value={formData.date}
                                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-neutral-700 mb-1">Local</label>
+                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Local</label>
                             <input
                                 type="text"
                                 placeholder="Auditório, Online, etc."
-                                className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                                className="input-field w-full"
                                 value={formData.location}
                                 onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                             />
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">URL da Imagem de Capa</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">URL da Imagem de Capa</label>
                         <input
                             type="url"
                             required
-                            className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                            className="input-field w-full"
                             value={formData.coverImage}
                             onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
                         />
@@ -119,13 +119,13 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
 
                 {/* Description & Multi-fields */}
                 <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-neutral-900 border-b pb-2">Detalhes e Mídia</h3>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white border-b dark:border-neutral-800 pb-2">Detalhes e Mídia</h3>
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Descrição</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Descrição</label>
                         <textarea
                             rows={4}
                             required
-                            className="w-full rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                            className="input-field w-full"
                             value={formData.description}
                             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                         />
@@ -133,22 +133,22 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
 
                     {/* Speakers */}
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Palestrantes</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Palestrantes</label>
                         <div className="flex gap-2 mb-2">
                             <input
                                 type="text"
-                                className="flex-1 rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                                className="input-field flex-1"
                                 value={newSpeaker}
                                 onChange={(e) => setNewSpeaker(e.target.value)}
                                 placeholder="Nome do palestrante"
                             />
-                            <button type="button" onClick={() => addItem('speakers', newSpeaker, setNewSpeaker)} className="px-4 py-2 bg-primary-50 text-primary-600 rounded-xl font-bold hover:bg-primary-100 transition-colors">+</button>
+                            <button type="button" onClick={() => addItem('speakers', newSpeaker, setNewSpeaker)} className="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl font-bold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors">+</button>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {formData.speakers.map((s, i) => (
-                                <span key={i} className="bg-primary-50 text-primary-700 px-3 py-1 rounded-lg text-sm flex items-center gap-2">
+                                <span key={i} className="bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 px-3 py-1 rounded-lg text-sm flex items-center gap-2 border dark:border-primary-800">
                                     {s}
-                                    <button type="button" onClick={() => removeItem('speakers', i)} className="hover:text-danger-500">×</button>
+                                    <button type="button" onClick={() => removeItem('speakers', i)} className="hover:text-danger-500 transition-colors">×</button>
                                 </span>
                             ))}
                         </div>
@@ -156,22 +156,22 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
 
                     {/* Highlights */}
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Destaques (Bullet points)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Destaques (Bullet points)</label>
                         <div className="flex gap-2 mb-2">
                             <input
                                 type="text"
-                                className="flex-1 rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                                className="input-field flex-1"
                                 value={newHighlight}
                                 onChange={(e) => setNewHighlight(e.target.value)}
                                 placeholder="O que terá no evento?"
                             />
-                            <button type="button" onClick={() => addItem('highlights', newHighlight, setNewHighlight)} className="px-4 py-2 bg-primary-50 text-primary-600 rounded-xl font-bold hover:bg-primary-100 transition-colors">+</button>
+                            <button type="button" onClick={() => addItem('highlights', newHighlight, setNewHighlight)} className="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl font-bold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors">+</button>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {formData.highlights.map((h, i) => (
-                                <span key={i} className="bg-success-50 text-success-700 px-3 py-1 rounded-lg text-sm flex items-center gap-2">
+                                <span key={i} className="bg-success-50 dark:bg-success-900/20 text-success-700 dark:text-success-300 px-3 py-1 rounded-lg text-sm flex items-center gap-2 border dark:border-success-800">
                                     {h}
-                                    <button type="button" onClick={() => removeItem('highlights', i)} className="hover:text-danger-500">×</button>
+                                    <button type="button" onClick={() => removeItem('highlights', i)} className="hover:text-danger-500 transition-colors">×</button>
                                 </span>
                             ))}
                         </div>
@@ -179,16 +179,16 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
 
                     {/* Gallery */}
                     <div>
-                        <label className="block text-sm font-semibold text-neutral-700 mb-1">Galeria (Fotos Extras - URLs)</label>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Galeria (Fotos Extras - URLs)</label>
                         <div className="flex gap-2 mb-2">
                             <input
                                 type="url"
-                                className="flex-1 rounded-xl border-neutral-200 focus:border-primary-500 focus:ring-primary-500"
+                                className="input-field flex-1"
                                 value={newGalleryItem}
                                 onChange={(e) => setNewGalleryItem(e.target.value)}
                                 placeholder="URL da foto"
                             />
-                            <button type="button" onClick={() => addItem('gallery', newGalleryItem, setNewGalleryItem)} className="px-4 py-2 bg-primary-50 text-primary-600 rounded-xl font-bold hover:bg-primary-100 transition-colors">+</button>
+                            <button type="button" onClick={() => addItem('gallery', newGalleryItem, setNewGalleryItem)} className="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl font-bold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors">+</button>
                         </div>
                         <div className="flex flex-wrap gap-2">
                             {formData.gallery.map((img, i) => (
@@ -206,7 +206,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="px-8 py-3 rounded-xl text-neutral-600 hover:bg-neutral-100 transition-colors"
+                    className="px-8 py-3 rounded-xl text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
                 >
                     Cancelar
                 </button>

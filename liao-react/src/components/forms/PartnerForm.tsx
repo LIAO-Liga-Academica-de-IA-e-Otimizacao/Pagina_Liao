@@ -49,8 +49,8 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">
+        <div className="bg-white dark:bg-neutral-900 rounded-lg shadow-lg p-6 border dark:border-neutral-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800 dark:text-white">
                 {partner ? 'Editar Parceria' : 'Nova Parceria'}
             </h2>
 
@@ -68,7 +68,7 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                        className="input-field mt-1"
                     />
                 </div>
 
@@ -80,7 +80,7 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
                         value={imageUrl}
                         onChange={(e) => setImageUrl(e.target.value)}
                         placeholder="https://exemplo.com/logo.png"
-                        className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                        className="input-field mt-1"
                     />
                     <p className="text-xs text-neutral-500 mt-1">Cole o link da imagem da logo.</p>
                 </div>
@@ -99,7 +99,7 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
                         value={websiteUrl}
                         onChange={(e) => setWebsiteUrl(e.target.value)}
                         placeholder="https://parceiro.com"
-                        className="mt-1 block w-full rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                        className="input-field mt-1"
                     />
                     <p className="text-xs text-neutral-500 mt-1">Link para onde o usuário será redirecionado ao clicar.</p>
                 </div>
@@ -108,7 +108,7 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ partner, onSuccess, onCancel 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-neutral-300 rounded-md text-neutral-700 hover:bg-neutral-50"
+                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                     >
                         Cancelar
                     </button>

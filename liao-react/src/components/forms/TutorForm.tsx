@@ -46,8 +46,8 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
     };
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold mb-6 text-neutral-800">
+        <div className="bg-white dark:bg-neutral-900 p-6 rounded-lg shadow-lg border dark:border-neutral-800">
+            <h2 className="text-2xl font-bold mb-6 text-neutral-800 dark:text-white">
                 {tutor ? 'Editar Tutor' : 'Novo Tutor'}
             </h2>
 
@@ -130,7 +130,7 @@ const TutorForm: React.FC<TutorFormProps> = ({ tutor, onSuccess, onCancel }) => 
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="px-4 py-2 border border-neutral-300 rounded-md text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+                        className="px-4 py-2 border border-neutral-300 dark:border-neutral-700 rounded-md text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                     >
                         Cancelar
                     </button>
