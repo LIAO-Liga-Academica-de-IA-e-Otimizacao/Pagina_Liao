@@ -1,11 +1,3 @@
-export interface Tutor {
-    id: number;
-    name: string;
-    email: string;
-    photo?: string;
-    subjects: string[];
-    bio?: string;
-    availability?: string;
-    createdAt: string;
-    updatedAt: string;
-}
+import type { components } from '@liao/api-types';
+
+export type Tutor = components["schemas"]["Tutor"];

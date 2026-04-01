@@ -1,8 +1,3 @@
-export interface Partner {
-    id: number;
-    name: string;
-    imageUrl: string;
-    websiteUrl?: string; // Optional
-    createdAt: string;
-    updatedAt: string;
-}
+import type { components } from '@liao/api-types';
+
+export type Partner = components["schemas"]["Partner"];

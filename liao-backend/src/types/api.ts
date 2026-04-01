@@ -1079,7 +1079,7 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         Event: {
-            id?: number;
+            id: number;
             slug: string;
             title: string;
             description: string;
@@ -1096,13 +1096,14 @@ export interface components {
             subscribe?: string | null;
             agenda?: components["schemas"]["AgendaItem"][];
             speakers?: components["schemas"]["EventSpeaker"][];
+            partners?: components["schemas"]["Partner"][];
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         AgendaItem: {
-            id?: number;
+            id: number;
             event?: components["schemas"]["Event"];
             time: string;
             title: string;
@@ -1110,7 +1111,7 @@ export interface components {
             speakerName?: string | null;
         };
         EventSpeaker: {
-            id?: number;
+            id: number;
             event?: components["schemas"]["Event"];
             member?: components["schemas"]["Member"] | null;
             name?: string | null;
@@ -1120,19 +1121,19 @@ export interface components {
             link?: string | null;
         };
         User: {
-            id?: number;
+            id: number;
             email: string;
             password: string;
             name: string;
             /** @default admin */
             role: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         Member: {
-            id?: number;
+            id: number;
             name: string;
             email: string;
             role: string;
@@ -1143,7 +1144,7 @@ export interface components {
             /** Format: date-time */
             joinedAt?: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
             course: string;
@@ -1156,7 +1157,7 @@ export interface components {
             eventSpeakers?: components["schemas"]["EventSpeaker"][];
         };
         Tutor: {
-            id?: number;
+            id: number;
             name: string;
             email: string;
             photo?: string | null;
@@ -1164,12 +1165,12 @@ export interface components {
             bio?: string | null;
             availability?: string | null;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         Content: {
-            id?: number;
+            id: number;
             type: string;
             title: string;
             description?: string | null;
@@ -1178,12 +1179,12 @@ export interface components {
             /** @default true */
             published: boolean;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         Application: {
-            id?: number;
+            id: number;
             name: string;
             email: string;
             phone?: string | null;
@@ -1193,7 +1194,7 @@ export interface components {
             /** @default pending */
             status: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
@@ -1202,19 +1203,19 @@ export interface components {
             value: string;
         };
         Project: {
-            id?: number;
+            id: number;
             title: string;
             description: string;
             images: string[];
             /** Format: date-time */
-            date?: string;
+            date: string;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };
         Article: {
-            id?: number;
+            id: number;
             title: string;
             content: string;
             images: string[];
@@ -1222,18 +1223,20 @@ export interface components {
             /** @default true */
             isPublished: boolean;
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
             description?: string | null;
+            references: string[];
         };
         Partner: {
-            id?: number;
+            id: number;
             name: string;
             imageUrl: string;
             websiteUrl?: string | null;
+            events?: components["schemas"]["Event"][];
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
             updatedAt: string;
         };

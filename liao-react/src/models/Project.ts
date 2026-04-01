@@ -1,9 +1,3 @@
-export interface Project {
-    id: number;
-    title: string;
-    description: string;
-    images: string[];
-    date: string; // ISO Date string
-    createdAt: string;
-    updatedAt: string;
-}
+import type { components } from '@liao/api-types';
+
+export type Project = components["schemas"]["Project"];

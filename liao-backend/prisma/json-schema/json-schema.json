@@ -551,6 +551,12 @@
             "string",
             "null"
           ]
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "required": [
@@ -558,7 +564,8 @@
         "content",
         "images",
         "tags",
-        "updatedAt"
+        "updatedAt",
+        "references"
       ]
     },
     "Partner": {
