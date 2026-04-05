@@ -5,5 +5,8 @@ build/
 .DS_Store
 coverage/
 .vscode/
+fix-env.js
+test-db.js
+prisma.config.ts.old
 
 reports.md

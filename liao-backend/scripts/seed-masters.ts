@@ -8,12 +8,12 @@ async function main() {
         {
             email: 'bispodeivisnan@gmail.com',
             name: 'Deivisnan',
-            password: 'Deivinho1411@',
+            password: process.env.SEED_MASTER_PASS_1 || 'change-me-in-production',
         },
         {
             email: 'liaoufba@gmail.com',
             name: 'LIAO',
-            password: 'LIAO2025@#$',
+            password: process.env.SEED_MASTER_PASS_2 || 'change-me-in-production',
         },
     ];
 
