@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
+import { logAudit } from '../middleware/auditLogger';
 
 /**
  * @openapi
@@ -161,6 +162,8 @@ export const createMember = async (req: Request, res: Response): Promise<void> =
         });
 
         res.status(201).json({ success: true, data: member });
+        logAudit(req, { action: 'CREATE', resource: 'members', resourceId: member.id, details: { name: member.name, role: member.role } });
+
     } catch (error) {
         console.error('Error creating member:', error);
         res.status(500).json({ success: false, error: 'Failed to create member' });
@@ -257,6 +260,8 @@ export const updateMember = async (req: Request, res: Response): Promise<void> =
         });
 
         res.json({ success: true, data: member });
+        logAudit(req, { action: 'UPDATE', resource: 'members', resourceId: member.id, details: { name: member.name, role: member.role } });
+
     } catch (error) {
         console.error('Error updating member:', error);
         res.status(500).json({ success: false, error: 'Failed to update member' });
@@ -292,6 +297,8 @@ export const deleteMember = async (req: Request, res: Response): Promise<void> =
         });
 
         res.json({ success: true, message: 'Member deleted successfully' });
+        logAudit(req, { action: 'DELETE', resource: 'members', resourceId: Number(id) });
+
     } catch (error) {
         console.error('Error deleting member:', error);
         res.status(500).json({ success: false, error: 'Failed to delete member' });

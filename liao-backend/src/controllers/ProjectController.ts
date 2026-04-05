@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
+import { logAudit } from '../middleware/auditLogger';
 
 /**
  * @openapi
@@ -41,6 +42,8 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
         });
 
         res.status(201).json({ success: true, data: project });
+        logAudit(req, { action: 'CREATE', resource: 'projects', resourceId: project.id, details: { title: project.title } });
+
     } catch (error) {
         console.error('Error creating project:', error);
         res.status(500).json({ success: false, error: 'Failed to create project' });
@@ -113,6 +116,8 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
             where: { id: Number(id) },
         });
         res.json({ success: true, message: 'Project deleted successfully' });
+        logAudit(req, { action: 'DELETE', resource: 'projects', resourceId: Number(id) });
+
     } catch (error) {
         console.error('Error deleting project:', error);
         res.status(500).json({ success: false, error: 'Failed to delete project' });
@@ -161,6 +166,8 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
         });
 
         res.json({ success: true, data: project });
+        logAudit(req, { action: 'UPDATE', resource: 'projects', resourceId: project.id, details: { title: project.title } });
+
     } catch (error) {
         console.error('Error updating project:', error);
         res.status(500).json({ success: false, error: 'Failed to update project' });

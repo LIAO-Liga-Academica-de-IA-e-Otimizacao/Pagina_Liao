@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
+import { logAudit } from '../middleware/auditLogger';
 
 // Get all tutors
 /**
@@ -162,6 +163,7 @@ export const createTutor = async (
             data: { tutor },
             message: 'Tutor created successfully',
         });
+        logAudit(req, { action: 'CREATE', resource: 'tutors', resourceId: tutor.id, details: { name: tutor.name } });
     } catch (error: any) {
         console.error('Create tutor error:', error);
 
@@ -227,6 +229,7 @@ export const updateTutor = async (
             data: { tutor },
             message: 'Tutor updated successfully',
         });
+        logAudit(req, { action: 'UPDATE', resource: 'tutors', resourceId: tutor.id, details: { name: tutor.name } });
     } catch (error: any) {
         console.error('Update tutor error:', error);
 
@@ -282,6 +285,7 @@ export const deleteTutor = async (
             success: true,
             message: 'Tutor deleted successfully',
         });
+        logAudit(req, { action: 'DELETE', resource: 'tutors', resourceId: parseInt(id) });
     } catch (error: any) {
         console.error('Delete tutor error:', error);
 

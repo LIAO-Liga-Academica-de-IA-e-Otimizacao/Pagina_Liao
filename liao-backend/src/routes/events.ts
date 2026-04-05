@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createEvent, getEvents, getEventBySlug, updateEvent, deleteEvent } from '../controllers/EventController';
-import { authenticate, requireAdmin } from '../middleware/auth';
+import { authenticate, requirePermission } from '../middleware/auth';
 
 const router = Router();
 
@@ -60,13 +60,12 @@ router.get('/:slug', getEventBySlug);
  *         description: Event created
  *         content:
  *           application/json:
- *             schema:
  *               type: object
  *               properties:
  *                 success: { type: boolean }
  *                 data: { $ref: '#/components/schemas/Event' }
  */
-router.post('/', authenticate, requireAdmin, createEvent);
+router.post('/', authenticate, requirePermission('events'), createEvent);
 
 /**
  * @openapi
@@ -90,7 +89,7 @@ router.post('/', authenticate, requireAdmin, createEvent);
  *                 success: { type: boolean }
  *                 data: { $ref: '#/components/schemas/Event' }
  */
-router.put('/:id', authenticate, requireAdmin, updateEvent);
+router.put('/:id', authenticate, requirePermission('events'), updateEvent);
 
 /**
  * @openapi
@@ -107,6 +106,6 @@ router.put('/:id', authenticate, requireAdmin, updateEvent);
  *       200:
  *         description: Event deleted
  */
-router.delete('/:id', authenticate, requireAdmin, deleteEvent);
+router.delete('/:id', authenticate, requirePermission('events'), deleteEvent);
 
 export default router;

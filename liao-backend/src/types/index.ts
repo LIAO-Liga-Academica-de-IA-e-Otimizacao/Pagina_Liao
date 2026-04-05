@@ -6,6 +6,7 @@ export interface AuthRequest extends Request {
         id: number;
         email: string;
         role: string;
+        permissions: string[];
     };
 }
 
@@ -27,10 +28,12 @@ export interface RegisterRequest {
     email: string;
     password: string;
     name: string;
+    permissions?: string[];
 }
 
 export interface JWTPayload {
     id: number;
     email: string;
     role: string;
+    permissions: string[];
 }

@@ -19,7 +19,9 @@ const Partnerships: React.FC = () => {
         const fetchPartners = async () => {
             try {
                 const response = await apiService.getPartners();
-                setPartners(response.data || []);
+                const allPartners = response.data || [];
+                // Filtrar apenas parceiros da liga (globais) para esta página
+                setPartners(allPartners.filter((p: Partner) => p.isLeaguePartner));
             } catch (error) {
                 console.error('Error fetching partners:', error);
             } finally {

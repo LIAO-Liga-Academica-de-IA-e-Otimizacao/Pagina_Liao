@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createArticle, getArticles, updateArticle, deleteArticle } from '../controllers/ArticleController';
-import { authenticate, requireAdmin } from '../middleware/auth';
+import { authenticate, requirePermission } from '../middleware/auth';
 
 const router = Router();
 
@@ -8,8 +8,8 @@ const router = Router();
 router.get('/', getArticles);
 
 // Protected routes (Admin only)
-router.post('/', authenticate, requireAdmin, createArticle);
-router.put('/:id', authenticate, requireAdmin, updateArticle);
-router.delete('/:id', authenticate, requireAdmin, deleteArticle);
+router.post('/', authenticate, requirePermission('newsletter'), createArticle);
+router.put('/:id', authenticate, requirePermission('newsletter'), updateArticle);
+router.delete('/:id', authenticate, requirePermission('newsletter'), deleteArticle);
 
 export default router;

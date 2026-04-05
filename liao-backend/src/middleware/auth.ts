@@ -18,16 +18,16 @@ export const authenticate = (
             return;
         }
 
-        const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+        const token = authHeader.substring(7);
         const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
 
         const decoded = jwt.verify(token, jwtSecret) as JWTPayload;
 
-        // Attach user info to request
         (req as AuthRequest).user = {
             id: decoded.id,
             email: decoded.email,
             role: decoded.role,
+            permissions: decoded.permissions || [],
         };
 
         next();
@@ -39,7 +39,7 @@ export const authenticate = (
     }
 };
 
-// Optional: Admin-only middleware
+// Admin-only middleware
 export const requireAdmin = (
     req: Request,
     res: Response,
@@ -56,4 +56,36 @@ export const requireAdmin = (
     }
 
     next();
+};
+
+/**
+ * Permission-based middleware.
+ * Master users always pass. Regular admins must have the resource in their permissions array.
+ */
+export const requirePermission = (resource: string) => (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
+    const authReq = req as AuthRequest;
+
+    if (!authReq.user) {
+        res.status(401).json({ success: false, error: 'Não autenticado.' });
+        return;
+    }
+
+    // Master has unrestricted access
+    if (authReq.user.role === 'master') {
+        return next();
+    }
+
+    // Check granular permission
+    if (authReq.user.permissions && authReq.user.permissions.includes(resource)) {
+        return next();
+    }
+
+    res.status(403).json({
+        success: false,
+        error: `Sem permissão para gerenciar "${resource}". Contate um Administrador Master.`,
+    });
 };

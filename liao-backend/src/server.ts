@@ -11,6 +11,7 @@ import projectRoutes from './routes/projects';
 import articleRoutes from './routes/articles';
 import partnerRoutes from './routes/partners';
 import eventsRoutes from './routes/events';
+import auditRoutes from './routes/audit';
 console.log('[DEBUG] partnerRoutes imported type:', typeof partnerRoutes);
 import { errorHandler } from './middleware/errorHandler';
 import { getConfig, updateConfig } from './controllers/configController';
@@ -43,6 +44,7 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/articles', articleRoutes);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/events', eventsRoutes);
+app.use('/api/audit', auditRoutes);
 app.use('/api/partners', (req, res, next) => {
     console.log(`[DEBUG] Request to /api/partners: ${req.method} ${req.url}`);
     next();

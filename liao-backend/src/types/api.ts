@@ -713,36 +713,13 @@ export interface paths {
                     content: {
                         "application/json": {
                             success?: boolean;
-                            data?: unknown[];
+                            data?: components["schemas"]["Partner"][];
                         };
                     };
                 };
             };
         };
-        /** updatePartner operation */
-        put: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: {
-                /** @description Successful response */
-                200: {
-                    headers: {
-                        [name: string]: unknown;
-                    };
-                    content: {
-                        "application/json": {
-                            success?: boolean;
-                            data?: unknown[];
-                        };
-                    };
-                };
-            };
-        };
+        put?: never;
         /** createPartner operation */
         post: {
             parameters: {
@@ -753,26 +730,42 @@ export interface paths {
             };
             requestBody?: never;
             responses: {
-                /** @description Successful response */
-                200: {
+                /** @description Partner created */
+                201: {
                     headers: {
                         [name: string]: unknown;
                     };
                     content: {
                         "application/json": {
                             success?: boolean;
-                            data?: unknown[];
+                            data?: components["schemas"]["Partner"];
                         };
                     };
                 };
             };
         };
-        /** deletePartner operation */
-        delete: {
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/partners/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** updatePartner operation */
+        put: {
             parameters: {
                 query?: never;
                 header?: never;
-                path?: never;
+                path: {
+                    id: number;
+                };
                 cookie?: never;
             };
             requestBody?: never;
@@ -785,7 +778,34 @@ export interface paths {
                     content: {
                         "application/json": {
                             success?: boolean;
-                            data?: unknown[];
+                            data?: components["schemas"]["Partner"];
+                        };
+                    };
+                };
+            };
+        };
+        post?: never;
+        /** deletePartner operation */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                            message?: string;
                         };
                     };
                 };
@@ -1234,6 +1254,8 @@ export interface components {
             name: string;
             imageUrl: string;
             websiteUrl?: string | null;
+            /** @default true */
+            isLeaguePartner: boolean;
             events?: components["schemas"]["Event"][];
             /** Format: date-time */
             createdAt: string;

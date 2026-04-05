@@ -39,8 +39,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         }
 
         // Find user
-        const user = await prisma.user.findUnique({
+        const user = await (prisma.user.findUnique as any)({
             where: { email },
+            select: {
+                id: true, email: true, password: true,
+                name: true, role: true, permissions: true,
+            },
         });
 
         if (!user) {
@@ -67,7 +71,8 @@ export const login = async (req: Request, res: Response): Promise<void> => {
         const payload: JWTPayload = {
             id: user.id,
             email: user.email,
-            role: user.role,
+            role: user.role as any,
+            permissions: (user as any).permissions || [],
         };
 
         const token = jwt.sign(payload, jwtSecret, { expiresIn: '7d' });
@@ -81,6 +86,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    permissions: (user as any).permissions || [],
                 },
             },
         });
@@ -128,7 +134,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
             return;
         }
 
-        const { email, password, name } = req.body;
+        const { email, password, name, permissions } = req.body;
 
         if (!email || !password || !name) {
             res.status(400).json({
@@ -154,12 +160,13 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
-        const user = await prisma.user.create({
+        // Create user with optional granular permissions
+        const user = await (prisma.user.create as any)({
             data: {
                 email,
                 password: hashedPassword,
                 name,
+                permissions: Array.isArray(permissions) ? permissions : [],
             },
         });
 
@@ -171,6 +178,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
                     email: user.email,
                     name: user.name,
                     role: user.role,
+                    permissions: (user as any).permissions || [],
                 },
             },
             message: 'Admin user created successfully',
@@ -278,12 +286,13 @@ export const getCurrentUser = async (
  */
 export const getAdmins = async (req: Request, res: Response): Promise<void> => {
     try {
-        const users = await prisma.user.findMany({
+        const users = await (prisma.user.findMany as any)({
             select: {
                 id: true,
                 email: true,
                 name: true,
                 role: true,
+                permissions: true,
                 createdAt: true,
             },
             orderBy: {

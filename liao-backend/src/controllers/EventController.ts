@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import prisma from '../config/database';
+import { logAudit } from '../middleware/auditLogger';
 
 /**
  * @openapi
@@ -70,6 +71,8 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
         });
 
         res.status(201).json({ success: true, data: event });
+        logAudit(req, { action: 'CREATE', resource: 'events', resourceId: event.id, details: { title: event.title, slug: event.slug } });
+
     } catch (error: any) {
         console.error('Error creating event:', error);
         if (error.code === 'P2002') {
@@ -237,6 +240,8 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
         });
 
         res.json({ success: true, data: event });
+        logAudit(req, { action: 'UPDATE', resource: 'events', resourceId: event.id, details: { title: event.title } });
+
     } catch (error) {
         console.error('Error updating event:', error);
         res.status(500).json({ success: false, error: 'Failed to update event' });
@@ -271,6 +276,8 @@ export const deleteEvent = async (req: Request, res: Response): Promise<void> =>
             where: { id: Number(id) },
         });
         res.json({ success: true, message: 'Event deleted successfully' });
+        logAudit(req, { action: 'DELETE', resource: 'events', resourceId: Number(id) });
+
     } catch (error) {
         console.error('Error deleting event:', error);
         res.status(500).json({ success: false, error: 'Failed to delete event' });

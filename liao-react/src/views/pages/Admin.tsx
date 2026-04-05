@@ -7,6 +7,7 @@ import ProjectForm from '../../components/forms/ProjectForm';
 import ArticleForm from '../../components/forms/ArticleForm';
 import PartnerForm from '../../components/forms/PartnerForm';
 import EventForm from '../../components/forms/EventForm';
+import AuditModal from '../../components/admin/AuditModal';
 import type { EventApi } from '../../models/Event';
 
 const Admin: React.FC = () => {
@@ -51,6 +52,32 @@ const Admin: React.FC = () => {
     const [admins, setAdmins] = useState<any[]>([]);
     const [showAdminForm, setShowAdminForm] = useState(false);
     const [newAdmin, setNewAdmin] = useState({ name: '', email: '', password: '' });
+    const [newAdminPermissions, setNewAdminPermissions] = useState<string[]>([]);
+
+    // Audit Modal State
+    const [auditModal, setAuditModal] = useState<{ isOpen: boolean; resource: string; label: string }>(
+        { isOpen: false, resource: '', label: '' }
+    );
+
+    // Permission helper
+    const isMaster = user.role === 'master';
+    const hasPermission = (section: string) => isMaster || (user.permissions || []).includes(section);
+    const openAudit = (resource: string, label: string) => setAuditModal({ isOpen: true, resource, label });
+
+    const PERMISSION_OPTIONS = [
+        { key: 'members',  label: 'Membros' },
+        { key: 'tutors',   label: 'Tutores' },
+        { key: 'projects', label: 'Projetos' },
+        { key: 'newsletter', label: 'Newsletter' },
+        { key: 'partners', label: 'Parcerias' },
+        { key: 'events',   label: 'Eventos' },
+    ];
+
+    const togglePermission = (key: string) => {
+        setNewAdminPermissions(prev =>
+            prev.includes(key) ? prev.filter(p => p !== key) : [...prev, key]
+        );
+    };
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -158,10 +185,11 @@ const Admin: React.FC = () => {
     const handleCreateAdmin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await apiService.register(newAdmin.email, newAdmin.password, newAdmin.name);
+            await apiService.register(newAdmin.email, newAdmin.password, newAdmin.name, newAdminPermissions);
             alert('Administrador criado com sucesso!');
             setShowAdminForm(false);
             setNewAdmin({ name: '', email: '', password: '' });
+            setNewAdminPermissions([]);
             fetchAdmins();
         } catch (error: any) {
             console.error(error);
@@ -241,14 +269,22 @@ const Admin: React.FC = () => {
 
     const renderEventsSection = () => (
         <div className="space-y-6">
+            {!hasPermission('events') ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                    <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Eventos</strong>. Contate um Administrador Master.</p>
+                </div>
+            ) : (
+            <>
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Eventos</h2>
-                <button
-                    onClick={() => { setEditingEvent(null); setShowEventForm(true); }}
-                    className="btn-primary"
-                >
-                    Novo Evento
-                </button>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Eventos</h2>
+                    <button onClick={() => openAudit('events', 'Eventos')} title="Ver histórico de alterações" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all" >
+                        🕐
+                    </button>
+                </div>
+                <button onClick={() => { setEditingEvent(null); setShowEventForm(true); }} className="btn-primary">Novo Evento</button>
             </div>
             {showEventForm ? (
                 <EventForm
@@ -288,6 +324,8 @@ const Admin: React.FC = () => {
                         </tbody>
                     </table>
                 </div>
+            )}
+            </>
             )}
         </div>
     );
@@ -333,8 +371,8 @@ const Admin: React.FC = () => {
                 </div>
 
                 {showAdminForm && (
-                    <form onSubmit={handleCreateAdmin} className="mb-6 bg-neutral-50 dark:bg-neutral-900/50 p-4 rounded-md border border-neutral-200 dark:border-neutral-700">
-                        <h4 className="text-sm font-bold mb-3 dark:text-white">Novo Administrador</h4>
+                    <form onSubmit={handleCreateAdmin} className="mb-6 bg-neutral-50 dark:bg-neutral-900/50 p-4 rounded-2xl border border-neutral-200 dark:border-neutral-700 space-y-4">
+                        <h4 className="text-sm font-bold dark:text-white">Novo Administrador</h4>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <div>
                                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Nome</label>
@@ -348,7 +386,7 @@ const Admin: React.FC = () => {
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-neutral-700">Email</label>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Email</label>
                                 <input
                                     type="email"
                                     required
@@ -359,24 +397,55 @@ const Admin: React.FC = () => {
                                 />
                             </div>
                             <div className="sm:col-span-2">
-                                <label className="block text-sm font-medium text-neutral-700">Senha</label>
-                                    <input
-                                        type="password"
-                                        required
-                                        value={newAdmin.password}
-                                        autoComplete="new-password"
-                                        onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
-                                        className="mt-1 block w-full rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
-                                    />
-                                </div>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300">Senha</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={newAdmin.password}
+                                    autoComplete="new-password"
+                                    onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
+                                    className="mt-1 block w-full rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-800 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
+                                />
                             </div>
-                            <div className="mt-4 flex justify-end">
-                                <button type="submit" className="bg-success-600 text-white px-4 py-2 rounded-md hover:bg-success-700 shadow-sm">
-                                    Salvar
-                                </button>
+                        </div>
+
+                        {/* Permissions Selector */}
+                        <div>
+                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+                                🔑 Permissões de Acesso
+                                <span className="ml-2 text-xs font-normal text-neutral-500">(deixe vazio para acesso negado a todas as seções)</span>
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                {PERMISSION_OPTIONS.map((opt) => {
+                                    const isChecked = newAdminPermissions.includes(opt.key);
+                                    return (
+                                        <label
+                                            key={opt.key}
+                                            className={`flex items-center gap-2 p-2.5 rounded-xl cursor-pointer border transition-all ${isChecked
+                                                ? 'bg-primary-50 dark:bg-primary-900/20 border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300'
+                                                : 'bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-primary-200'
+                                            }`}
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={isChecked}
+                                                onChange={() => togglePermission(opt.key)}
+                                                className="accent-primary-600"
+                                            />
+                                            <span className="text-sm font-medium">{opt.label}</span>
+                                        </label>
+                                    );
+                                })}
                             </div>
-                        </form>
-                    )}
+                        </div>
+
+                        <div className="flex justify-end">
+                            <button type="submit" className="bg-success-600 text-white px-4 py-2 rounded-md hover:bg-success-700 shadow-sm">
+                                Salvar Administrador
+                            </button>
+                        </div>
+                    </form>
+                )}
     
                     <div className="overflow-x-auto">
                         <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
@@ -384,7 +453,8 @@ const Admin: React.FC = () => {
                                 <tr>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
                                     <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Data Cadastro</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Permissões</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Cadastro</th>
                                     <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
                                 </tr>
                             </thead>
@@ -398,33 +468,50 @@ const Admin: React.FC = () => {
     
                                     return (
                                         <tr key={admin.id}>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900 dark:text-white">{admin.name}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900 dark:text-white">
+                                                {admin.name}
+                                                {(admin.role === 'master' || isTargetMaster) && (
+                                                    <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-full uppercase">Master</span>
+                                                )}
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{admin.email}</td>
+                                            <td className="px-6 py-4 text-sm">
+                                                {isTargetMaster || admin.role === 'master' ? (
+                                                    <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold">Acesso Total</span>
+                                                ) : admin.permissions && admin.permissions.length > 0 ? (
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {admin.permissions.map((p: string) => (
+                                                            <span key={p} className="px-2 py-0.5 text-[10px] font-bold bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 rounded-full uppercase">{p}</span>
+                                                        ))}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-neutral-400 italic">Sem permissões</span>
+                                                )}
+                                            </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
                                                 {new Date(admin.createdAt).toLocaleDateString('pt-BR')}
                                             </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            {canDelete && (
-                                                <button
-                                                    onClick={() => handleDeleteAdmin(admin.id)}
-                                                    className="text-danger-600 hover:text-danger-900"
-                                                >
-                                                    Excluir
-                                                </button>
-                                            )}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                {canDelete && (
+                                                    <button
+                                                        onClick={() => handleDeleteAdmin(admin.id)}
+                                                        className="text-danger-600 hover:text-danger-900"
+                                                    >
+                                                        Excluir
+                                                    </button>
+                                                )}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        );
 
     const renderMembersSection = () => {
-        // Year Filter Logic
         const years = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
         const filteredMembers = selectedMemberYear === 'all'
             ? members
@@ -432,76 +519,79 @@ const Admin: React.FC = () => {
 
         return (
             <div className="space-y-6">
-                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Membros</h2>
-
-                    <div className="flex items-center gap-4">
-                        {/* Year Filter Dropdown */}
-                        <select
-                            value={selectedMemberYear}
-                            onChange={(e) => setSelectedMemberYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
-                            className="block rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
-                        >
-                            <option value="all">Todos os Anos</option>
-                            {years.map(year => (
-                                <option key={year} value={year}>{year}</option>
-                            ))}
-                        </select>
-
-                        <button
-                            onClick={() => { setEditingMember(null); setShowMemberForm(true); }}
-                            className="btn-primary"
-                        >
-                            Novo Membro
-                        </button>
+                {!hasPermission('members') ? (
+                    <div className="flex flex-col items-center justify-center py-24 text-center">
+                        <div className="text-6xl mb-4">🔒</div>
+                        <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                        <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Membros</strong>.</p>
                     </div>
-                </div>
-
-                {showMemberForm ? (
-                    <MemberForm
-                        member={editingMember}
-                        onSuccess={handleMemberSuccess}
-                        onCancel={() => { setShowMemberForm(false); setEditingMember(null); }}
-                    />
                 ) : (
-                    <div className="bg-white dark:bg-neutral-800 shadow rounded-lg overflow-x-auto border dark:border-neutral-700">
-                        <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
-                            <thead className="bg-neutral-50 dark:bg-neutral-900/50">
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Ano</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
-                                    <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
-                                {filteredMembers.map((member) => (
-                                    <tr key={member.id}>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                {member.photo && <img className="h-8 w-8 rounded-full mr-3 text-neutral-900 dark:text-white" src={member.photo} alt="" />}
-                                                <div className="text-sm font-medium text-neutral-900 dark:text-white">{member.name}</div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{member.email}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-bold">{member.year || 2025}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{member.isFounder ? 'Fundador' : member.role}</td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
-                                            <button onClick={() => handleDeleteMember(member.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
-                                        </td>
-                                    </tr>
+                    <>
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div className="flex items-center gap-3">
+                            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Membros</h2>
+                            <button onClick={() => openAudit('members', 'Membros')} title="Ver histórico" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">🕐</button>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <select
+                                value={selectedMemberYear}
+                                onChange={(e) => setSelectedMemberYear(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                                className="block rounded-md border-neutral-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                            >
+                                <option value="all">Todos os Anos</option>
+                                {years.map(year => (
+                                    <option key={year} value={year}>{year}</option>
                                 ))}
-                            </tbody>
-                        </table>
-
-                        {filteredMembers.length === 0 && (
-                            <div className="text-center py-8 text-neutral-500">
-                                Nenhum membro encontrado para este filtro.
-                            </div>
-                        )}
+                            </select>
+                            <button onClick={() => { setEditingMember(null); setShowMemberForm(true); }} className="btn-primary">
+                                Novo Membro
+                            </button>
+                        </div>
                     </div>
+                    {showMemberForm ? (
+                        <MemberForm
+                            member={editingMember}
+                            onSuccess={handleMemberSuccess}
+                            onCancel={() => { setShowMemberForm(false); setEditingMember(null); }}
+                        />
+                    ) : (
+                        <div className="bg-white dark:bg-neutral-800 shadow rounded-lg overflow-x-auto border dark:border-neutral-700">
+                            <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+                                <thead className="bg-neutral-50 dark:bg-neutral-900/50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Nome</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Email</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Ano</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">Status</th>
+                                        <th className="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
+                                    {filteredMembers.map((member) => (
+                                        <tr key={member.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                <div className="flex items-center">
+                                                    {member.photo && <img className="h-8 w-8 rounded-full mr-3" src={member.photo} alt="" />}
+                                                    <div className="text-sm font-medium text-neutral-900 dark:text-white">{member.name}</div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{member.email}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400 font-bold">{member.year || 2025}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{member.isFounder ? 'Fundador' : member.role}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                <button onClick={() => { setEditingMember(member); setShowMemberForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
+                                                <button onClick={() => handleDeleteMember(member.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                            {filteredMembers.length === 0 && (
+                                <div className="text-center py-8 text-neutral-500">Nenhum membro encontrado para este filtro.</div>
+                            )}
+                        </div>
+                    )}
+                    </>
                 )}
             </div>
         );
@@ -509,8 +599,18 @@ const Admin: React.FC = () => {
 
     const renderTutorsSection = () => (
         <div className="space-y-6">
+            {!hasPermission('tutors') ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                    <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Tutores</strong>.</p>
+                </div>
+            ) : (<>
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Tutores</h2>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Tutores</h2>
+                    <button onClick={() => openAudit('tutors', 'Tutores')} title="Ver histórico" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">🕐</button>
+                </div>
                 <button
                     onClick={() => { setEditingTutor(null); setShowTutorForm(true); }}
                     className="btn-primary"
@@ -556,19 +656,26 @@ const Admin: React.FC = () => {
                     </table>
                 </div>
             )}
+            </>
+            )}
         </div>
     );
 
     const renderProjectsSection = () => (
         <div className="space-y-6">
+            {!hasPermission('projects') ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                    <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Projetos</strong>.</p>
+                </div>
+            ) : (<>
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Projetos</h2>
-                <button
-                    onClick={() => { setEditingProject(null); setShowProjectForm(true); }}
-                    className="btn-primary"
-                >
-                    Novo Projeto
-                </button>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Projetos</h2>
+                    <button onClick={() => openAudit('projects', 'Projetos')} title="Ver histórico" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">🕐</button>
+                </div>
+                <button onClick={() => { setEditingProject(null); setShowProjectForm(true); }} className="btn-primary">Novo Projeto</button>
             </div>
             {showProjectForm ? (
                 <ProjectForm
@@ -607,19 +714,26 @@ const Admin: React.FC = () => {
                     </table>
                 </div>
             )}
+            </>
+            )}
         </div>
     );
 
     const renderArticlesSection = () => (
         <div className="space-y-6">
+            {!hasPermission('newsletter') ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                    <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Newsletter</strong>.</p>
+                </div>
+            ) : (<>
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Newsletter & Artigos</h2>
-                <button
-                    onClick={() => { setEditingArticle(null); setShowArticleForm(true); }}
-                    className="btn-primary"
-                >
-                    Nova Publicação
-                </button>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Newsletter &amp; Artigos</h2>
+                    <button onClick={() => openAudit('newsletter', 'Newsletter')} title="Ver histórico" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">🕐</button>
+                </div>
+                <button onClick={() => { setEditingArticle(null); setShowArticleForm(true); }} className="btn-primary">Nova Publicação</button>
             </div>
             {showArticleForm ? (
                 <ArticleForm
@@ -664,19 +778,26 @@ const Admin: React.FC = () => {
                     </table>
                 </div>
             )}
+            </>
+            )}
         </div>
     );
 
     const renderPartnersSection = () => (
         <div className="space-y-6">
+            {!hasPermission('partners') ? (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <h3 className="text-xl font-bold text-neutral-700 dark:text-neutral-300 mb-2">Sem Permissão</h3>
+                    <p className="text-neutral-500 max-w-sm">Você não tem acesso para gerenciar <strong>Parcerias</strong>.</p>
+                </div>
+            ) : (<>
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-neutral-900">Gerenciar Parcerias</h2>
-                <button
-                    onClick={() => { setEditingPartner(null); setShowPartnerForm(true); }}
-                    className="btn-primary"
-                >
-                    Nova Parceria
-                </button>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Gerenciar Parcerias</h2>
+                    <button onClick={() => openAudit('partners', 'Parcerias')} title="Ver histórico" className="p-2 rounded-xl text-neutral-400 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all">🕐</button>
+                </div>
+                <button onClick={() => { setEditingPartner(null); setShowPartnerForm(true); }} className="btn-primary">Nova Parceria</button>
             </div>
             {showPartnerForm ? (
                 <PartnerForm
@@ -695,35 +816,61 @@ const Admin: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
-                            {partners.map((partner) => (
+                            {partners.length > 0 ? (
+                                partners.map((partner) => (
                                 <tr key={partner.id}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
-                                            <img className="h-10 w-10 object-contain mr-3 border rounded p-1" src={partner.imageUrl} alt="" />
-                                            <div className="text-sm font-medium text-neutral-900">{partner.name}</div>
+                                            <img className="h-10 w-10 object-contain mr-3 border rounded p-1 bg-white" src={partner.imageUrl} alt="" />
+                                            <div>
+                                                <div className="text-sm font-medium text-neutral-900 dark:text-white">{partner.name}</div>
+                                                <div className="flex gap-1 mt-1">
+                                                    {partner.isLeaguePartner ? (
+                                                        <span className="px-2 py-0.5 text-[10px] font-bold bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 rounded-full uppercase">Liga</span>
+                                                    ) : (
+                                                        <span className="px-2 py-0.5 text-[10px] font-bold bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400 rounded-full uppercase">Evento</span>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500">
-                                        {partner.websiteUrl ? (
-                                            <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
-                                                Link
-                                            </a>
-                                        ) : '-'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <button onClick={() => { setEditingPartner(partner); setShowPartnerForm(true); }} className="text-primary-600 hover:text-primary-900 mr-4">Editar</button>
-                                        <button onClick={() => handleDeletePartner(partner.id)} className="text-danger-600 hover:text-danger-900">Excluir</button>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                            {partner.websiteUrl ? (
+                                                <a href={partner.websiteUrl} target="_blank" rel="noopener noreferrer" className="text-primary-600 dark:text-primary-400 hover:underline">
+                                                    Link
+                                                </a>
+                                            ) : '-'}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                            <button onClick={() => { setEditingPartner(partner); setShowPartnerForm(true); }} className="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300 mr-4">Editar</button>
+                                            <button onClick={() => handleDeletePartner(partner.id)} className="text-danger-600 dark:text-danger-400 hover:text-danger-900 dark:hover:text-danger-300">Excluir</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan={3} className="px-6 py-10 text-center text-neutral-500 dark:text-neutral-400">
+                                        Nenhum parceiro cadastrado.
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
+            )}
+            </>
             )}
         </div>
     );
 
     return (
+        <>
+        <AuditModal
+            isOpen={auditModal.isOpen}
+            onClose={() => setAuditModal({ isOpen: false, resource: '', label: '' })}
+            resource={auditModal.resource}
+            resourceLabel={auditModal.label}
+        />
         <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 py-12 transition-colors duration-200">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center mb-8">
@@ -821,6 +968,7 @@ const Admin: React.FC = () => {
                 )}
             </div>
         </div>
+        </>
     );
 };
 

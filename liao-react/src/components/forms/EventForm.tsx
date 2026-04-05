@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
+import type { Partner } from '../../models/Partner';
 
 interface EventFormProps {
     event?: EventApi | null;
@@ -18,13 +19,27 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         location: event?.location || '',
         speakers: (event?.speakers as any[]) || [],
         gallery: (event?.gallery as string[]) || [],
-        highlights: (event?.highlights as string[]) || []
+        highlights: (event?.highlights as string[]) || [],
+        partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[]
     });
 
+    const [allPartners, setAllPartners] = useState<Partner[]>([]);
     const [newSpeaker, setNewSpeaker] = useState('');
     const [newGalleryItem, setNewGalleryItem] = useState('');
     const [newHighlight, setNewHighlight] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const fetchPartners = async () => {
+            try {
+                const response = await apiService.getPartners();
+                setAllPartners(response.data || []);
+            } catch (error) {
+                console.error('Error fetching partners for selection:', error);
+            }
+        };
+        fetchPartners();
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,14 +61,25 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
 
     const addItem = (field: 'speakers' | 'gallery' | 'highlights', value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
         if (!value.trim()) return;
-        setFormData({ ...formData, [field]: [...formData[field], value] });
+        setFormData({ ...formData, [field]: [...(formData[field] as any[]), value] });
         setter('');
     };
 
     const removeItem = (field: 'speakers' | 'gallery' | 'highlights', index: number) => {
-        const newList = [...formData[field]];
+        const newList = [...(formData[field] as any[])];
         newList.splice(index, 1);
         setFormData({ ...formData, [field]: newList });
+    };
+
+    const togglePartner = (partnerId: number) => {
+        const currentPartners = [...formData.partners];
+        const index = currentPartners.indexOf(partnerId);
+        if (index > -1) {
+            currentPartners.splice(index, 1);
+        } else {
+            currentPartners.push(partnerId);
+        }
+        setFormData({ ...formData, partners: currentPartners });
     };
 
     return (
@@ -198,6 +224,43 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                                 </div>
                             ))}
                         </div>
+                    </div>
+
+                    {/* Partners Selection */}
+                    <div>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-2">Parceiros do Evento</label>
+                        <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto p-2 border dark:border-neutral-800 rounded-xl">
+                            {allPartners.length > 0 ? (
+                                allPartners.map((partner) => (
+                                    <div 
+                                        key={partner.id} 
+                                        onClick={() => togglePartner(partner.id)}
+                                        className={`flex items-center gap-2 p-2 rounded-lg cursor-pointer transition-colors border ${
+                                            formData.partners.includes(partner.id) 
+                                                ? 'bg-primary-50 border-primary-200 dark:bg-primary-900/20 dark:border-primary-800' 
+                                                : 'bg-white border-transparent hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800'
+                                        }`}
+                                    >
+                                        <div className={`w-4 h-4 rounded border flex items-center justify-center ${
+                                            formData.partners.includes(partner.id) 
+                                                ? 'bg-primary-600 border-primary-600' 
+                                                : 'border-neutral-300 dark:border-neutral-700'
+                                        }`}>
+                                            {formData.partners.includes(partner.id) && (
+                                                <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                </svg>
+                                            )}
+                                        </div>
+                                        <img src={partner.imageUrl} alt="" className="w-6 h-6 object-contain rounded" />
+                                        <span className="text-xs font-medium text-neutral-700 dark:text-neutral-300 truncate">{partner.name}</span>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-xs text-neutral-500 col-span-2 py-2">Nenhum parceiro cadastrado.</p>
+                            )}
+                        </div>
+                        <p className="text-[10px] text-neutral-500 mt-2">Os parceiros selecionados aparecerão na página deste evento.</p>
                     </div>
                 </div>
             </div>

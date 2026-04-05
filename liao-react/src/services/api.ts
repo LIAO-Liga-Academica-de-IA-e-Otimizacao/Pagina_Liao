@@ -98,8 +98,8 @@ export const apiService = {
     login: (email: string, password: string) =>
         api.post('/auth/login', { email, password }),
 
-    register: (email: string, password: string, name: string) =>
-        api.post('/auth/register', { email, password, name }),
+    register: (email: string, password: string, name: string, permissions: string[] = []) =>
+        api.post('/auth/register', { email, password, name, permissions }),
 
     getCurrentUser: () => api.get('/auth/me'),
     getAdmins: () => api.get('/auth/admins'),
@@ -227,6 +227,14 @@ export const apiService = {
     deleteEvent: (id: number) => {
         reqCache.clear('/events');
         return api.delete(`/events/${id}`);
+    },
+    // Audit Logs
+    getAuditLogs: (resource?: string, startDate?: string, endDate?: string) => {
+        const params: Record<string, string> = {};
+        if (resource) params.resource = resource;
+        if (startDate) params.startDate = startDate;
+        if (endDate) params.endDate = endDate;
+        return api.get('/audit', { params });
     },
 };
 

@@ -6,7 +6,7 @@ import {
     updateMember,
     deleteMember,
 } from '../controllers/memberController';
-import { authenticate } from '../middleware/auth';
+import { authenticate, requirePermission } from '../middleware/auth';
 
 const router = Router();
 
@@ -15,8 +15,8 @@ router.get('/', getMembers);
 router.get('/:id', getMemberById);
 
 // Protected routes (Admin only)
-router.post('/', authenticate, createMember);
-router.put('/:id', authenticate, updateMember);
-router.delete('/:id', authenticate, deleteMember);
+router.post('/', authenticate, requirePermission('members'), createMember);
+router.put('/:id', authenticate, requirePermission('members'), updateMember);
+router.delete('/:id', authenticate, requirePermission('members'), deleteMember);
 
 export default router;

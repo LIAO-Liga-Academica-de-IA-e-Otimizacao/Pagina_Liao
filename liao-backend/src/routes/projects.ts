@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createProject, getProjects, updateProject, deleteProject } from '../controllers/ProjectController';
-import { authenticate, requireAdmin } from '../middleware/auth';
+import { authenticate, requirePermission } from '../middleware/auth';
 
 const router = Router();
 
@@ -8,8 +8,8 @@ const router = Router();
 router.get('/', getProjects);
 
 // Protected routes (Admin only)
-router.post('/', authenticate, requireAdmin, createProject);
-router.put('/:id', authenticate, requireAdmin, updateProject);
-router.delete('/:id', authenticate, requireAdmin, deleteProject);
+router.post('/', authenticate, requirePermission('projects'), createProject);
+router.put('/:id', authenticate, requirePermission('projects'), updateProject);
+router.delete('/:id', authenticate, requirePermission('projects'), deleteProject);
 
 export default router;

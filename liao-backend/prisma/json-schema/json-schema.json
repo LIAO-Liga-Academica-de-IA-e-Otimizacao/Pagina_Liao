@@ -212,6 +212,18 @@
           "type": "string",
           "default": "admin"
         },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "auditLogs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuditLog"
+          }
+        },
         "createdAt": {
           "type": "string",
           "format": "date-time"
@@ -226,6 +238,48 @@
         "password",
         "name",
         "updatedAt"
+      ]
+    },
+    "AuditLog": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "action": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "resourceId": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "details": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "userId",
+        "userName",
+        "action",
+        "resource"
       ]
     },
     "Member": {
@@ -586,6 +640,10 @@
             "null"
           ]
         },
+        "isLeaguePartner": {
+          "type": "boolean",
+          "default": true
+        },
         "events": {
           "type": "array",
           "items": {
@@ -621,6 +679,9 @@
     },
     "user": {
       "$ref": "#/definitions/User"
+    },
+    "auditLog": {
+      "$ref": "#/definitions/AuditLog"
     },
     "member": {
       "$ref": "#/definitions/Member"
