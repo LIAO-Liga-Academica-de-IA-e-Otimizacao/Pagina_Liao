@@ -459,10 +459,7 @@ export interface paths {
                         [name: string]: unknown;
                     };
                     content: {
-                        "application/json": {
-                            success?: boolean;
-                            data?: components["schemas"]["Event"];
-                        };
+                        "application/json": unknown;
                     };
                 };
             };
@@ -1147,10 +1144,23 @@ export interface components {
             name: string;
             /** @default admin */
             role: string;
+            permissions?: string[];
+            auditLogs?: components["schemas"]["AuditLog"][];
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+        };
+        AuditLog: {
+            id: number;
+            user?: components["schemas"]["User"];
+            userName: string;
+            action: string;
+            resource: string;
+            resourceId?: number | null;
+            details?: string | null;
+            /** Format: date-time */
+            createdAt: string;
         };
         Member: {
             id: number;

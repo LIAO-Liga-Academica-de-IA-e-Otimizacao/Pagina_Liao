@@ -1,6 +1,6 @@
 # LIAO Frontend
 
-The "Face" of the LIAO (Liga de Inteligência Artificial e Otimização) web application.
+The "Face" of the LIAO (Liga Acadêmica de Inteligência Artificial e Otimização) web application.
 
 ## 🛠️ Tech Stack
 

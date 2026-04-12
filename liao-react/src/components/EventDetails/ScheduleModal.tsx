@@ -144,7 +144,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose, schedule
                 {/* Footer Info */}
                 <div className="p-6 bg-white/[0.02] text-center border-t border-white/5">
                     <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold">
-                        LIAO • Liga de Inteligência Artificial e Otimização
+                        LIAO • Liga Acadêmica de Inteligência Artificial e Otimização
                     </p>
                 </div>
             </div>

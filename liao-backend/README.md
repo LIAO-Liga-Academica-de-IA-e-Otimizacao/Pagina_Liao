@@ -1,6 +1,6 @@
 # LIAO Backend
 
-Backend API and Database Engine for the LIAO (Liga de Inteligência Artificial e Otimização) web application.
+Backend API and Database Engine for the LIAO (Liga Acadêmica de Inteligência Artificial e Otimização) web application.
 
 ## 🛠️ Tech Stack
 

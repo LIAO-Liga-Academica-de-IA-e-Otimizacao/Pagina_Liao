@@ -1,6 +1,6 @@
 # LIAO - Full Stack Application
 
-Complete full-stack web application for **LIAO (Liga de Inteligência Artificial e Otimização)**. This repository houses both the Node.js backend and the React frontend.
+Complete full-stack web application for **LIAO (Liga Acadêmica de Inteligência Artificial e Otimização)**. This repository houses both the Node.js backend and the React frontend.
 
 ## 🚀 Quick Start
 
