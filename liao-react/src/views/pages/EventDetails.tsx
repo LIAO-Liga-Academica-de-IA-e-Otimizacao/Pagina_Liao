@@ -65,13 +65,23 @@ const EventDetails: React.FC = () => {
     let parsedContent: EventContentState | null = null;
     let descriptionText = event?.description || '';
 
-    try {
-        if (event?.description && (event.description.startsWith('{') || event.description.startsWith('['))) {
-            parsedContent = JSON.parse(event.description);
-            descriptionText = parsedContent?.presentation?.content || event.description;
+    if (event?.description) {
+        const trimmedDescription = event.description.trim();
+        if (trimmedDescription.startsWith('{') || trimmedDescription.startsWith('[')) {
+            try {
+                // Sanitize string if it contains raw newlines that haven't been escaped
+                const sanitized = trimmedDescription.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+                parsedContent = JSON.parse(sanitized);
+                descriptionText = parsedContent?.presentation?.content || event.description;
+            } catch (e) {
+                console.warn("Detais: Failed to parse structured content", e);
+                // Fallback to raw if sanitize failed too
+                try {
+                    parsedContent = JSON.parse(trimmedDescription);
+                    descriptionText = parsedContent?.presentation?.content || event.description;
+                } catch(e2) {}
+            }
         }
-    } catch (e) {
-        // Not JSON, keep as is
     }
 
     useEffect(() => {

@@ -61,17 +61,24 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 <div className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-4">
                     {(() => {
                         let text = event.description;
-                        try {
-                            if (typeof event.description === 'string' && (event.description.trim().startsWith('{') || event.description.trim().startsWith('['))) {
-                                // Sanitize unescaped newlines and control characters that break JSON.parse
-                                const sanitizedString = event.description.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
-                                const parsed = JSON.parse(sanitizedString);
-                                if (parsed && parsed.presentation && parsed.presentation.content) {
-                                    text = parsed.presentation.content;
+                        if (typeof event.description === 'string') {
+                            const trimmed = event.description.trim();
+                            if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+                                try {
+                                    const sanitized = trimmed.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+                                    const parsed = JSON.parse(sanitized);
+                                    if (parsed?.presentation?.content) {
+                                        text = parsed.presentation.content;
+                                    }
+                                } catch(e) {
+                                    try {
+                                        const parsed = JSON.parse(trimmed);
+                                        if (parsed?.presentation?.content) {
+                                            text = parsed.presentation.content;
+                                        }
+                                    } catch(e2) {}
                                 }
                             }
-                        } catch(e) {
-                            console.error("Erro ao fazer parse do card", e);
                         }
                         return text;
                     })()}
