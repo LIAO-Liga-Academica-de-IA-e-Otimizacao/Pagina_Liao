@@ -59,7 +59,15 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                 </div>
 
                 <p className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-4">
-                    {event.description}
+                    {(() => {
+                        try {
+                            if (event.description && (event.description.startsWith('{') || event.description.startsWith('['))) {
+                                const parsed = JSON.parse(event.description);
+                                return parsed?.presentation?.content || '';
+                            }
+                        } catch(e) {}
+                        return event.description;
+                    })()}
                 </p>
 
                 <div className="pt-4 border-t border-neutral-100 dark:border-neutral-700 flex justify-between items-center">

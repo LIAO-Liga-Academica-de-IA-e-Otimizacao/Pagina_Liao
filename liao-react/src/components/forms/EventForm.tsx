@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
 import type { Partner } from '../../models/Partner';
+import EventContentManager from './EventContentManager';
 
 interface EventFormProps {
     event?: EventApi | null;
@@ -20,11 +21,13 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         speakers: (event?.speakers as any[]) || [],
         gallery: (event?.gallery as string[]) || [],
         highlights: (event?.highlights as string[]) || [],
-        partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[]
+        partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[],
+        locations: event?.location ? event.location.split(' | ') : []
     });
 
     const [allPartners, setAllPartners] = useState<Partner[]>([]);
     const [newSpeaker, setNewSpeaker] = useState('');
+    const [newLocation, setNewLocation] = useState('');
     const [newGalleryItem, setNewGalleryItem] = useState('');
     const [newHighlight, setNewHighlight] = useState('');
     const [loading, setLoading] = useState(false);
@@ -45,10 +48,14 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         e.preventDefault();
         setLoading(true);
         try {
+            const dataToSubmit = {
+                ...formData,
+                location: formData.locations.join(' | ')
+            };
             if (event && event.id !== undefined) {
-                await apiService.updateEvent(event.id, formData);
+                await apiService.updateEvent(event.id, dataToSubmit);
             } else {
-                await apiService.createEvent(formData);
+                await apiService.createEvent(dataToSubmit);
             }
             onSuccess();
         } catch (error: any) {
@@ -82,6 +89,13 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         setFormData({ ...formData, partners: currentPartners });
     };
 
+    const handleContentChange = React.useCallback((content: string) => {
+        setFormData(prev => {
+            if (prev.description === content) return prev;
+            return { ...prev, description: content };
+        });
+    }, []);
+
     return (
         <form onSubmit={handleSubmit} className="bg-white dark:bg-neutral-900 p-8 rounded-3xl shadow-sm border border-neutral-100 dark:border-neutral-800 space-y-8 animate-in fade-in duration-500">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -111,7 +125,7 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Data</label>
+                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Data Início</label>
                             <input
                                 type="date"
                                 required
@@ -121,14 +135,51 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Local</label>
-                            <input
-                                type="text"
-                                placeholder="Auditório, Online, etc."
-                                className="input-field w-full"
-                                value={formData.location}
-                                onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                            />
+                            <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Locais do Evento (Máx: 5)</label>
+                            <div className="flex gap-2 mb-2">
+                                <input
+                                    type="text"
+                                    placeholder={formData.locations.length >= 5 ? "Limite de 5 atingido" : "Auditório, Online, etc."}
+                                    className="input-field flex-1 disabled:opacity-50"
+                                    value={newLocation}
+                                    disabled={formData.locations.length >= 5}
+                                    onChange={(e) => setNewLocation(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' && !e.shiftKey) {
+                                            e.preventDefault();
+                                            if (newLocation.trim() && formData.locations.length < 5) {
+                                                setFormData({ ...formData, locations: [...formData.locations, newLocation.trim()] });
+                                                setNewLocation('');
+                                            }
+                                        }
+                                    }}
+                                />
+                                <button 
+                                    type="button" 
+                                    disabled={formData.locations.length >= 5 || !newLocation.trim()}
+                                    onClick={() => {
+                                        if (newLocation.trim() && formData.locations.length < 5) {
+                                            setFormData({ ...formData, locations: [...formData.locations, newLocation.trim()] });
+                                            setNewLocation('');
+                                        }
+                                    }} 
+                                    className="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl font-bold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors disabled:opacity-30"
+                                >
+                                    +
+                                </button>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                {formData.locations.map((loc, i) => (
+                                    <span key={i} className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-3 py-1 rounded-lg text-sm flex items-center gap-2 border dark:border-neutral-700">
+                                        {loc}
+                                        <button type="button" onClick={() => {
+                                            const newList = [...formData.locations];
+                                            newList.splice(i, 1);
+                                            setFormData({ ...formData, locations: newList });
+                                        }} className="hover:text-danger-500 transition-colors">×</button>
+                                    </span>
+                                ))}
+                            </div>
                         </div>
                     </div>
                     <div>
@@ -146,16 +197,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                 {/* Description & Multi-fields */}
                 <div className="space-y-4">
                     <h3 className="text-lg font-bold text-neutral-900 dark:text-white border-b dark:border-neutral-800 pb-2">Detalhes e Mídia</h3>
-                    <div>
-                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Descrição</label>
-                        <textarea
-                            rows={4}
-                            required
-                            className="input-field w-full"
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        />
-                    </div>
+                    <EventContentManager 
+                        initialContent={formData.description}
+                        onChange={handleContentChange}
+                    />
 
                     {/* Speakers */}
                     <div>

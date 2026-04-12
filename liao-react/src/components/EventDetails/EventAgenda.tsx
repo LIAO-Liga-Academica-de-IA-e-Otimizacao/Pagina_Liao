@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoTimeOutline as Clock, IoPersonOutline as User } from 'react-icons/io5';
+import { IoTimeOutline as Clock, IoPersonOutline as User, IoLocationOutline as MapPin } from 'react-icons/io5';
 import type { AgendaItem } from '../../models/Event';
 import FadeInSection from './FadeInSection';
 
@@ -9,43 +9,76 @@ interface EventAgendaProps {
 }
 
 const EventAgenda: React.FC<EventAgendaProps> = ({ agenda, palette }) => {
+    if (!agenda || agenda.length === 0) return null;
+
     return (
         <FadeInSection delay="delay-200">
-            <div className="space-y-8">
-                <h3 className="text-3xl font-bold tracking-tight text-white mb-8">Agenda do Evento</h3>
-                <div className="space-y-6">
+            <div className="py-12">
+                <div className="flex items-center gap-6 mb-12">
+                    <h3 className="text-3xl font-extrabold tracking-tight text-white whitespace-nowrap">Programação</h3>
+                    <div className="h-px w-full bg-gradient-to-r from-white/20 via-white/5 to-transparent"></div>
+                </div>
+
+                <div className="relative space-y-4">
+                    {/* Vertical Timeline Line */}
+                    <div className="absolute left-[23px] top-0 bottom-0 w-[2px] bg-gradient-to-b from-[var(--event-primary)]/40 via-white/10 to-transparent"></div>
+
                     {agenda.map((item, idx) => {
                         const itemColor = palette[idx % palette.length];
                         
                         return (
-                            <div key={idx} className="relative pl-8 group">
-                                <div className="absolute left-0 top-0 bottom-0 w-px bg-white/10 group-last:bottom-auto group-last:h-full"></div>
+                            <div key={idx} className="relative pl-16 group">
+                                {/* Dot on timeline */}
                                 <div 
-                                    className="absolute left-[-4px] top-2 w-2 h-2 rounded-full ring-4 ring-neutral-950"
-                                    style={{ backgroundColor: itemColor }}
-                                ></div>
+                                    className="absolute left-4 top-8 w-5 h-5 rounded-full ring-4 ring-neutral-950 z-10 transition-all duration-500 group-hover:scale-125"
+                                    style={{ 
+                                        backgroundColor: itemColor,
+                                        boxShadow: `0 0 15px 2px ${itemColor}40`
+                                    }}
+                                >
+                                    <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ backgroundColor: itemColor }}></div>
+                                </div>
+
                                 <div 
-                                    className="bg-white/5 border border-white/10 p-6 hover:bg-white/10 transition-colors"
+                                    className="bg-neutral-900/40 backdrop-blur-md border border-white/5 p-6 md:p-8 hover:bg-neutral-800/60 transition-all duration-300 group-hover:translate-x-1"
                                     style={{ borderRadius: 'var(--event-radius)' }}
                                 >
-                                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                                        <div>
-                                            <div 
-                                                className="flex items-center gap-2 mb-2 font-mono text-sm"
-                                                style={{ color: itemColor }}
-                                            >
-                                                <Clock size={16} />
-                                                {item.time}
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                        <div className="flex-1">
+                                            <div className="flex items-center gap-3 mb-3">
+                                                <div 
+                                                    className="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono tracking-tight"
+                                                    style={{ 
+                                                        backgroundColor: `${itemColor}15`,
+                                                        color: itemColor,
+                                                        border: `1px solid ${itemColor}30`
+                                                    }}
+                                                >
+                                                    <Clock size={14} />
+                                                    {item.time}
+                                                </div>
+                                                <div className="h-1 w-1 rounded-full bg-white/20"></div>
+                                                <p className="text-xs font-semibold text-neutral-500 uppercase tracking-widest">Sessão {idx + 1}</p>
                                             </div>
-                                            <h4 className="text-xl font-bold text-white mb-2">{item.title}</h4>
+
+                                            <h4 className="text-xl md:text-2xl font-bold text-white mb-2 group-hover:text-[var(--event-primary)] transition-colors">
+                                                {item.title}
+                                            </h4>
+                                            
                                             {item.description && (
-                                                <p className="text-neutral-400 text-sm mt-1">{item.description}</p>
+                                                <p className="text-neutral-400 text-sm md:text-base leading-relaxed max-w-2xl">{item.description}</p>
                                             )}
                                         </div>
+
                                         {item.speakerName && (
-                                            <div className="flex items-center gap-2 bg-neutral-900 px-4 py-2 rounded-xl border border-white/5 shrink-0">
-                                                <User size={14} className="text-neutral-500" />
-                                                <span className="text-sm font-medium text-neutral-300">{item.speakerName}</span>
+                                            <div className="flex items-center gap-3 bg-white/5 px-5 py-3 rounded-2xl border border-white/5 shrink-0 transition-colors group-hover:bg-white/10 group-hover:border-[var(--event-primary)]/20">
+                                                <div className="p-2 bg-neutral-950 rounded-lg">
+                                                    <User size={18} className="text-neutral-400" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider mb-0.5">Palestrante</p>
+                                                    <p className="text-sm font-bold text-white">{item.speakerName}</p>
+                                                </div>
                                             </div>
                                         )}
                                     </div>

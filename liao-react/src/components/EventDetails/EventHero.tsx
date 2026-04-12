@@ -5,7 +5,8 @@ import {
     IoCalendarOutline as Calendar,
     IoLocationOutline as MapPin,
     IoSparkles as Sparkles,
-    IoRocketOutline as Rocket
+    IoRocketOutline as Rocket,
+    IoChevronForward
 } from 'react-icons/io5';
 import type { EventApi } from '../../models/Event';
 import FadeInSection from './FadeInSection';
@@ -13,9 +14,18 @@ import FadeInSection from './FadeInSection';
 interface EventHeroProps {
     event: EventApi;
     eventDate: string;
+    descriptionOverride?: string;
+    hasSchedule?: boolean;
+    onOpenSchedule?: () => void;
 }
 
-const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
+const EventHero: React.FC<EventHeroProps> = ({ 
+    event, 
+    eventDate, 
+    descriptionOverride, 
+    hasSchedule, 
+    onOpenSchedule 
+}) => {
     return (
         <FadeInSection>
             <Link to="/events" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 group transition-colors">
@@ -44,8 +54,32 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                     </h1>
                     
                     <p className="text-xl text-neutral-400 leading-relaxed font-light max-w-xl">
-                        {event.description}
+                        {descriptionOverride || event.description}
                     </p>
+
+                    {hasSchedule && (
+                        <div className="pt-2">
+                            <button
+                                onClick={onOpenSchedule}
+                                className="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 hover:border-white/20 rounded-2xl transition-all hover:bg-white/10 overflow-hidden relative"
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                                <div 
+                                    className="p-2 rounded-lg bg-primary-500/10 text-primary-400 group-hover:bg-primary-500/20 transition-colors"
+                                    style={{ color: 'var(--event-primary)' }}
+                                >
+                                    <Calendar size={20} />
+                                </div>
+                                <div className="text-left">
+                                    <p className="text-xs text-neutral-500 font-bold uppercase tracking-wider">Visualizar</p>
+                                    <p className="font-bold text-white flex items-center gap-1">
+                                        Cronograma Completo
+                                        <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
+                                    </p>
+                                </div>
+                            </button>
+                        </div>
+                    )}
 
                     <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-white/10">
                         <div className="flex items-center gap-3 text-neutral-300">
@@ -78,7 +112,11 @@ const EventHero: React.FC<EventHeroProps> = ({ event, eventDate }) => {
                             </div>
                             <div>
                                 <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-0.5">Local</p>
-                                <p className="font-medium text-white">{event.location}</p>
+                                <p className="font-medium text-white">
+                                    {event.location ? event.location.split('|').map((loc, i) => (
+                                        <span key={i} className="block">{loc.trim()}</span>
+                                    )) : 'A definir'}
+                                </p>
                             </div>
                         </div>
                     </div>

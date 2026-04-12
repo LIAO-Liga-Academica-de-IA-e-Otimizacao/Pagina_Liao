@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { IoArrowBack as ArrowLeft, IoCalendarOutline as Calendar } from 'react-icons/io5';
+import { IoArrowBack as ArrowLeft, IoCalendarOutline as Calendar, IoSparkles as Sparkles } from 'react-icons/io5';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
 
@@ -12,6 +12,10 @@ import EventGallery from '../../components/EventDetails/EventGallery';
 import EventSpeakers from '../../components/EventDetails/EventSpeakers';
 import EventCTA from '../../components/EventDetails/EventCTA';
 import EventPartners from '../../components/EventDetails/EventPartners';
+import ScheduleModal from '../../components/EventDetails/ScheduleModal';
+import FadeInSection from '../../components/EventDetails/FadeInSection';
+import type { EventContentState } from '../../components/forms/EventContentManager';
+import ReactMarkdown from 'react-markdown';
 
 const FONT_MAP: Record<string, { family: string; url: string }> = {
     'font-serif': { 
@@ -55,6 +59,20 @@ const EventDetails: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const [event, setEvent] = useState<EventApi | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+
+    // Parsing structured description
+    let parsedContent: EventContentState | null = null;
+    let descriptionText = event?.description || '';
+
+    try {
+        if (event?.description && (event.description.startsWith('{') || event.description.startsWith('['))) {
+            parsedContent = JSON.parse(event.description);
+            descriptionText = parsedContent?.presentation?.content || event.description;
+        }
+    } catch (e) {
+        // Not JSON, keep as is
+    }
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -144,6 +162,54 @@ const EventDetails: React.FC = () => {
         'fontFamily': fontFamily,
     } as React.CSSProperties;
 
+    const renderContentSection = (title: string, content: string | undefined, isPlus: boolean = false, delay: string = 'delay-0') => {
+        if (!content) return null;
+        
+        return (
+            <FadeInSection delay={delay}>
+                <div 
+                    className={`relative group p-4 md:p-8 rounded-3xl transition-colors ${
+                        isPlus 
+                            ? 'bg-neutral-900/40 border-l-4 shadow-sm my-12' 
+                            : 'bg-transparent my-10'
+                    }`}
+                    style={isPlus ? { borderLeftColor: 'var(--event-primary)' } : {}}
+                >
+                    {!isPlus && <div className="absolute -inset-x-6 -inset-y-4 bg-white/0 group-hover:bg-white/[0.02] transition-colors rounded-3xl -z-10"></div>}
+                    
+                    <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white flex items-center gap-4">
+                        <div 
+                            className={`flex items-center justify-center rounded-2xl ${
+                                isPlus 
+                                    ? 'w-12 h-12 bg-primary-500/20 border border-primary-500/30' 
+                                    : 'w-10 h-10 bg-primary-500/10 border border-primary-500/20 shadow-inner'
+                            }`}
+                            style={{ color: 'var(--event-primary)' }}
+                        >
+                            <Sparkles size={isPlus ? 24 : 20} className={isPlus ? "animate-pulse" : ""} />
+                        </div>
+                        {title}
+                    </h3>
+                    
+                    {/* Markdown rendering with Prose styling mimicking native App typography.  */}
+                    <div 
+                        className="prose prose-invert prose-lg md:prose-xl max-w-none 
+                                    prose-headings:text-white prose-headings:font-bold 
+                                    prose-p:text-neutral-400 prose-p:leading-relaxed 
+                                    prose-a:text-[color:var(--event-primary)] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                                    prose-strong:text-white 
+                                    prose-ul:list-disc prose-ol:list-decimal
+                                    prose-li:text-neutral-400 prose-li:marker:text-[color:var(--event-primary)]"
+                    >
+                        <ReactMarkdown>
+                            {content}
+                        </ReactMarkdown>
+                    </div>
+                </div>
+            </FadeInSection>
+        );
+    };
+
     return (
         <div 
             className={`relative min-h-screen bg-neutral-950 text-neutral-50 overflow-x-hidden ${fontClass}`}
@@ -163,13 +229,52 @@ const EventDetails: React.FC = () => {
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-20">
-                <EventHero event={event} eventDate={eventDate} />
+                <EventHero 
+                    event={event} 
+                    eventDate={eventDate} 
+                    descriptionOverride={descriptionText}
+                    hasSchedule={!!parsedContent?.scheduleTable?.enabled}
+                    onOpenSchedule={() => setIsScheduleOpen(true)}
+                />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
                     {/* Main Content Column */}
-                    <div className="lg:col-span-2 space-y-16">
-                        {event.highlights && <EventHighlights highlights={event.highlights} />}
-                        {event.agenda && <EventAgenda agenda={event.agenda} palette={palette} />}
+                    <div className="lg:col-span-2 space-y-16 pb-24">
+                        <div className="space-y-4">
+                            {parsedContent?.objectives?.enabled && renderContentSection('Objetivos', parsedContent.objectives.content, false, '')}
+                            {parsedContent?.targetAudience?.enabled && renderContentSection('Público-alvo', parsedContent.targetAudience.content, false, 'delay-150')}
+                            {parsedContent?.structure?.enabled && renderContentSection('Estrutura Geral', parsedContent.structure.content, false, 'delay-300')}
+                        </div>
+
+                        {event.highlights && (
+                            <div className="pt-8 border-t border-white/5">
+                                <EventHighlights highlights={event.highlights} />
+                            </div>
+                        )}
+                        
+                        {event.agenda && event.agenda.length > 0 && (
+                            <div className="pt-8 border-t border-white/5">
+                                <EventAgenda agenda={event.agenda} palette={palette} />
+                            </div>
+                        )}
+                        
+                        {parsedContent?.schedule?.enabled && (
+                            <div className="pt-8 border-t border-white/5">
+                                {renderContentSection('Cronograma', parsedContent.schedule.content, false, '')}
+                            </div>
+                        )}
+                        
+                        {parsedContent?.dynamicSections?.filter(s => (s as any).enabled !== false).map((section, idx) => {
+                            const delayClass = ['delay-100', 'delay-200', 'delay-300', 'delay-500', 'delay-700'][idx % 5];
+                            return (
+                                <React.Fragment key={section.id}>
+                                    {renderContentSection(section.title, section.content, true, delayClass)}
+                                </React.Fragment>
+                            );
+                        })}
+                        
+                        {parsedContent?.finalConsiderations?.enabled && renderContentSection('Considerações Finais', parsedContent.finalConsiderations.content, false, '')}
+
                         {event.gallery && <EventGallery gallery={event.gallery} />}
                     </div>
 
@@ -187,6 +292,16 @@ const EventDetails: React.FC = () => {
                     </div>
                 )}
             </div>
+
+            {parsedContent?.scheduleTable && (
+                <ScheduleModal 
+                    isOpen={isScheduleOpen}
+                    onClose={() => setIsScheduleOpen(false)}
+                    schedule={parsedContent.scheduleTable}
+                    eventTitle={event.title}
+                    palette={palette}
+                />
+            )}
         </div>
     );
 };
