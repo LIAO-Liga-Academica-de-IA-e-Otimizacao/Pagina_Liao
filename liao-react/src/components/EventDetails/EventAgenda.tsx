@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoTimeOutline as Clock, IoPersonOutline as User, IoLocationOutline as MapPin } from 'react-icons/io5';
+import { IoTimeOutline as Clock, IoPersonOutline as User } from 'react-icons/io5';
 import type { AgendaItem } from '../../models/Event';
 import FadeInSection from './FadeInSection';
 
