@@ -58,17 +58,24 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                     )}
                 </div>
 
-                <p className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-4">
+                <div className="text-neutral-600 dark:text-neutral-400 text-sm line-clamp-2 mb-4">
                     {(() => {
+                        let text = event.description;
                         try {
-                            if (event.description && (event.description.startsWith('{') || event.description.startsWith('['))) {
-                                const parsed = JSON.parse(event.description);
-                                return parsed?.presentation?.content || '';
+                            if (typeof event.description === 'string' && (event.description.trim().startsWith('{') || event.description.trim().startsWith('['))) {
+                                // Sanitize unescaped newlines and control characters that break JSON.parse
+                                const sanitizedString = event.description.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+                                const parsed = JSON.parse(sanitizedString);
+                                if (parsed && parsed.presentation && parsed.presentation.content) {
+                                    text = parsed.presentation.content;
+                                }
                             }
-                        } catch(e) {}
-                        return event.description;
+                        } catch(e) {
+                            console.error("Erro ao fazer parse do card", e);
+                        }
+                        return text;
                     })()}
-                </p>
+                </div>
 
                 <div className="pt-4 border-t border-neutral-100 dark:border-neutral-700 flex justify-between items-center">
                     <span className="text-xs font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-wider">
