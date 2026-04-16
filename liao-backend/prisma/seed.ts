@@ -143,6 +143,17 @@ async function main() {
   });
 
   console.log(`✅ Seed finished! Event created: ${event.title}`);
+
+  // 3. System Config
+  console.log('Seeding system config...');
+  await prisma.systemConfig.upsert({
+    where: { key: 'CONTACT_EMAIL' },
+    update: {},
+    create: {
+      key: 'CONTACT_EMAIL',
+      value: 'contato@liao.com'
+    }
+  });
 }
 
 main()

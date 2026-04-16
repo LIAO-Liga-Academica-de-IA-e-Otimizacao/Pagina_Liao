@@ -46,7 +46,8 @@ const Admin: React.FC = () => {
     const [editingEvent, setEditingEvent] = useState<EventApi | null>(null);
     const [showEventForm, setShowEventForm] = useState(false);
 
-    const [config, setConfig] = useState({ proselOpen: false });
+    const [config, setConfig] = useState({ proselOpen: false, contactEmail: '' });
+    const [originalContactEmail, setOriginalContactEmail] = useState('');
 
     // Admins State (New)
     const [admins, setAdmins] = useState<any[]>([]);
@@ -132,30 +133,21 @@ const Admin: React.FC = () => {
 
     const fetchConfig = async () => {
         try {
-            const response = await apiService.getConfig('prosel_open');
-            setConfig({ proselOpen: response.data === 'true' });
+            const proselRes = await apiService.getConfig('prosel_open');
+            const emailRes = await apiService.getConfig('CONTACT_EMAIL');
+            
+            const fetchedEmail = emailRes.data || 'contato@liao.com';
+            setConfig({ 
+                proselOpen: proselRes.data === 'true',
+                contactEmail: fetchedEmail
+            });
+            setOriginalContactEmail(fetchedEmail);
         } catch (error) {
             console.error('Error fetching config:', error);
         }
     };
 
-    const fetchAdmins = async () => {
-        try {
-            const response = await apiService.getAdmins();
-            setAdmins(response.data || []);
-        } catch (error) {
-            console.error('Error fetching admins:', error);
-        }
-    };
-
-    const fetchEvents = async () => {
-        try {
-            const response = await apiService.getEvents() as any;
-            setEvents(response.data || []);
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    };
+    // ... (rest of fetch functions)
 
     useEffect(() => {
         if (activeSection === 'members') fetchMembers();
@@ -175,11 +167,21 @@ const Admin: React.FC = () => {
         try {
             const newValue = (!config.proselOpen).toString();
             await apiService.updateConfig('prosel_open', newValue);
-            setConfig({ proselOpen: !config.proselOpen });
+            setConfig(prev => ({ ...prev, proselOpen: !prev.proselOpen }));
         } catch (error) {
             alert('Erro ao atualizar configuração');
         }
     }
+
+    const handleUpdateContactEmail = async () => {
+        try {
+            await apiService.updateConfig('CONTACT_EMAIL', config.contactEmail);
+            setOriginalContactEmail(config.contactEmail);
+            alert('Email de contato atualizado com sucesso!');
+        } catch (error) {
+            alert('Erro ao atualizar email de contato');
+        }
+    };
 
     // --- Admin Management Logic ---
     const handleCreateAdmin = async (e: React.FormEvent) => {
@@ -333,26 +335,51 @@ const Admin: React.FC = () => {
     const renderConfigSection = () => (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">Configurações do Sistema</h2>
-            <div className="bg-white dark:bg-neutral-800 shadow rounded-lg p-6 border dark:border-neutral-700">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h3 className="text-lg font-medium text-neutral-900 dark:text-white">Processo Seletivo</h3>
-                        <p className="text-neutral-500 dark:text-neutral-400">
-                            {config.proselOpen
-                                ? 'O formulário de inscrição está ABERTO para todos.'
-                                : 'O formulário está FECHADO. Visitantes verão uma mensagem de aguardo.'}
-                        </p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* ProSel Toggle */}
+                <div className="bg-white dark:bg-neutral-800 shadow rounded-lg p-6 border dark:border-neutral-700">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="text-lg font-medium text-neutral-900 dark:text-white">Processo Seletivo</h3>
+                            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
+                                {config.proselOpen ? 'Inscrições ABERTAS' : 'Inscrições FECHADAS'}
+                            </p>
+                        </div>
+                        <button
+                            onClick={handleToggleProSel}
+                            className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${config.proselOpen ? 'bg-primary-600' : 'bg-neutral-200 dark:bg-neutral-700'}`}
+                        >
+                            <span className="sr-only">Toggle ProSel</span>
+                            <span
+                                aria-hidden="true"
+                                className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${config.proselOpen ? 'translate-x-5' : 'translate-x-0'}`}
+                            />
+                        </button>
                     </div>
-                    <button
-                        onClick={handleToggleProSel}
-                        className={`relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 ${config.proselOpen ? 'bg-primary-600' : 'bg-neutral-200'}`}
-                    >
-                        <span className="sr-only">Toggle ProSel</span>
-                        <span
-                            aria-hidden="true"
-                            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200 ${config.proselOpen ? 'translate-x-5' : 'translate-x-0'}`}
+                </div>
+
+                {/* Contact Email Config */}
+                <div className="bg-white dark:bg-neutral-800 shadow rounded-lg p-6 border dark:border-neutral-700">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-1">Email de Contato</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">Usado nos botões "Solicitar Proposta".</p>
+                    <div className="flex gap-2">
+                        <input
+                            type="email"
+                            value={config.contactEmail}
+                            onChange={(e) => setConfig({ ...config, contactEmail: e.target.value })}
+                            className="flex-1 rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                            placeholder="contato@liao.com"
                         />
-                    </button>
+                        {config.contactEmail !== originalContactEmail && (
+                            <button
+                                onClick={handleUpdateContactEmail}
+                                className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors text-sm font-bold"
+                            >
+                                Salvar
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
