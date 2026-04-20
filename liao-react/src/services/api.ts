@@ -224,9 +224,23 @@ export const apiService = {
         reqCache.clear('/events');
         return api.put(`/events/${id}`, data);
     },
-    deleteEvent: (id: number) => {
+    deleteEvent: (id: number, password?: string) => {
         reqCache.clear('/events');
-        return api.delete(`/events/${id}`);
+        return api.post(`/events/${id}/delete`, { password });
+    },
+    // FAQs
+    getFAQsByEvent: (eventId: number) => api.get(`/faqs/event/${eventId}`),
+    createFAQ: (data: { eventId: number; question: string; answer: string; order?: number }) => {
+        reqCache.clear('/events');
+        return api.post('/faqs', data);
+    },
+    updateFAQ: (id: number, data: { question?: string; answer?: string; order?: number }) => {
+        reqCache.clear('/events');
+        return api.put(`/faqs/${id}`, data);
+    },
+    deleteFAQ: (id: number) => {
+        reqCache.clear('/events');
+        return api.delete(`/faqs/${id}`);
     },
     // Audit Logs
     getAuditLogs: (resource?: string, startDate?: string, endDate?: string) => {

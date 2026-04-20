@@ -12,6 +12,7 @@ import articleRoutes from './routes/articles';
 import partnerRoutes from './routes/partners';
 import eventsRoutes from './routes/events';
 import auditRoutes from './routes/audit';
+import faqRoutes from './routes/faq';
 console.log('[DEBUG] partnerRoutes imported type:', typeof partnerRoutes);
 import { errorHandler } from './middleware/errorHandler';
 import { getConfig, updateConfig } from './controllers/configController';
@@ -45,6 +46,7 @@ app.use('/api/articles', articleRoutes);
 app.use('/api/partners', partnerRoutes);
 app.use('/api/events', eventsRoutes);
 app.use('/api/audit', auditRoutes);
+app.use('/api/faqs', faqRoutes);
 app.use('/api/partners', (req, res, next) => {
     console.log(`[DEBUG] Request to /api/partners: ${req.method} ${req.url}`);
     next();
@@ -78,13 +80,16 @@ app.get('/', (req, res) => {
 app.use(errorHandler);
 
 // Start server
-// Start server only if not running in Vercel (Vercel handles the server)
-if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, () => {
-        console.log(`🚀 LIAO Backend server running on port ${PORT}`);
-        console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-        console.log(`🌐 CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
-    });
-}
+app.listen(Number(PORT), '0.0.0.0', () => {
+    console.log(`🚀 LIAO Backend server running on http://localhost:${PORT}`);
+    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 CORS enabled for: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+}).on('error', (err: any) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`❌ Port ${PORT} is already in use. Please kill the process using this port.`);
+    } else {
+        console.error('❌ Server failed to start:', err);
+    }
+});
 
 export default app;

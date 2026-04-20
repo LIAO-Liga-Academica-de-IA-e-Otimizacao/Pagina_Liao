@@ -18,15 +18,16 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         coverImage: event?.coverImage || '',
         date: event?.date ? new Date(event.date as string).toISOString().split('T')[0] : '',
         location: event?.location || '',
-        speakers: (event?.speakers as any[]) || [],
+        speakers: (event?.speakers as any[])?.map(s => typeof s === 'string' ? { name: s } : s) || [],
         gallery: (event?.gallery as string[]) || [],
         highlights: (event?.highlights as string[]) || [],
         partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[],
-        locations: event?.location ? event.location.split(' | ') : []
+        locations: event?.location ? event.location.split(' | ') : [],
+        subscribe: event?.subscribe || ''
     });
 
     const [allPartners, setAllPartners] = useState<Partner[]>([]);
-    const [newSpeaker, setNewSpeaker] = useState('');
+    const [newSpeaker, setNewSpeaker] = useState({ name: '', role: '', photo: '' });
     const [newLocation, setNewLocation] = useState('');
     const [newGalleryItem, setNewGalleryItem] = useState('');
     const [newHighlight, setNewHighlight] = useState('');
@@ -66,7 +67,13 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         }
     };
 
-    const addItem = (field: 'speakers' | 'gallery' | 'highlights', value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    const addSpeaker = () => {
+        if (!newSpeaker.name.trim()) return;
+        setFormData({ ...formData, speakers: [...formData.speakers, { ...newSpeaker }] });
+        setNewSpeaker({ name: '', role: '', photo: '' });
+    };
+
+    const addItem = (field: 'gallery' | 'highlights', value: string, setter: React.Dispatch<React.SetStateAction<string>>) => {
         if (!value.trim()) return;
         setFormData({ ...formData, [field]: [...(formData[field] as any[]), value] });
         setter('');
@@ -192,6 +199,17 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                             onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
                         />
                     </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Link de Inscrição (Opcional)</label>
+                        <input
+                            type="url"
+                            placeholder="https://exemplo.com/inscricao"
+                            className="input-field w-full"
+                            value={formData.subscribe}
+                            onChange={(e) => setFormData({ ...formData, subscribe: e.target.value })}
+                        />
+                        <p className="text-[10px] text-neutral-500 mt-1">Habilita o botão "Realizar Inscrição" na página do evento.</p>
+                    </div>
                 </div>
 
                 {/* Description & Multi-fields */}
@@ -205,22 +223,61 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                     {/* Speakers */}
                     <div>
                         <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Palestrantes</label>
-                        <div className="flex gap-2 mb-2">
-                            <input
-                                type="text"
-                                className="input-field flex-1"
-                                value={newSpeaker}
-                                onChange={(e) => setNewSpeaker(e.target.value)}
-                                placeholder="Nome do palestrante"
-                            />
-                            <button type="button" onClick={() => addItem('speakers', newSpeaker, setNewSpeaker)} className="px-4 py-2 bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-xl font-bold hover:bg-primary-100 dark:hover:bg-primary-900/40 transition-colors">+</button>
+                        <div className="bg-neutral-50 dark:bg-neutral-800/50 p-4 rounded-2xl border dark:border-neutral-700 space-y-3 mb-4">
+                            <div className="grid grid-cols-2 gap-3">
+                                <input
+                                    type="text"
+                                    className="input-field text-sm"
+                                    value={newSpeaker.name}
+                                    onChange={(e) => setNewSpeaker({ ...newSpeaker, name: e.target.value })}
+                                    placeholder="Nome do palestrante"
+                                />
+                                <input
+                                    type="text"
+                                    className="input-field text-sm"
+                                    value={newSpeaker.role}
+                                    onChange={(e) => setNewSpeaker({ ...newSpeaker, role: e.target.value })}
+                                    placeholder="Cargo / Instituição"
+                                />
+                            </div>
+                            <div className="flex gap-2">
+                                <input
+                                    type="url"
+                                    className="input-field text-sm flex-1"
+                                    value={newSpeaker.photo}
+                                    onChange={(e) => setNewSpeaker({ ...newSpeaker, photo: e.target.value })}
+                                    placeholder="URL da Foto de Perfil"
+                                />
+                                <button 
+                                    type="button" 
+                                    onClick={addSpeaker}
+                                    disabled={!newSpeaker.name.trim()}
+                                    className="px-6 py-2 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-colors disabled:opacity-50"
+                                >
+                                    Adicionar
+                                </button>
+                            </div>
                         </div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-3">
                             {formData.speakers.map((s, i) => (
-                                <span key={i} className="bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 px-3 py-1 rounded-lg text-sm flex items-center gap-2 border dark:border-primary-800">
-                                    {s}
-                                    <button type="button" onClick={() => removeItem('speakers', i)} className="hover:text-danger-500 transition-colors">×</button>
-                                </span>
+                                <div key={i} className="flex items-center gap-3 bg-white dark:bg-neutral-800 p-2 pr-4 rounded-xl border dark:border-neutral-700 shadow-sm transition-all hover:border-primary-500/50">
+                                    <div className="w-10 h-10 rounded-full overflow-hidden bg-neutral-100 dark:bg-neutral-700 border dark:border-neutral-600">
+                                        {s.photo ? (
+                                            <img src={s.photo} alt={s.name} className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-xs font-bold text-neutral-400">
+                                                {s.name?.charAt(0)}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <h4 className="text-xs font-bold text-neutral-900 dark:text-white truncate">{s.name}</h4>
+                                        <p className="text-[10px] text-neutral-500 truncate">{s.role || 'Convidado'}</p>
+                                    </div>
+                                    <button type="button" onClick={() => removeItem('speakers', i)} className="text-neutral-400 hover:text-danger-500 transition-colors">
+                                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                    </button>
+                                </div>
                             ))}
                         </div>
                     </div>
