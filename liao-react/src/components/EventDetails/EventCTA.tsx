@@ -11,6 +11,22 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
     const handleAddToCalendar = () => {
         if (!event) return;
 
+        // Extract clean description text
+        let cleanDescription = event.description || "";
+        if (cleanDescription.trim().startsWith('{')) {
+            try {
+                const sanitized = cleanDescription.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
+                const parsed = JSON.parse(sanitized);
+                cleanDescription = parsed?.presentation?.content || "";
+            } catch (e) {
+                console.warn("FAQ: Failed to parse structured content for calendar", e);
+            }
+        }
+
+        // Add event link to the details
+        const eventLink = window.location.href;
+        const detailsText = `${cleanDescription}\n\nSaiba mais em: ${eventLink}`;
+
         const startDate = new Date(event.date as string);
         const endDate = new Date(startDate.getTime() + 2 * 60 * 60 * 1000);
 
@@ -19,7 +35,7 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
         };
 
         const title = encodeURIComponent(event.title);
-        const details = encodeURIComponent(event.description || "");
+        const details = encodeURIComponent(detailsText);
         const location = encodeURIComponent(event.location || "");
         const dates = `${formatGCalDate(startDate)}/${formatGCalDate(endDate)}`;
 
@@ -53,12 +69,25 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                             Adicione este evento à sua agenda e fique por dentro de todas as novidades.
                         </p>
                     </div>
+                    {event.subscribe && (
+                        <button 
+                            onClick={() => window.open(event.subscribe as string, '_blank', 'noopener,noreferrer')}
+                            className="w-full py-4 bg-primary-600 text-white font-bold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20 active:scale-[0.98] transition-all"
+                            style={{ borderRadius: 'var(--event-radius-sm)' }}
+                        >
+                            Realizar Inscrição
+                        </button>
+                    )}
                     <button 
                         onClick={handleAddToCalendar}
-                        className="w-full py-4 bg-white text-neutral-950 font-bold hover:bg-neutral-200 transition-colors shadow-lg shadow-white/10 active:scale-[0.98] transition-all"
+                        className={`w-full py-4 font-bold transition-all active:scale-[0.98] ${
+                            event.subscribe 
+                                ? 'bg-white/5 text-white hover:bg-white/10 border border-white/10' 
+                                : 'bg-white text-neutral-950 hover:bg-neutral-200 shadow-lg shadow-white/10'
+                        }`}
                         style={{ borderRadius: 'var(--event-radius-sm)' }}
                     >
-                        Notificar-me
+                        {event.subscribe ? 'Lembrar-me (Agenda)' : 'Notificar-me'}
                     </button>
                 </div>
             </div>

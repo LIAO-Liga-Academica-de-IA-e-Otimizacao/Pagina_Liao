@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import bcrypt from 'bcryptjs';
 import prisma from '../config/database';
 import { logAudit } from '../middleware/auditLogger';
+import { AuthRequest } from '../types';
 
 /**
  * @openapi
@@ -42,14 +44,23 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
                 borderRadius,
                 subscribe,
                 speakers: {
-                    create: speakers?.map((s: any) => ({
-                        memberId: s.memberId || null,
-                        name: s.name,
-                        role: s.role,
-                        photo: s.photo,
-                        company: s.company,
-                        link: s.link
-                    })) || []
+                    create: speakers?.map((s: any) => {
+                        const name = typeof s === 'string' ? s : s.name;
+                        const role = typeof s === 'string' ? '' : s.role;
+                        const photo = typeof s === 'string' ? null : s.photo;
+                        const company = typeof s === 'string' ? null : s.company;
+                        const link = typeof s === 'string' ? null : s.link;
+                        const memberId = typeof s === 'string' ? null : s.memberId;
+                        
+                        return {
+                            memberId,
+                            name,
+                            role,
+                            photo,
+                            company,
+                            link
+                        };
+                    }) || []
                 },
                 agenda: {
                     create: agenda?.map((a: any) => ({
@@ -210,14 +221,23 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
                 subscribe,
                 speakers: speakers ? {
                     deleteMany: {}, // Clear old speakers and re-insert
-                    create: speakers.map((s: any) => ({
-                        memberId: s.memberId || null,
-                        name: s.name,
-                        role: s.role,
-                        photo: s.photo,
-                        company: s.company,
-                        link: s.link
-                    }))
+                    create: speakers.map((s: any) => {
+                        const name = typeof s === 'string' ? s : s.name;
+                        const role = typeof s === 'string' ? '' : s.role;
+                        const photo = typeof s === 'string' ? null : s.photo;
+                        const company = typeof s === 'string' ? null : s.company;
+                        const link = typeof s === 'string' ? null : s.link;
+                        const memberId = typeof s === 'string' ? null : s.memberId;
+                        
+                        return {
+                            memberId,
+                            name,
+                            role,
+                            photo,
+                            company,
+                            link
+                        };
+                    })
                 } : undefined,
                 agenda: agenda ? {
                     deleteMany: {}, // Clear old agenda and re-insert
@@ -272,9 +292,49 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
 export const deleteEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
+        const { password } = req.body;
+        const actingUser = (req as AuthRequest).user;
+
+        if (!actingUser || actingUser.role !== 'master') {
+            res.status(403).json({ 
+                success: false, 
+                error: 'Somente Administradores Master possuem permissão para excluir eventos definitivamente.' 
+            });
+            return;
+        }
+
+        if (!password) {
+            res.status(400).json({ 
+                success: false, 
+                error: 'A confirmação de senha é obrigatória para esta operação de segurança.' 
+            });
+            return;
+        }
+
+        // Find current user to get hashed password
+        const user = await prisma.user.findUnique({
+            where: { id: actingUser.id }
+        });
+
+        if (!user) {
+            res.status(404).json({ success: false, error: 'Usuário administrador não encontrado.' });
+            return;
+        }
+
+        // Verify password
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) {
+            res.status(401).json({ 
+                success: false, 
+                error: 'Senha incorreta. A exclusão foi cancelada por motivos de segurança.' 
+            });
+            return;
+        }
+
         await prisma.event.delete({
             where: { id: Number(id) },
         });
+
         res.json({ success: true, message: 'Event deleted successfully' });
         logAudit(req, { action: 'DELETE', resource: 'events', resourceId: Number(id) });
 

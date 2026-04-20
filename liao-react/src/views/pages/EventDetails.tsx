@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { IoArrowBack as ArrowLeft, IoCalendarOutline as Calendar, IoSparkles as Sparkles } from 'react-icons/io5';
+import { IoArrowBack as ArrowLeft, IoCalendarOutline as Calendar, IoSparkles as Sparkles, IoArrowForwardOutline as ArrowRight, IoHelpCircleOutline as Help } from 'react-icons/io5';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
 
@@ -12,6 +12,8 @@ import EventGallery from '../../components/EventDetails/EventGallery';
 import EventSpeakers from '../../components/EventDetails/EventSpeakers';
 import EventCTA from '../../components/EventDetails/EventCTA';
 import EventPartners from '../../components/EventDetails/EventPartners';
+import EventFAQ from '../../components/EventDetails/EventFAQ';
+import PublicFAQModal from '../../components/EventDetails/PublicFAQModal';
 import ScheduleModal from '../../components/EventDetails/ScheduleModal';
 import FadeInSection from '../../components/EventDetails/FadeInSection';
 import type { EventContentState } from '../../components/forms/EventContentManager';
@@ -58,8 +60,10 @@ const hexToRgb = (hex: string) => {
 const EventDetails: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
     const [event, setEvent] = useState<EventApi | null>(null);
+    const [faqs, setFaqs] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [isScheduleOpen, setIsScheduleOpen] = useState(false);
+    const [isFAQOpen, setIsFAQOpen] = useState(false);
 
     // Parsing structured description
     let parsedContent: EventContentState | null = null;
@@ -89,7 +93,14 @@ const EventDetails: React.FC = () => {
             try {
                 if (!slug) return;
                 const response = await apiService.getEventBySlug(slug) as any;
-                setEvent(response.data as EventApi);
+                const fetchedEvent = response.data as EventApi;
+                setEvent(fetchedEvent);
+                
+                // Fetch FAQs for this event
+                if (fetchedEvent.id) {
+                    const faqRes = await apiService.getFAQsByEvent(fetchedEvent.id as number);
+                    setFaqs(faqRes.data || []);
+                }
             } catch (error) {
                 console.error("Error fetching event details", error);
             } finally {
@@ -295,11 +306,49 @@ const EventDetails: React.FC = () => {
                     </div>
                 </div>
 
+                {/* FAQ Section (Hidden in favor of button/modal) */}
+                {/* <EventFAQ faqs={faqs} /> */}
+
                 {/* Partners Section */}
                 {event.partners && event.partners.length > 0 && (
                     <div className="mt-16">
                         <EventPartners partners={event.partners} />
                     </div>
+                )}
+
+                {/* FAQ CTA Button Section */}
+                {faqs.length > 0 && (
+                    <FadeInSection delay="delay-700">
+                        <div className="mt-12 flex flex-col items-center">
+                            <button 
+                                onClick={() => setIsFAQOpen(true)}
+                                className="group relative px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
+                                style={{ borderRadius: 'var(--event-radius-lg)' }}
+                            >
+                                {/* Button background accent */}
+                                <div 
+                                    className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+                                    style={{ background: `linear-gradient(45deg, var(--event-primary), var(--event-secondary))` }}
+                                ></div>
+                                
+                                <div className="relative z-10 flex items-center gap-4">
+                                    <div 
+                                        className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10"
+                                        style={{ color: 'var(--event-primary)' }}
+                                    >
+                                        <Help size={20} />
+                                    </div>
+                                    <div className="text-left">
+                                        <div className="text-lg font-bold text-white leading-none">Dúvidas Frequentes</div>
+                                        <div className="text-neutral-500 text-sm mt-1">Confira as respostas para as perguntas comuns</div>
+                                    </div>
+                                    <div className="ml-4 text-neutral-600 group-hover:text-white transition-colors">
+                                        <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                    </FadeInSection>
                 )}
             </div>
 
@@ -312,6 +361,14 @@ const EventDetails: React.FC = () => {
                     palette={palette}
                 />
             )}
+
+            <PublicFAQModal 
+                isOpen={isFAQOpen}
+                onClose={() => setIsFAQOpen(false)}
+                faqs={faqs}
+                eventTitle={event.title}
+                palette={palette}
+            />
         </div>
     );
 };

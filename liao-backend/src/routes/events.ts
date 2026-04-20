@@ -106,6 +106,6 @@ router.put('/:id', authenticate, requirePermission('events'), updateEvent);
  *       200:
  *         description: Event deleted
  */
-router.delete('/:id', authenticate, requirePermission('events'), deleteEvent);
+router.post('/:id/delete', authenticate, requirePermission('events'), deleteEvent);
 
 export default router;

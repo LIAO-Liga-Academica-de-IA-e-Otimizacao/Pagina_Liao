@@ -7,6 +7,7 @@ import ProjectForm from '../../components/forms/ProjectForm';
 import ArticleForm from '../../components/forms/ArticleForm';
 import PartnerForm from '../../components/forms/PartnerForm';
 import EventForm from '../../components/forms/EventForm';
+import FAQManagerModal from '../../components/admin/FAQManagerModal';
 import AuditModal from '../../components/admin/AuditModal';
 import type { EventApi } from '../../models/Event';
 
@@ -59,6 +60,21 @@ const Admin: React.FC = () => {
     const [auditModal, setAuditModal] = useState<{ isOpen: boolean; resource: string; label: string }>(
         { isOpen: false, resource: '', label: '' }
     );
+
+    // Security Verification Modal
+    const [securityModal, setSecurityModal] = useState({
+        isOpen: false,
+        targetId: null as number | null,
+        password: '',
+        loading: false,
+        error: ''
+    });
+
+    // FAQ Management State
+    const [faqManager, setFaqManager] = useState<{ isOpen: boolean; event: EventApi | null }>({
+        isOpen: false,
+        event: null
+    });
 
     // Permission helper
     const isMaster = user.role === 'master';
@@ -147,7 +163,23 @@ const Admin: React.FC = () => {
         }
     };
 
-    // ... (rest of fetch functions)
+    const fetchEvents = async () => {
+        try {
+            const response = await apiService.getEvents();
+            setEvents(response.data || []);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+        }
+    };
+
+    const fetchAdmins = async () => {
+        try {
+            const response = await apiService.getAdmins();
+            setAdmins(response.data || []);
+        } catch (error) {
+            console.error('Error fetching admins:', error);
+        }
+    };
 
     useEffect(() => {
         if (activeSection === 'members') fetchMembers();
@@ -258,12 +290,28 @@ const Admin: React.FC = () => {
     const handlePartnerSuccess = () => { setShowPartnerForm(false); setEditingPartner(null); fetchPartners(); };
 
     // --- Events Logic ---
-    const handleDeleteEvent = async (id: number) => {
-        if (window.confirm('Tem certeza que deseja excluir este evento?')) {
-            await apiService.deleteEvent(id);
+    const handleDeleteEvent = (id: number) => {
+        if (!isMaster) {
+            alert('Apenas Administradores Master possuem permissão para excluir eventos definitivamente do sistema.');
+            return;
+        }
+        setSecurityModal({ isOpen: true, targetId: id, password: '', loading: false, error: '' });
+    };
+
+    const confirmDeleteEvent = async () => {
+        if (!securityModal.targetId || !securityModal.password) return;
+        setSecurityModal(prev => ({ ...prev, loading: true, error: '' }));
+        try {
+            await apiService.deleteEvent(securityModal.targetId, securityModal.password);
+            setSecurityModal({ isOpen: false, targetId: null, password: '', loading: false, error: '' });
+            alert('Evento excluído com sucesso.');
             fetchEvents();
+        } catch (error: any) {
+            const msg = error.response?.data?.error || 'Erro ao excluir evento. Verifique sua senha.';
+            setSecurityModal(prev => ({ ...prev, loading: false, error: msg }));
         }
     };
+
     const handleEventSuccess = () => { setShowEventForm(false); setEditingEvent(null); fetchEvents(); };
 
 
@@ -318,6 +366,13 @@ const Admin: React.FC = () => {
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{event.location || '-'}</td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                        <button 
+                                            onClick={() => setFaqManager({ isOpen: true, event })} 
+                                            className="text-neutral-500 dark:text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 mr-4 transition-colors p-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg"
+                                            title="Gerenciar Dúvidas (FAQ)"
+                                        >
+                                            🙋 FAQ
+                                        </button>
                                         <button onClick={() => { setEditingEvent(event); setShowEventForm(true); }} className="text-primary-600 dark:text-primary-400 hover:text-primary-900 dark:hover:text-primary-300 mr-4">Editar</button>
                                         <button onClick={() => handleDeleteEvent(event.id as number)} className="text-danger-600 dark:text-danger-400 hover:text-danger-900 dark:hover:text-danger-300">Excluir</button>
                                     </td>
@@ -995,6 +1050,74 @@ const Admin: React.FC = () => {
                 )}
             </div>
         </div>
+        {/* Security Verification Modal */}
+        {securityModal.isOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-neutral-950/80 backdrop-blur-sm">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden border border-neutral-200 dark:border-neutral-800 animate-in fade-in zoom-in duration-300">
+                    <div className="p-6">
+                        <div className="flex items-center gap-4 mb-6">
+                            <div className="p-3 bg-red-500/10 text-red-600 rounded-xl">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-neutral-900 dark:text-white">Confirmação de Segurança</h3>
+                                <p className="text-sm text-neutral-500">Ação Restrita a Master Admin</p>
+                            </div>
+                        </div>
+
+                        <p className="text-neutral-600 dark:text-neutral-400 mb-6">
+                            Para confirmar a exclusão <strong>irreversível</strong> deste evento, digite sua senha de administrador abaixo.
+                        </p>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-1">
+                                    Sua Senha Atual
+                                </label>
+                                <input 
+                                    type="password"
+                                    className="w-full px-4 py-2 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 outline-none transition-all"
+                                    placeholder="••••••••"
+                                    value={securityModal.password}
+                                    onChange={(e) => setSecurityModal(prev => ({ ...prev, password: e.target.value }))}
+                                    onKeyDown={(e) => e.key === 'Enter' && confirmDeleteEvent()}
+                                    autoFocus
+                                />
+                            </div>
+
+                            {securityModal.error && (
+                                <p className="text-sm text-red-500 bg-red-500/10 p-3 rounded-lg border border-red-500/20 font-medium">
+                                    {securityModal.error}
+                                </p>
+                            )}
+
+                            <div className="flex gap-3">
+                                <button 
+                                    onClick={() => setSecurityModal({ ...securityModal, isOpen: false })}
+                                    className="flex-1 px-4 py-2 border border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                                >
+                                    Cancelar
+                                </button>
+                                <button 
+                                    onClick={confirmDeleteEvent}
+                                    disabled={securityModal.loading || !securityModal.password}
+                                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold shadow-lg shadow-red-600/20"
+                                >
+                                    {securityModal.loading ? 'Verificando...' : 'Confirmar Exclusão'}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+        {/* FAQ Manager Modal */}
+        {faqManager.isOpen && faqManager.event && (
+            <FAQManagerModal 
+                event={faqManager.event} 
+                onClose={() => setFaqManager({ isOpen: false, event: null })} 
+            />
+        )}
         </>
     );
 };
