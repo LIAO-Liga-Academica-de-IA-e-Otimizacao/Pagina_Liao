@@ -12,7 +12,6 @@ import EventGallery from '../../components/EventDetails/EventGallery';
 import EventSpeakers from '../../components/EventDetails/EventSpeakers';
 import EventCTA from '../../components/EventDetails/EventCTA';
 import EventPartners from '../../components/EventDetails/EventPartners';
-import EventFAQ from '../../components/EventDetails/EventFAQ';
 import PublicFAQModal from '../../components/EventDetails/PublicFAQModal';
 import ScheduleModal from '../../components/EventDetails/ScheduleModal';
 import FadeInSection from '../../components/EventDetails/FadeInSection';
@@ -306,8 +305,6 @@ const EventDetails: React.FC = () => {
                     </div>
                 </div>
 
-                {/* FAQ Section (Hidden in favor of button/modal) */}
-                {/* <EventFAQ faqs={faqs} /> */}
 
                 {/* Partners Section */}
                 {event.partners && event.partners.length > 0 && (
