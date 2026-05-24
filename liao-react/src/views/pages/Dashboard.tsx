@@ -114,18 +114,19 @@ const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {
 
 const Dashboard: React.FC = () => {
     const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState({ members: 0, tutors: 0, projects: 0 });
+    const [stats, setStats] = useState({ members: 0, tutors: 0, projects: 0, events: 0 });
     const [recentArticles, setRecentArticles] = useState<Article[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch basic counts and latest news
-                const [membersRes, tutorsRes, projectsRes, articlesRes] = await Promise.all([
+                // Fetch basic counts, events and latest news
+                const [membersRes, tutorsRes, projectsRes, articlesRes, eventsRes] = await Promise.all([
                     apiService.getMembers(),
                     apiService.getTutors(),
                     apiService.getProjects(),
                     apiService.getArticles(),
+                    apiService.getEvents(),
                 ]);
 
                 // Extract data safely
@@ -133,11 +134,13 @@ const Dashboard: React.FC = () => {
                 const tutors = (tutorsRes.success && Array.isArray(tutorsRes.data?.tutors || tutorsRes.data)) ? (tutorsRes.data?.tutors || tutorsRes.data) : [];
                 const projects = (projectsRes.success && Array.isArray(projectsRes.data)) ? projectsRes.data : [];
                 const articles = (articlesRes.success && Array.isArray(articlesRes.data)) ? articlesRes.data : [];
+                const events = (eventsRes.success && Array.isArray(eventsRes.data)) ? eventsRes.data : [];
 
                 setStats({
                     members: members.filter((m: Member) => m.isActive !== false).length,
                     tutors: tutors.length,
                     projects: projects.length,
+                    events: events.length,
                 });
 
                 // Sort articles by date descending
@@ -180,24 +183,42 @@ const Dashboard: React.FC = () => {
                         <h2 className="text-3xl font-bold mt-2 text-neutral-900 dark:text-white">Impacto em Números</h2>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 md:gap-12 text-center">
-                        <div className="p-2 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 hover:shadow-lg transition-all">
-                            <div className="text-2xl md:text-6xl font-black text-neutral-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-500">
+                    {/* Desktop: 4 Columns | Mobile: Horizontal Scrollable Row (Swipeable Slider) */}
+                    <div className="flex md:grid overflow-x-auto md:overflow-visible gap-6 md:grid-cols-4 pb-6 md:pb-0 snap-x snap-mandatory scrollbar-none">
+                        {/* L - Membros Ativos (Red) */}
+                        <div className="min-w-[240px] md:min-w-0 flex-shrink-0 w-[75%] md:w-auto snap-center p-6 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                            <div className="text-5xl md:text-6xl font-black mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#E53935] to-[#ef5350] drop-shadow-[0_2px_8px_rgba(229,57,53,0.15)]">
                                 {stats.members}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Membros Ativos</div>
+                            <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-1">L</span>
+                            <div className="text-base md:text-lg font-bold text-neutral-800 dark:text-neutral-200">Membros Ativos</div>
                         </div>
-                        <div className="p-2 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 hover:shadow-lg transition-all">
-                            <div className="text-2xl md:text-6xl font-black text-neutral-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-accent-600 to-pink-500">
+
+                        {/* I - Projetos Realizados (Yellow) */}
+                        <div className="min-w-[240px] md:min-w-0 flex-shrink-0 w-[75%] md:w-auto snap-center p-6 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                            <div className="text-5xl md:text-6xl font-black mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#FBC02D] to-[#fdd835] drop-shadow-[0_2px_8px_rgba(251,192,45,0.15)]">
                                 {stats.projects}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Projetos Realizados</div>
+                            <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-1">I</span>
+                            <div className="text-base md:text-lg font-bold text-neutral-800 dark:text-neutral-200">Projetos Realizados</div>
                         </div>
-                        <div className="p-2 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-700 hover:shadow-lg transition-all">
-                            <div className="text-2xl md:text-6xl font-black text-neutral-900 mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-success-600 to-emerald-500">
+
+                        {/* A - Tutores Disponíveis (Blue) */}
+                        <div className="min-w-[240px] md:min-w-0 flex-shrink-0 w-[75%] md:w-auto snap-center p-6 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                            <div className="text-5xl md:text-6xl font-black mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#1E88E5] to-[#42a5f5] drop-shadow-[0_2px_8px_rgba(30,136,229,0.15)]">
                                 {stats.tutors}
                             </div>
-                            <div className="text-[10px] md:text-lg font-bold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">Tutores Disponíveis</div>
+                            <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-1">Λ</span>
+                            <div className="text-base md:text-lg font-bold text-neutral-800 dark:text-neutral-200">Tutores Disponíveis</div>
+                        </div>
+
+                        {/* O - Eventos e Extensão (Green) */}
+                        <div className="min-w-[240px] md:min-w-0 flex-shrink-0 w-[75%] md:w-auto snap-center p-6 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                            <div className="text-5xl md:text-6xl font-black mb-2 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#43A047] to-[#66bb6a] drop-shadow-[0_2px_8px_rgba(67,160,71,0.15)]">
+                                {stats.events}
+                            </div>
+                            <span className="text-xs font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-1">O</span>
+                            <div className="text-base md:text-lg font-bold text-neutral-800 dark:text-neutral-200">Eventos e Extensão</div>
                         </div>
                     </div>
                 </div>

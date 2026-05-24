@@ -102,3 +102,12 @@ body {
 .animate-tech-bg {
   animation: techBgFadeIn 400ms ease-out forwards;
 }
+
+/* Hide scrollbars for sliders */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
