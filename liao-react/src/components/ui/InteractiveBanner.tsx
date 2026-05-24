@@ -12,15 +12,25 @@ const InteractiveBanner: React.FC = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     
+    // Get initial particle count based on screen width to avoid high density on mobile
+    const getInitialParticleCount = () => {
+        const width = typeof window !== 'undefined' ? window.innerWidth : 1024;
+        if (width < 640) return 45;
+        if (width < 1024) return 85;
+        return 130;
+    };
+
+    const initialCount = getInitialParticleCount();
+
     // UI states to bind inputs and show/hide the panel
     const [panelOpen, setPanelOpen] = useState(false);
-    const [particleCount, setParticleCount] = useState(150);
+    const [particleCount, setParticleCount] = useState(initialCount);
     const [baseSpeed, setBaseSpeed] = useState(1.0);
     const [interactionMode, setInteractionMode] = useState<'connect' | 'repel' | 'none'>('connect');
 
     // Ref configuration for high-performance reading inside the loop
     const configRef = useRef<ParticleConfig>({
-        particleCount: 150,
+        particleCount: initialCount,
         baseSpeed: 1.0,
         connectDistance: 120,
         mouseRadius: 150,
@@ -286,20 +296,20 @@ const InteractiveBanner: React.FC = () => {
     const styles = `
         .logo-text {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4rem;
+            font-size: 3rem;
             line-height: 1;
             letter-spacing: 0.05em;
             text-shadow: 2px 2px 15px rgba(0,0,0,0.8);
         }
         @media (min-width: 640px) {
             .logo-text {
-                font-size: 5.5rem;
+                font-size: 4.5rem;
                 letter-spacing: 0.08em;
             }
         }
         @media (min-width: 768px) {
             .logo-text {
-                font-size: 7rem;
+                font-size: 5.5rem;
                 letter-spacing: 0.1em;
             }
         }
@@ -336,7 +346,7 @@ const InteractiveBanner: React.FC = () => {
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="interactive-banner relative h-[350px] sm:h-[450px] md:h-[550px] w-full overflow-hidden bg-[#0a0a0c] text-white flex flex-col justify-center select-none"
+            className="interactive-banner relative h-[220px] sm:h-[300px] md:h-[400px] w-full overflow-hidden bg-[#0a0a0c] text-white flex flex-col justify-center select-none"
         >
             <style dangerouslySetInnerHTML={{ __html: styles }} />
 
@@ -355,7 +365,7 @@ const InteractiveBanner: React.FC = () => {
                         <span className="text-[#1E88E5] drop-shadow-[0_0_15px_rgba(30,136,229,0.4)] text-[1.1em] translate-y-[-0.05em]">Λ</span>
                         <span className="text-[#43A047] drop-shadow-[0_0_15px_rgba(67,160,71,0.4)]">O</span>
                     </div>
-                    <p className="logo-sub text-lg sm:text-2xl md:text-3xl font-semibold mt-2 text-gray-200 tracking-wide">
+                    <p className="logo-sub text-sm sm:text-lg md:text-xl font-semibold mt-1.5 text-gray-200 tracking-wide">
                         Liga de Inteligência Artificial e Otimização
                     </p>
                 </div>
