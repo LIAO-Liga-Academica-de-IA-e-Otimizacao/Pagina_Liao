@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Member } from '../../models/Member';
 import type { Article } from '../../models/Article';
+import InteractiveBanner from '../../components/ui/InteractiveBanner';
 
 // Simple Carousel Component
 const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {
@@ -168,17 +169,8 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="min-h-screen font-sans">
-            {/* Hero Section - Professional & Minimal */}
-            <section className="relative h-[120px] sm:h-[200px] md:h-[450px] w-full overflow-hidden">
-                <div
-                    className="absolute inset-0 z-0 transform scale-105"
-                    style={{
-                        backgroundImage: 'url("/banner-new.jpg")',
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-            </section>
+            {/* Hero Section - Interactive Particle Canvas Banner */}
+            <InteractiveBanner />
 
             {/* Stats Section - Clean & Modern */}
             <section className="py-20 bg-white dark:bg-neutral-900 transition-colors duration-200">
