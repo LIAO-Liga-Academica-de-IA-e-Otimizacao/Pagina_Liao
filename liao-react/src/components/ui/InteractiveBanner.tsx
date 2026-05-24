@@ -25,13 +25,13 @@ const InteractiveBanner: React.FC = () => {
     // UI states to bind inputs and show/hide the panel
     const [panelOpen, setPanelOpen] = useState(false);
     const [particleCount, setParticleCount] = useState(initialCount);
-    const [baseSpeed, setBaseSpeed] = useState(1.0);
+    const [baseSpeed, setBaseSpeed] = useState(0.8);
     const [interactionMode, setInteractionMode] = useState<'connect' | 'repel' | 'none'>('connect');
 
     // Ref configuration for high-performance reading inside the loop
     const configRef = useRef<ParticleConfig>({
         particleCount: initialCount,
-        baseSpeed: 1.0,
+        baseSpeed: 0.8,
         connectDistance: 120,
         mouseRadius: 150,
         interactionMode: 'connect',
