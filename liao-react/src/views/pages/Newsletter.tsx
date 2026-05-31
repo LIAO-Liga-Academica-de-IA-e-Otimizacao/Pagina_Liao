@@ -3,12 +3,34 @@ import { useNavigate } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { Article } from '../../models/Article';
 import CollectionLayout from '../layouts/CollectionLayout';
+import MemberModal from '../../components/ui/MemberModal';
+import { FaHeart, FaShareAlt } from 'react-icons/fa';
 
 const Newsletter: React.FC = () => {
     const navigate = useNavigate();
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedMember, setSelectedMember] = useState<any | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [copiedId, setCopiedId] = useState<number | null>(null);
+
+    const handleShareCard = (e: React.MouseEvent, articleId: number) => {
+        e.stopPropagation();
+        const url = `${window.location.origin}/newsletter/${articleId}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Artigo LIAO',
+                url: url
+            }).catch(err => console.log('Error sharing:', err));
+        } else {
+            navigator.clipboard.writeText(url).then(() => {
+                setCopiedId(articleId);
+                setTimeout(() => setCopiedId(null), 2000);
+            }).catch(err => console.error('Failed to copy link:', err));
+        }
+    };
 
     useEffect(() => {
         const fetchArticles = async () => {
@@ -42,6 +64,7 @@ const Newsletter: React.FC = () => {
     }
 
     return (
+        <>
         <CollectionLayout
             title="Newsletter & Artigos"
             renderControls={() => (
@@ -120,20 +143,64 @@ const Newsletter: React.FC = () => {
                                 )}
 
                                 <div className={`
-                                    flex items-center justify-between
-                                    ${viewMode === 'grid' ? 'mt-2' : 'mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-700'}
+                                    ${viewMode === 'grid' ? 'mt-2 pt-2 border-t border-neutral-100 dark:border-neutral-700' : 'mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-700'}
                                 `}>
-                                    <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">
-                                        {new Date(article.createdAt).toLocaleDateString('pt-BR')}
-                                    </span>
-                                    <button
-                                        className={`
-                                            text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 transition-colors
-                                            ${viewMode === 'grid' ? 'text-xs' : ''}
-                                        `}
-                                    >
-                                        Ler mais &rarr;
-                                    </button>
+                                    {/* Author Info */}
+                                    {(article.authorMember || article.authorName) && (
+                                        <div className="flex items-center text-[11px] text-neutral-500 dark:text-neutral-400 font-medium mb-2">
+                                            <span className="mr-1 text-[9px] uppercase text-neutral-400 dark:text-neutral-500">Por:</span>
+                                            {article.authorMember ? (
+                                                <span
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedMember(article.authorMember);
+                                                        setIsModalOpen(true);
+                                                    }}
+                                                    className="font-bold text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 hover:underline cursor-pointer"
+                                                >
+                                                    {article.authorMember.name}
+                                                </span>
+                                            ) : (
+                                                <span className="font-bold text-neutral-700 dark:text-neutral-300">
+                                                    {article.authorName}
+                                                </span>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-xs text-neutral-400 dark:text-neutral-500 font-medium">
+                                                {new Date(article.createdAt).toLocaleDateString('pt-BR')}
+                                            </span>
+                                            <div className="flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500">
+                                                <FaHeart size={10} className="text-danger-500 dark:text-danger-400" />
+                                                <span>{article.likes || 0}</span>
+                                            </div>
+                                            <div className="relative">
+                                                <button
+                                                    onClick={(e) => handleShareCard(e, article.id)}
+                                                    className="p-1 rounded-full text-neutral-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all focus:outline-none"
+                                                    title="Compartilhar Artigo"
+                                                >
+                                                    <FaShareAlt size={10} />
+                                                </button>
+                                                {copiedId === article.id && (
+                                                    <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-1.5 px-2 py-0.5 bg-neutral-900 text-white text-[9px] font-bold rounded shadow-lg animate-in fade-in duration-200 z-30 pointer-events-none whitespace-nowrap">
+                                                        Copiado!
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <button
+                                            className={`
+                                                text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 transition-colors
+                                                ${viewMode === 'grid' ? 'text-xs' : ''}
+                                            `}
+                                        >
+                                            Ler mais &rarr;
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,6 +216,13 @@ const Newsletter: React.FC = () => {
                 </>
             )}
         </CollectionLayout>
+
+        <MemberModal
+            member={selectedMember}
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+        />
+        </>
     );
 };
 

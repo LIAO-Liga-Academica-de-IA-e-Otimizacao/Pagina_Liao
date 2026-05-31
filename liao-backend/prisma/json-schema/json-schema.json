@@ -394,6 +394,12 @@
           "items": {
             "$ref": "#/definitions/EventSpeaker"
           }
+        },
+        "articles": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Article"
+          }
         }
       },
       "required": [
@@ -652,6 +658,26 @@
           "items": {
             "type": "string"
           }
+        },
+        "authorName": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "authorMember": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Member"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "likes": {
+          "type": "integer",
+          "default": 0
         }
       },
       "required": [

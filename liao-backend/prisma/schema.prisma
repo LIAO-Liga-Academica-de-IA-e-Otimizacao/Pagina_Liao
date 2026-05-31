@@ -112,6 +112,7 @@ model Member {
   isFounder Boolean  @default(false)
   year      Int      @default(2025)
   eventSpeakers EventSpeaker[]
+  articles      Article[]
 }
 
 model Tutor {
@@ -177,6 +178,11 @@ model Article {
   updatedAt   DateTime @updatedAt
   description String?
   references  String[]
+
+  authorId     Int?
+  authorName   String?
+  authorMember Member?  @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  likes        Int      @default(0)
 }
 
 model Partner {

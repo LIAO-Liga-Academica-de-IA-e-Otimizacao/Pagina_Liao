@@ -25,7 +25,7 @@ import { logAudit } from '../middleware/auditLogger';
  */
 export const createArticle = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, description, content, images, tags, references, isPublished } = req.body;
+        const { title, description, content, images, tags, references, isPublished, authorId, authorName } = req.body;
 
         if (images && images.length > 5) {
             res.status(400).json({ success: false, error: 'Maximum of 5 images allowed per article.' });
@@ -41,6 +41,11 @@ export const createArticle = async (req: Request, res: Response): Promise<void> 
                 tags: tags || [],
                 references: references || [],
                 isPublished: isPublished !== undefined ? isPublished : true,
+                authorId: authorId ? Number(authorId) : null,
+                authorName: authorName || null,
+            },
+            include: {
+                authorMember: true,
             },
         });
 
@@ -107,6 +112,7 @@ export const getArticles = async (req: Request, res: Response): Promise<void> =>
 
         const articles = await prisma.article.findMany({
             where,
+            include: { authorMember: true },
             orderBy: { createdAt: 'desc' },
         });
 
@@ -177,7 +183,7 @@ export const deleteArticle = async (req: Request, res: Response): Promise<void> 
 export const updateArticle = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, description, content, images, tags, references, isPublished } = req.body;
+        const { title, description, content, images, tags, references, isPublished, authorId, authorName } = req.body;
 
         if (images && images.length > 5) {
             res.status(400).json({ success: false, error: 'Maximum of 5 images allowed per article.' });
@@ -194,6 +200,11 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
                 tags,
                 references,
                 isPublished,
+                authorId: authorId ? Number(authorId) : null,
+                authorName: authorName || null,
+            },
+            include: {
+                authorMember: true,
             },
         });
 
@@ -203,5 +214,70 @@ export const updateArticle = async (req: Request, res: Response): Promise<void> 
     } catch (error) {
         console.error('Error updating article:', error);
         res.status(500).json({ success: false, error: 'Failed to update article' });
+    }
+};
+
+/**
+ * @openapi
+ * /api/articles/{id}/like:
+ *   post:
+ *     summary: toggleLikeArticle operation
+ *     tags: [Articles]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               action:
+ *                 type: string
+ *                 enum: [like, unlike]
+ *     responses:
+ *       200:
+ *         description: Successful response
+ */
+export const toggleLikeArticle = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        const { action } = req.body;
+
+        if (action !== 'like' && action !== 'unlike') {
+            res.status(400).json({ success: false, error: "Action must be 'like' or 'unlike'" });
+            return;
+        }
+
+        const incrementValue = action === 'like' ? 1 : -1;
+
+        let article = await prisma.article.update({
+            where: { id: Number(id) },
+            data: {
+                likes: {
+                    increment: incrementValue
+                }
+            },
+            include: {
+                authorMember: true
+            }
+        });
+
+        if (article.likes < 0) {
+            article = await prisma.article.update({
+                where: { id: Number(id) },
+                data: { likes: 0 },
+                include: { authorMember: true }
+            });
+        }
+
+        res.json({ success: true, data: article });
+    } catch (error) {
+        console.error('Error in toggleLikeArticle:', error);
+        res.status(500).json({ success: false, error: 'Failed to toggle like on article' });
     }
 };

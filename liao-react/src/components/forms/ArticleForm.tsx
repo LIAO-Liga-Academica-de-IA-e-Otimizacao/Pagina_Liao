@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { apiService } from '../../services/api';
 import type { Article } from '../../models/Article';
 
@@ -19,6 +19,27 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [activeTab, setActiveTab] = useState<'edit' | 'preview'>('edit');
+
+    // Author selection state
+    const [membersList, setMembersList] = useState<any[]>([]);
+    const [authorType, setAuthorType] = useState<'member' | 'manual'>(article?.authorMember?.id ? 'member' : 'manual');
+    const [authorId, setAuthorId] = useState<number | null>(article?.authorMember?.id || null);
+    const [authorName, setAuthorName] = useState<string>(article?.authorName || '');
+
+    useEffect(() => {
+        const fetchMembers = async () => {
+            try {
+                const res = await apiService.getMembers();
+                if (res.success && Array.isArray(res.data)) {
+                    const sorted = [...res.data].sort((a, b) => a.name.localeCompare(b.name));
+                    setMembersList(sorted);
+                }
+            } catch (err) {
+                console.error('Error fetching members in ArticleForm:', err);
+            }
+        };
+        fetchMembers();
+    }, []);
 
     const handleImageChange = (index: number, value: string) => {
         const newImages = [...images];
@@ -76,7 +97,9 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
             images: filteredImages,
             references: filteredRefs,
             tags: tagsArray,
-            isPublished
+            isPublished,
+            authorId: authorType === 'member' ? (authorId ? Number(authorId) : null) : null,
+            authorName: authorType === 'manual' ? authorName : null
         };
 
         try {
@@ -108,12 +131,23 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                         </span>
                     </div>
                     <div className="p-8">
-                        <div className="flex flex-wrap gap-2 mb-4">
+                        <div className="flex flex-wrap gap-2 mb-2">
                             {tagsArray.map((tag, i) => (
                                 <span key={i} className="text-[10px] font-bold uppercase tracking-widest text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20 px-2 py-1 rounded">
                                     {tag}
                                 </span>
                             ))}
+                        </div>
+                        {/* Realistic Preview Author Info */}
+                        <div className="flex items-center gap-2 mb-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400">
+                            <span>Por: <span className="text-primary-600 dark:text-primary-400">{
+                                authorType === 'member' 
+                                    ? (membersList.find(m => m.id === Number(authorId))?.name || 'Membro LIAO') 
+                                    : (authorName || 'Autor não especificado')
+                            }</span></span>
+                            {authorType === 'member' && authorId && (
+                                <span className="px-1.5 py-0.5 text-[9px] bg-primary-50 dark:bg-primary-900/20 text-primary-600 dark:text-primary-400 rounded-full font-bold uppercase tracking-wider">Membro</span>
+                            )}
                         </div>
                         <h3 className="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4 leading-tight">
                             {title || 'Título da sua Publicação'}
@@ -303,6 +337,55 @@ const ArticleForm: React.FC<ArticleFormProps> = ({ article, onSuccess, onCancel 
                                             placeholder="Separadas por vírgula..."
                                             className="input-field w-full text-xs"
                                         />
+                                    </div>
+
+                                    {/* Author Selection Section */}
+                                    <div className="space-y-3 pt-4 border-t dark:border-neutral-800">
+                                        <label className="text-xs font-bold text-neutral-500 dark:text-neutral-400 uppercase tracking-widest block">Autor do Artigo</label>
+                                        
+                                        <div className="flex bg-neutral-100 dark:bg-neutral-800 p-1 rounded-lg border dark:border-neutral-700 text-xs">
+                                            <button
+                                                type="button"
+                                                onClick={() => setAuthorType('member')}
+                                                className={`flex-1 py-1.5 rounded-md font-bold transition-all ${authorType === 'member' ? 'bg-white dark:bg-neutral-700 text-primary-600 dark:text-primary-400 shadow-sm border dark:border-neutral-600' : 'text-neutral-500 dark:text-neutral-400'}`}
+                                            >
+                                                Membro LIAO
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setAuthorType('manual')}
+                                                className={`flex-1 py-1.5 rounded-md font-bold transition-all ${authorType === 'manual' ? 'bg-white dark:bg-neutral-700 text-primary-600 dark:text-primary-400 shadow-sm border dark:border-neutral-600' : 'text-neutral-500 dark:text-neutral-400'}`}
+                                            >
+                                                Nome Manual
+                                            </button>
+                                        </div>
+
+                                        {authorType === 'member' ? (
+                                            <div className="space-y-1">
+                                                <select
+                                                    value={authorId || ''}
+                                                    onChange={(e) => setAuthorId(e.target.value ? Number(e.target.value) : null)}
+                                                    className="w-full px-3 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-white focus:ring-2 focus:ring-primary-500 text-xs transition-colors"
+                                                >
+                                                    <option value="">Selecione um membro...</option>
+                                                    {membersList.map((m) => (
+                                                        <option key={m.id} value={m.id}>
+                                                            {m.name} ({m.role})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-1">
+                                                <input
+                                                    type="text"
+                                                    value={authorName}
+                                                    onChange={(e) => setAuthorName(e.target.value)}
+                                                    placeholder="Nome do autor..."
+                                                    className="input-field w-full text-xs"
+                                                />
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="flex items-center justify-between p-3 bg-white dark:bg-neutral-800 rounded-lg border dark:border-neutral-700">

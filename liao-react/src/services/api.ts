@@ -197,6 +197,10 @@ export const apiService = {
         reqCache.clear('/articles');
         return api.delete(`/articles/${id}`);
     },
+    likeArticle: (id: number, action: 'like' | 'unlike') => {
+        reqCache.clear('/articles');
+        return api.post(`/articles/${id}/like`, { action });
+    },
 
     // Partners
     getPartners: () => getCached('/partners'),

@@ -128,6 +128,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/articles/{id}/like": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** toggleLikeArticle operation */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: number;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @enum {string} */
+                        action?: "like" | "unlike";
+                    };
+                };
+            };
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/auth": {
         parameters: {
             query?: never;
@@ -1114,6 +1157,19 @@ export interface components {
             agenda?: components["schemas"]["AgendaItem"][];
             speakers?: components["schemas"]["EventSpeaker"][];
             partners?: components["schemas"]["Partner"][];
+            faqs?: components["schemas"]["FAQ"][];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        FAQ: {
+            id: number;
+            event?: components["schemas"]["Event"];
+            question: string;
+            answer: string;
+            /** @default 0 */
+            order: number;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -1185,6 +1241,7 @@ export interface components {
             /** @default 2025 */
             year: number;
             eventSpeakers?: components["schemas"]["EventSpeaker"][];
+            articles?: components["schemas"]["Article"][];
         };
         Tutor: {
             id: number;
@@ -1258,6 +1315,10 @@ export interface components {
             updatedAt: string;
             description?: string | null;
             references: string[];
+            authorName?: string | null;
+            authorMember?: components["schemas"]["Member"] | null;
+            /** @default 0 */
+            likes: number;
         };
         Partner: {
             id: number;
