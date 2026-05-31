@@ -8,6 +8,12 @@ export default {
     theme: {
         extend: {
             colors: {
+                'liao-bg': '#141414',
+                'liao-card': '#222222',
+                'liao-red': '#E32D2D',
+                'liao-yellow': '#F9B233',
+                'liao-blue': '#1D70B8',
+                'liao-green': '#429946',
                 primary: {
                     50: '#f0f7ff',
                     100: '#e0f0fe',
@@ -76,6 +82,7 @@ export default {
             },
             fontFamily: {
                 sans: ['Inter', 'system-ui', 'sans-serif'],
+                display: ['Outfit', 'sans-serif'],
             },
         },
     },

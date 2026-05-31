@@ -49,6 +49,9 @@ const Admin: React.FC = () => {
 
     const [config, setConfig] = useState({ proselOpen: false, contactEmail: '' });
     const [originalContactEmail, setOriginalContactEmail] = useState('');
+    const [carouselImages, setCarouselImages] = useState<string[]>([]);
+    const [originalCarouselImages, setOriginalCarouselImages] = useState<string[]>([]);
+    const [newCarouselImageUrl, setNewCarouselImageUrl] = useState('');
 
     // Admins State (New)
     const [admins, setAdmins] = useState<any[]>([]);
@@ -151,6 +154,7 @@ const Admin: React.FC = () => {
         try {
             const proselRes = await apiService.getConfig('prosel_open');
             const emailRes = await apiService.getConfig('CONTACT_EMAIL');
+            const carouselRes = await apiService.getConfig('about_carousel_images');
             
             const fetchedEmail = emailRes.data || 'contato@liao.com';
             setConfig({ 
@@ -158,6 +162,18 @@ const Admin: React.FC = () => {
                 contactEmail: fetchedEmail
             });
             setOriginalContactEmail(fetchedEmail);
+
+            if (carouselRes.success && carouselRes.data) {
+                try {
+                    const parsed = JSON.parse(carouselRes.data);
+                    if (Array.isArray(parsed)) {
+                        setCarouselImages(parsed);
+                        setOriginalCarouselImages(parsed);
+                    }
+                } catch (e) {
+                    console.error('Error parsing carousel images config:', e);
+                }
+            }
         } catch (error) {
             console.error('Error fetching config:', error);
         }
@@ -212,6 +228,17 @@ const Admin: React.FC = () => {
             alert('Email de contato atualizado com sucesso!');
         } catch (error) {
             alert('Erro ao atualizar email de contato');
+        }
+    };
+
+    const handleUpdateCarouselImages = async () => {
+        try {
+            await apiService.updateConfig('about_carousel_images', JSON.stringify(carouselImages));
+            setOriginalCarouselImages(carouselImages);
+            alert('Carrossel da página Sobre atualizado com sucesso! 🚀');
+        } catch (error) {
+            console.error('Error updating carousel images config:', error);
+            alert('Falha ao atualizar carrossel.');
         }
     };
 
@@ -435,6 +462,73 @@ const Admin: React.FC = () => {
                             </button>
                         )}
                     </div>
+                </div>
+
+                {/* About Carousel Config */}
+                <div className="bg-white dark:bg-neutral-800 shadow rounded-lg p-6 border dark:border-neutral-700 md:col-span-2">
+                    <h3 className="text-lg font-medium text-neutral-900 dark:text-white mb-1">Carrossel de Imagens (Sobre Nós)</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-4">
+                        Gerencie as imagens exibidas no carrossel da página "Sobre Nós". Digite o link da imagem e clique em adicionar.
+                    </p>
+                    
+                    <div className="flex gap-2 mb-6">
+                        <input
+                            type="url"
+                            value={newCarouselImageUrl}
+                            onChange={(e) => setNewCarouselImageUrl(e.target.value)}
+                            placeholder="https://exemplo.com/imagem.jpg"
+                            className="flex-1 rounded-md border-neutral-300 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => {
+                                if (newCarouselImageUrl.trim() && !carouselImages.includes(newCarouselImageUrl.trim())) {
+                                    setCarouselImages([...carouselImages, newCarouselImageUrl.trim()]);
+                                    setNewCarouselImageUrl('');
+                                }
+                            }}
+                            className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors text-sm font-bold"
+                        >
+                            Adicionar
+                        </button>
+                    </div>
+
+                    {carouselImages.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                            {carouselImages.map((url, index) => (
+                                <div key={index} className="relative group rounded-lg overflow-hidden border border-neutral-200 dark:border-neutral-700 aspect-video bg-neutral-100 dark:bg-neutral-900 flex flex-col justify-between">
+                                    <img
+                                        src={url}
+                                        alt={`Slide ${index + 1}`}
+                                        className="w-full h-2/3 object-cover"
+                                    />
+                                    <div className="p-2 flex items-center justify-between gap-2 flex-1">
+                                        <span className="text-[10px] text-neutral-500 dark:text-neutral-400 truncate flex-1">{url}</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setCarouselImages(carouselImages.filter((_, i) => i !== index))}
+                                            className="text-danger-600 dark:text-danger-400 hover:bg-danger-50 dark:hover:bg-danger-900/20 p-1.5 rounded transition-colors text-xs font-bold"
+                                        >
+                                            Excluir
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-neutral-400 italic mb-6">Nenhuma imagem adicionada. O carrossel usará imagens padrão.</p>
+                    )}
+
+                    {JSON.stringify(carouselImages) !== JSON.stringify(originalCarouselImages) && (
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleUpdateCarouselImages}
+                                className="bg-success-600 text-white px-6 py-2.5 rounded-md hover:bg-success-700 shadow-sm transition-colors text-sm font-bold"
+                            >
+                                Salvar Alterações do Carrossel
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
