@@ -17,15 +17,22 @@ Backend API and Database Engine for the LIAO (Liga Acadêmica de Inteligência A
 
 ### Prerequisites
 - Node.js (v18+)
-- PostgreSQL database
+- Docker (recommended for automatic database setup)
 
 ### Installation
-1. Install dependencies: `npm install`
-2. Configure environment: `cp .env.example .env`
-3. Edit `.env` with your DB credentials and `JWT_SECRET`.
-4. Initialize the DB: `npx prisma migrate dev --name init`
-5. Seed the DB: `npx prisma db seed`
-6. Start dev server: `npm run dev`
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Set up the development database:
+   ```bash
+   npm run db:setup
+   ```
+   *(This automatically copies `.env.example` to `.env`, spins up a PostgreSQL container via Docker, and runs migrations & seeding).*
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ---
 

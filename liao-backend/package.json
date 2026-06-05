@@ -9,6 +9,7 @@
     "postinstall": "prisma generate && npm run generate:types",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "db:setup": "tsx scripts/setup-db.ts",
     "generate:openapi": "tsx scripts/generate-openapi.ts",
     "generate:types": "npm run generate:openapi && openapi-typescript openapi.json --output src/types/api.ts"
   },
