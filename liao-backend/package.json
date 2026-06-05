@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "prisma generate && nodemon",
-    "build": "prisma generate && tsc",
+    "dev": "tsx scripts/resolve-env.ts && prisma generate && nodemon",
+    "build": "tsx scripts/resolve-env.ts && prisma generate && tsc",
     "vercel-build": "prisma generate && tsc",
     "postinstall": "prisma generate && npm run generate:types",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "db:setup": "tsx scripts/setup-db.ts",
+    "db:setup": "tsx scripts/resolve-env.ts && tsx scripts/setup-db.ts",
     "generate:openapi": "tsx scripts/generate-openapi.ts",
     "generate:types": "npm run generate:openapi && openapi-typescript openapi.json --output src/types/api.ts"
   },

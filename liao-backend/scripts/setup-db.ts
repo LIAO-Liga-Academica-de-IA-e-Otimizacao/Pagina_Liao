@@ -47,31 +47,51 @@ async function main() {
   // Load environment variables
   require('dotenv').config({ path: envPath });
 
+  const dbEnv = process.env.DB_ENV || 'dev';
+  let devDbUrl = process.env.DEV_DATABASE_URL || '';
+  let prodDbUrl = process.env.PROD_DATABASE_URL || '';
   let dbUrl = process.env.DATABASE_URL || '';
 
-  // 2. Autofix DATABASE_URL if it is the default placeholder
   const defaultPlaceholder = 'postgresql://username:password@localhost:5432/liao_db?schema=public';
-  if (dbUrl === defaultPlaceholder || envCreated) {
-    const isPortOpen = await checkPort(5432, 'localhost');
-    if (isPortOpen) {
-      const currentUser = process.env.USER || process.env.USERNAME || 'postgres';
-      const localUrl = `postgresql://${currentUser}@localhost:5432/postgres`;
-      console.log(`🔍 Port 5432 is open. Checking if we can connect as user "${currentUser}"...`);
-      
-      const connTest = await tryConnect(localUrl);
-      if (connTest.success) {
-        const newDbUrl = `postgresql://${currentUser}@localhost:5432/liao_db?schema=public`;
-        console.log(`⚙️ Detected running local PostgreSQL. Updating DATABASE_URL in .env to:`);
-        console.log(`   ${newDbUrl}`);
+
+  if (dbEnv === 'dev') {
+    // 2. Autofix DEV_DATABASE_URL if it is the default placeholder
+    if (devDbUrl === defaultPlaceholder || envCreated) {
+      const isPortOpen = await checkPort(5432, 'localhost');
+      if (isPortOpen) {
+        const currentUser = process.env.USER || process.env.USERNAME || 'postgres';
+        const localUrl = `postgresql://${currentUser}@localhost:5432/postgres`;
+        console.log(`🔍 Port 5432 is open. Checking if we can connect as user "${currentUser}"...`);
         
-        let envContent = fs.readFileSync(envPath, 'utf8');
-        envContent = envContent.replace(dbUrl, newDbUrl);
-        fs.writeFileSync(envPath, envContent, 'utf8');
-        dbUrl = newDbUrl;
-        
-        // Reload environment variables
-        process.env.DATABASE_URL = dbUrl;
+        const connTest = await tryConnect(localUrl);
+        if (connTest.success) {
+          const newDbUrl = `postgresql://${currentUser}@localhost:5432/liao_db?schema=public`;
+          console.log(`⚙️ Detected running local PostgreSQL. Updating DEV_DATABASE_URL in .env to:`);
+          console.log(`   ${newDbUrl}`);
+          
+          let envContent = fs.readFileSync(envPath, 'utf8');
+          envContent = envContent
+            .replace(/^DEV_DATABASE_URL=.+$/m, `DEV_DATABASE_URL="${newDbUrl}"`)
+            .replace(/^DATABASE_URL=.+$/m, `DATABASE_URL="${newDbUrl}"`);
+          fs.writeFileSync(envPath, envContent, 'utf8');
+          devDbUrl = newDbUrl;
+          dbUrl = newDbUrl;
+          
+          // Reload environment variables
+          process.env.DEV_DATABASE_URL = devDbUrl;
+          process.env.DATABASE_URL = dbUrl;
+        }
       }
+    }
+  } else {
+    // If we are in prod env, ensure DATABASE_URL matches PROD_DATABASE_URL
+    if (dbUrl !== prodDbUrl) {
+      console.log(`🔄 DB_ENV is set to "PROD". Synchronizing active DATABASE_URL...`);
+      let envContent = fs.readFileSync(envPath, 'utf8');
+      envContent = envContent.replace(/^DATABASE_URL=.+$/m, `DATABASE_URL="${prodDbUrl}"`);
+      fs.writeFileSync(envPath, envContent, 'utf8');
+      dbUrl = prodDbUrl;
+      process.env.DATABASE_URL = dbUrl;
     }
   }
 
@@ -111,6 +131,16 @@ async function main() {
         adminClient.end().catch(() => {});
       }
     } else if (host === 'localhost' || host === '127.0.0.1') {
+      // Check if port is already open (meaning another service is occupying it)
+      const isPortOccupied = await checkPort(port, host);
+      if (isPortOccupied) {
+        console.error(`\n⚠️  [Port Conflict] Port ${port} is already in use, but connection failed with: "${pgErr.message}".`);
+        console.error(`👉 If you have a local PostgreSQL running on port ${port}:`);
+        console.error(`   1. Please edit the DATABASE_URL in "liao-backend/.env" to include your correct password/credentials.`);
+        console.error(`   2. Or, stop your local PostgreSQL service and run this setup script again so Docker Compose can use the port.\n`);
+        process.exit(1);
+      }
+
       // Connection refused or port closed, let's try starting docker-compose
       console.log('🐳 Database connection failed. Attempting to start PostgreSQL via Docker Compose...');
       try {
