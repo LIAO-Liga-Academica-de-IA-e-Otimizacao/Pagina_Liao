@@ -11,10 +11,12 @@ const Footer: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* About */}
                     <div>
-                        <h3 className="text-xl font-bold mb-4">LIAO</h3>
-                        <p className="text-neutral-400">
-                            Liga Acadêmica de Inteligência Artificial e Otimização - Desenvolvendo soluções
-                            inovadoras e capacitando estudantes.
+                        <h3 className="text-xl font-bold mb-4">LIAO UFBA</h3>
+                        <p className="text-neutral-400 text-sm mb-3">
+                            Liga Acadêmica de Inteligência Artificial e Otimização da <a href="https://www.ufba.br/" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">UFBA</a> - Desenvolvendo soluções inovadoras e capacitando estudantes.
+                        </p>
+                        <p className="text-neutral-500 text-xs">
+                            Filiada ao <a href="https://computacao.ufba.br/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Instituto de Computação da UFBA</a>.
                         </p>
                     </div>
 
