@@ -154,6 +154,34 @@ async function main() {
       value: 'contato@liao.com'
     }
   });
+
+  // 4. Create Tutors
+  console.log('Creating tutors...');
+  await prisma.tutor.upsert({
+    where: { email: 'carlos@liao.com' },
+    update: {},
+    create: {
+      name: 'Carlos Alberto',
+      email: 'carlos@liao.com',
+      subjects: ['Cálculo I', 'Álgebra Linear', 'Física I'],
+      bio: 'Tutor de exatas com foco em ajudar alunos nas disciplinas básicas do primeiro ano de engenharia e ciência.',
+      availability: 'Segunda e Quarta, das 14h às 16h',
+      photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200'
+    }
+  });
+
+  await prisma.tutor.upsert({
+    where: { email: 'daniela@liao.com' },
+    update: {},
+    create: {
+      name: 'Daniela Souza',
+      email: 'daniela@liao.com',
+      subjects: ['Estruturas de Dados', 'Programação Orientada a Objetos'],
+      bio: 'Apaixonada por ensinar algoritmos, Java, C++ e desenvolvimento de software.',
+      availability: 'Terça e Quinta, das 10h às 12h',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
+    }
+  });
 }
 
 main()
