@@ -52,13 +52,7 @@ const Navbar: React.FC = () => {
                     {/* Logo */}
                     <Link to="/" className="flex items-center space-x-3">
                         <img src="/logo.png" alt="LIAO Logo" className="w-12 h-12 object-contain" />
-                        <img 
-                            src="/liao-text.png" 
-                            alt="LIAO" 
-                            className={`h-8 object-contain transition-all duration-300 ${
-                                (theme === 'dark' || isHeroAdjacent) ? 'invert' : ''
-                            }`} 
-                        />
+                        <img src="/liao-text.png" alt="LIAO" className="h-8 object-contain" />
                     </Link>
 
                     {/* Desktop Navigation */}
