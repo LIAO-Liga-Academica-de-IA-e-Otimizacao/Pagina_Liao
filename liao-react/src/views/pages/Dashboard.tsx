@@ -4,6 +4,7 @@ import { apiService } from '../../services/api';
 import type { Member } from '../../models/Member';
 import type { Article } from '../../models/Article';
 import InteractiveBanner from '../../components/ui/InteractiveBanner';
+import Button from '../../components/ui/Button';
 
 // Simple Carousel Component
 const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {
@@ -268,11 +269,10 @@ const Dashboard: React.FC = () => {
                         Faça parte de uma comunidade apaixonada por tecnologia e inovação.
                         Inscreva-se no nosso processo seletivo e potencialize sua jornada acadêmica.
                     </p>
-                    <Link
-                        to="/prosel"
-                        className="btn-premium inline-block px-8 py-4 text-lg font-bold"
-                    >
-                        Quero me Inscrever
+                    <Link to="/prosel">
+                        <Button variant="premium" size="lg">
+                            Quero me Inscrever
+                        </Button>
                     </Link>
                 </div>
             </section>

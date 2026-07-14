@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
+import Card from '../../components/ui/Card';
 
 const About: React.FC = () => {
     const [images, setImages] = useState<string[]>([]);
@@ -282,7 +283,7 @@ const About: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     
                     {/* Value 1: L (Red) */}
-                    <div className="card rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-red/50 dark:hover:border-liao-red/50 shadow-lg hover:shadow-liao-red/20 dark:hover:shadow-liao-red/10">
+                    <Card hover={false} className="rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-red/50 dark:hover:border-liao-red/50 shadow-lg hover:shadow-liao-red/20 dark:hover:shadow-liao-red/10">
                         <div className="absolute top-0 left-0 w-full h-1 bg-liao-red transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                         <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-neutral-100 dark:bg-neutral-800/80 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-liao-red/10 transition-colors duration-300 border border-neutral-200 dark:border-neutral-700 group-hover:border-liao-red/30">
                             <svg className="w-7 h-7 sm:w-8 sm:h-8 text-neutral-500 dark:text-neutral-400 group-hover:text-liao-red transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
@@ -291,10 +292,10 @@ const About: React.FC = () => {
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
                             Buscamos a qualidade e a melhoria contínua em tudo que fazemos, elevando o padrão de nossos projetos.
                         </p>
-                    </div>
+                    </Card>
 
                     {/* Value 2: I (Yellow) */}
-                    <div className="card rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-yellow/50 dark:hover:border-liao-yellow/50 shadow-lg hover:shadow-liao-yellow/20 dark:hover:shadow-liao-yellow/10">
+                    <Card hover={false} className="rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-yellow/50 dark:hover:border-liao-yellow/50 shadow-lg hover:shadow-liao-yellow/20 dark:hover:shadow-liao-yellow/10">
                         <div className="absolute top-0 left-0 w-full h-1 bg-liao-yellow transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                         <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-neutral-100 dark:bg-neutral-800/80 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-liao-yellow/10 transition-colors duration-300 border border-neutral-200 dark:border-neutral-700 group-hover:border-liao-yellow/30">
                             <svg className="w-7 h-7 sm:w-8 sm:h-8 text-neutral-500 dark:text-neutral-400 group-hover:text-liao-yellow transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
@@ -303,22 +304,22 @@ const About: React.FC = () => {
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
                             Trabalhamos juntos, compartilhando conhecimento e experiências para alcançar objetivos em comum.
                         </p>
-                    </div>
+                    </Card>
 
                     {/* Value 3: A (Blue) */}
-                    <div className="card rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-blue/50 dark:hover:border-liao-blue/50 shadow-lg hover:shadow-liao-blue/20 dark:hover:shadow-liao-blue/10">
+                    <Card hover={false} className="rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-blue/50 dark:hover:border-liao-blue/50 shadow-lg hover:shadow-liao-blue/20 dark:hover:shadow-liao-blue/10">
                         <div className="absolute top-0 left-0 w-full h-1 bg-liao-blue transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                         <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-neutral-100 dark:bg-neutral-800/80 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-liao-blue/10 transition-colors duration-300 border border-neutral-200 dark:border-neutral-700 group-hover:border-liao-blue/30">
                             <svg className="w-7 h-7 sm:w-8 sm:h-8 text-neutral-500 dark:text-neutral-400 group-hover:text-liao-blue transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
                         </div>
                         <h3 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-neutral-900 dark:text-white group-hover:text-liao-blue transition-colors duration-300">Inovação</h3>
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
-                            Exploramos novas ideias e tecnologias, pensando fora da caixa para criar soluções impactantes.
+                            Exploramos novas ideias and tecnologias, pensando fora da caixa para criar soluções impactantes.
                         </p>
-                    </div>
+                    </Card>
 
                     {/* Value 4: O (Green) */}
-                    <div className="card rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-green/50 dark:hover:border-liao-green/50 shadow-lg hover:shadow-liao-green/20 dark:hover:shadow-liao-green/10">
+                    <Card hover={false} className="rounded-2xl p-6 sm:p-8 text-center group hover:-translate-y-2 lg:hover:-translate-y-3 transition-all duration-300 relative overflow-hidden border border-neutral-200 dark:border-neutral-800 hover:border-liao-green/50 dark:hover:border-liao-green/50 shadow-lg hover:shadow-liao-green/20 dark:hover:shadow-liao-green/10">
                         <div className="absolute top-0 left-0 w-full h-1 bg-liao-green transform origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
                         <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto bg-neutral-100 dark:bg-neutral-800/80 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-liao-green/10 transition-colors duration-300 border border-neutral-200 dark:border-neutral-700 group-hover:border-liao-green/30">
                             <svg className="w-7 h-7 sm:w-8 sm:h-8 text-neutral-500 dark:text-neutral-400 group-hover:text-liao-green transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
@@ -327,7 +328,7 @@ const About: React.FC = () => {
                         <p className="text-neutral-600 dark:text-neutral-400 text-xs sm:text-sm leading-relaxed">
                             Aplicamos IA e algoritmos avançados para gerar resultados e resolver problemas complexos.
                         </p>
-                    </div>
+                    </Card>
 
                 </div>
             </section>
