@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTheme } from '../../hooks/useTheme';
 
 interface ParticleConfig {
     particleCount: number;
@@ -9,6 +10,13 @@ interface ParticleConfig {
 }
 
 const InteractiveBanner: React.FC = () => {
+    const { theme } = useTheme();
+    const isDarkRef = useRef(theme === 'dark');
+
+    useEffect(() => {
+        isDarkRef.current = theme === 'dark';
+    }, [theme]);
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     
@@ -346,14 +354,14 @@ const InteractiveBanner: React.FC = () => {
             ref={containerRef}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="interactive-banner relative h-[220px] sm:h-[300px] md:h-[400px] w-full overflow-hidden bg-[#0a0a0c] text-white flex flex-col justify-center select-none"
+            className="interactive-banner relative h-[220px] sm:h-[300px] md:h-[400px] w-full overflow-hidden bg-[#141417] dark:bg-[#0a0a0c] text-white flex flex-col justify-center select-none transition-colors duration-300"
         >
             <style dangerouslySetInnerHTML={{ __html: styles }} />
 
             {/* Network Canvas Animation */}
             <canvas
                 ref={canvasRef}
-                className="absolute inset-0 w-full h-full block z-0"
+                className="absolute inset-0 w-full h-full block z-0 animate-fade-in"
             />
 
             {/* Overlay UI Layer */}
