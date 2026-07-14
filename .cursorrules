@@ -1,0 +1,16 @@
+# LIAO - Regras de Desenvolvimento para Desenvolvedores e Agentes de IA
+
+Este arquivo descreve as diretrizes para garantir a consistência do design, evitar boilerplate e maximizar o reaproveitamento de componentes e configurações globais neste repositório.
+
+## 1. Diretrizes de Design & Tema
+* **Cores Semânticas**: Nunca hardcodeie cores hexadecimais ou arbitrárias em classes Tailwind (ex: `bg-[#141414]`). Use as cores e tons estendidos no arquivo de configuração `tailwind.config.js` (como `primary`, `neutral`, `success`, `warning`, `danger`, `liao-bg`, `liao-card`).
+* **Design Responsivo a Temas (Light/Dark Mode)**: Certifique-se de que todas as telas e componentes suportam Light Mode e Dark Mode de forma transparente usando as classes Tailwind semânticas adequadas ou o modificador `dark:`.
+* **Classes Globais e Utilitárias**: Consulte e utilize classes de estilo globais (como `.card`, `.section-bg-main`, `.section-bg-alt`, `.btn-premium`) declaradas em `src/index.css` em vez de replicar o mesmo conjunto de classes ad-hoc.
+
+## 2. Reuso de Componentes
+* **Verifique a Pasta de Componentes**: Antes de criar ou estilizar qualquer elemento do zero (como cartões, botões, modais ou layouts), inspecione os componentes compartilhados em `src/components/ui/` ou `src/components/layout/` e utilize-os.
+* **Evite Boilerplate**: Se você identificar padrões repetitivos de marcação HTML e estilização (ex: formulários, botões repetidos), modularize-os em componentes reutilizáveis dentro da pasta `src/components/ui/`.
+* **Nomes de Componentes**: Use componentes React semânticos estruturados com tipagem TypeScript adequada.
+
+## 3. Tipagem de API & Integrações
+* **Tipos do Backend**: Utilize a tipagem de API gerada no backend (mapeada a partir de `liao-backend/src/types/api.ts` como `@liao/api-types`) para garantir integridade e coerência das chamadas de API do frontend.
