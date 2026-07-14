@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/tutors" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
+                                <Link to="/members?tab=tutors" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
                                     Tutores
                                 </Link>
                             </li>

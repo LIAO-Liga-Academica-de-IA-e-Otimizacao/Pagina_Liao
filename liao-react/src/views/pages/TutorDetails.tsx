@@ -43,7 +43,7 @@ const TutorDetails: React.FC = () => {
                     <h2 className="text-3xl font-extrabold text-neutral-900 dark:text-white mb-4">Ops!</h2>
                     <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8">{error || 'Tutor não encontrado.'}</p>
                     <button
-                        onClick={() => navigate('/tutors')}
+                        onClick={() => navigate('/members?tab=tutors')}
                         className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 transition-colors shadow-lg"
                     >
                         Voltar para Tutores
@@ -73,7 +73,7 @@ const TutorDetails: React.FC = () => {
 
                     <div className="absolute top-8 left-4 md:left-8 z-20">
                         <Link
-                            to="/tutors"
+                            to="/members?tab=tutors"
                             className="inline-flex items-center text-white/80 hover:text-white transition-colors bg-black/10 hover:bg-black/20 px-3 py-1.5 rounded-full backdrop-blur-sm"
                         >
                             <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
@@ -194,7 +194,7 @@ const TutorDetails: React.FC = () => {
                 {/* Return Link */}
                 <div className="mt-8 text-center">
                     <Link
-                        to="/tutors"
+                        to="/members?tab=tutors"
                         className="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium transition-colors"
                     >
                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
