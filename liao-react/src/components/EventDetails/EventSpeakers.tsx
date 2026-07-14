@@ -149,7 +149,7 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2 mb-0.5">
-                                                <h4 className="font-bold text-white text-sm truncate">{speakerName}</h4>
+                                                <h4 className="font-bold text-neutral-900 dark:text-white text-sm truncate">{speakerName}</h4>
                                                 {speaker.member && (
                                                     <Sparkles 
                                                         size={10} 
@@ -158,10 +158,10 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                                                     />
                                                 )}
                                             </div>
-                                            <p className="text-[11px] text-neutral-400 truncate leading-tight">{speakerRole}</p>
+                                            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate leading-tight">{speakerRole}</p>
                                         </div>
                                         {(speaker.member || speaker.link) && (
-                                            <div className="text-neutral-600 group-hover/card:text-white transition-colors">
+                                            <div className="text-neutral-500 dark:text-neutral-600 group-hover/card:text-neutral-900 dark:group-hover/card:text-white transition-colors">
                                                 {speaker.member ? <ArrowRight size={14} /> : <ExternalLink size={14} />}
                                             </div>
                                         )}

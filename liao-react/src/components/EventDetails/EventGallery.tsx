@@ -11,12 +11,12 @@ const EventGallery: React.FC<EventGalleryProps> = ({ gallery }) => {
     return (
         <FadeInSection delay="delay-300">
             <div className="space-y-8">
-                <h3 className="text-2xl font-bold tracking-tight text-white mb-6">Galeria</h3>
+                <h3 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">Galeria</h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                     {gallery.map((img, i) => (
                         <div 
                             key={i} 
-                            className="aspect-square overflow-hidden border border-white/10 group cursor-pointer bg-white/5"
+                            className="aspect-square overflow-hidden border border-neutral-200 dark:border-white/10 group cursor-pointer bg-neutral-100 dark:bg-white/5"
                             style={{ borderRadius: 'var(--event-radius)' }}
                         >
                             <img 
