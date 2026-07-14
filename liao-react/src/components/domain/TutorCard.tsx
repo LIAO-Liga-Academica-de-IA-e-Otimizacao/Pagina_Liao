@@ -13,9 +13,9 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
             to={`/tutors/${tutor.id}`}
             className="block h-full group"
         >
-            <div className="group relative w-full h-full min-h-[320px] rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer">
+            <div className="group relative w-full h-full min-h-[320px] flex flex-col rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer">
                 {/* Content Container */}
-                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 h-full flex flex-col items-center text-center relative z-10 gap-2">
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 flex flex-col flex-1 items-center text-center relative z-10 gap-2">
 
                     {/* Avatar with Gradient Ring */}
                     <div className="relative mb-1">

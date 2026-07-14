@@ -20,10 +20,10 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
     return (
         <div
             onClick={() => onSelect(member)}
-            className="group relative w-[230px] h-[329px] rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="group relative w-[230px] min-h-[350px] flex flex-col rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
         >
             {/* White Content Container */}
-            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 h-full flex flex-col items-center text-center relative z-10 gap-2 transition-colors duration-200">
+            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 flex flex-col flex-1 items-center text-center relative z-10 gap-2 transition-colors duration-200">
 
                 {/* Avatar with Gradient Ring */}
                 <div className="relative mb-1">
