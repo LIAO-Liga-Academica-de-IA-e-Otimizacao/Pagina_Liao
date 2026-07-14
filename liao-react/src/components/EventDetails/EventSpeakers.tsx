@@ -58,13 +58,13 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
     return (
         <FadeInSection delay="delay-400">
             <div 
-                className="bg-white/5 border border-white/10 p-6 backdrop-blur-md relative group"
+                className="bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 p-6 backdrop-blur-md relative group"
                 style={{ borderRadius: 'var(--event-radius-lg)' }}
                 onMouseEnter={() => setIsPaused(true)}
                 onMouseLeave={() => setIsPaused(false)}
             >
                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-lg font-bold text-white flex items-center gap-3">
+                    <h3 className="text-lg font-bold text-neutral-905 dark:text-white flex items-center gap-3">
                         <User 
                             size={20} 
                             style={{ color: `rgb(var(--event-primary-rgb) / 1)` }} 
@@ -76,13 +76,13 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                         <div className="flex gap-1">
                             <button 
                                 onClick={prevSlide}
-                                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+                                className="p-1.5 rounded-lg bg-neutral-200 dark:bg-white/5 hover:bg-neutral-300 dark:hover:bg-white/10 border border-neutral-300 dark:border-white/10 text-neutral-800 dark:text-white transition-all active:scale-95"
                             >
                                 <ChevronUp size={16} />
                             </button>
                             <button 
                                 onClick={nextSlide}
-                                className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+                                className="p-1.5 rounded-lg bg-neutral-200 dark:bg-white/5 hover:bg-neutral-300 dark:hover:bg-white/10 border border-neutral-300 dark:border-white/10 text-neutral-800 dark:text-white transition-all active:scale-95"
                             >
                                 <ChevronDown size={16} />
                             </button>
@@ -118,8 +118,8 @@ const EventSpeakers: React.FC<EventSpeakersProps> = ({ speakers, palette }) => {
                                         }}
                                         className={`group/card flex items-center gap-4 p-4 border transition-all ${
                                             speaker.member || speaker.link 
-                                                ? 'cursor-pointer hover:bg-white/10 border-white/5 hover:border-white/20 shadow-lg shadow-black/20' 
-                                                : 'border-transparent bg-white/5'
+                                                ? 'cursor-pointer hover:bg-neutral-200/50 dark:hover:bg-white/10 border-neutral-200 dark:border-white/5 hover:border-neutral-300 dark:hover:border-white/20 shadow-md dark:shadow-lg dark:shadow-black/20' 
+                                                : 'border-transparent bg-neutral-100 dark:bg-white/5 text-neutral-800 dark:text-white'
                                         }`}
                                         style={{ 
                                             '--hover-border': `rgb(${hexToRgb(speakerColor)} / 0.5)`,

@@ -11,6 +11,7 @@ const Navbar: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
 
     const isActive = (path: string) => location.pathname === path;
+    const isEventDetailsPage = location.pathname.startsWith('/events/') && location.pathname !== '/events';
 
     const navLinks = [
         { name: 'Home', path: '/' },
@@ -58,13 +59,15 @@ const Navbar: React.FC = () => {
                     </div>
 
                     {/* Theme Toggle (Desktop) */}
-                    <button
-                        onClick={toggleTheme}
-                        className="hidden md:flex p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors text-neutral-600 dark:text-neutral-300 ml-2"
-                        aria-label="Alternar tema"
-                    >
-                        {theme === 'dark' ? <FaSun className="w-5 h-5 text-warning-400" /> : <FaMoon className="w-5 h-5" />}
-                    </button>
+                    {!isEventDetailsPage && (
+                        <button
+                            onClick={toggleTheme}
+                            className="hidden md:flex p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors text-neutral-600 dark:text-neutral-300 ml-2"
+                            aria-label="Alternar tema"
+                        >
+                            {theme === 'dark' ? <FaSun className="w-5 h-5 text-warning-400" /> : <FaMoon className="w-5 h-5" />}
+                        </button>
+                    )}
 
                     {/* Mobile section spacer - keeps mobile menu button to the right if logos are hidden */}
                     <div className="md:hidden ml-auto"></div>
@@ -117,24 +120,26 @@ const Navbar: React.FC = () => {
                         ))}
 
                         {/* Theme Toggle (Mobile) */}
-                        <div className="px-4 py-2 border-t border-neutral-100 dark:border-neutral-700 mt-2">
-                            <button
-                                onClick={toggleTheme}
-                                className="flex items-center space-x-2 text-neutral-700 dark:text-neutral-300 w-full"
-                            >
-                                {theme === 'dark' ? (
-                                    <>
-                                        <FaSun className="w-5 h-5 text-warning-400" />
-                                        <span>Modo Claro</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <FaMoon className="w-5 h-5" />
-                                        <span>Modo Escuro</span>
-                                    </>
-                                )}
-                            </button>
-                        </div>
+                        {!isEventDetailsPage && (
+                            <div className="px-4 py-2 border-t border-neutral-100 dark:border-neutral-700 mt-2">
+                                <button
+                                    onClick={toggleTheme}
+                                    className="flex items-center space-x-2 text-neutral-700 dark:text-neutral-300 w-full"
+                                >
+                                    {theme === 'dark' ? (
+                                        <>
+                                            <FaSun className="w-5 h-5 text-warning-400" />
+                                            <span>Modo Claro</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaMoon className="w-5 h-5" />
+                                            <span>Modo Escuro</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

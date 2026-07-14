@@ -66,22 +66,22 @@ const EventHighlights: React.FC<EventHighlightsProps> = ({ highlights }) => {
             >
                 <div className="flex items-center justify-between gap-6 mb-12 px-2">
                     <div className="flex items-center gap-4">
-                        <h3 className="text-3xl font-extrabold tracking-tight text-white whitespace-nowrap">O que esperar</h3>
-                        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-white/20 to-transparent"></div>
+                        <h3 className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white whitespace-nowrap">O que esperar</h3>
+                        <div className="hidden sm:block h-px w-32 bg-gradient-to-r from-neutral-200 dark:from-white/20 to-transparent"></div>
                     </div>
                     
                     {/* Navigation Buttons - Visible on hover/desktop */}
                     <div className="flex gap-2">
                         <button 
                             onClick={() => scroll('left')}
-                            className="p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all active:scale-90"
+                            className="p-3 rounded-full bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-neutral-200 dark:hover:bg-white/10 hover:border-neutral-300 dark:hover:border-white/20 transition-all active:scale-90"
                             aria-label="Anterior"
                         >
                             <IoChevronBack size={20} />
                         </button>
                         <button 
                             onClick={() => scroll('right')}
-                            className="p-3 rounded-full bg-white/5 border border-white/10 text-white hover:bg-white/10 hover:border-white/20 transition-all active:scale-90"
+                            className="p-3 rounded-full bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 text-neutral-800 dark:text-white hover:bg-neutral-200 dark:hover:bg-white/10 hover:border-neutral-300 dark:hover:border-white/20 transition-all active:scale-90"
                             aria-label="Próximo"
                         >
                             <IoChevronForward size={20} />
@@ -92,8 +92,8 @@ const EventHighlights: React.FC<EventHighlightsProps> = ({ highlights }) => {
                 {/* Carousel Container */}
                 <div className="relative">
                     {/* Edge Gradients for "More Content" hint */}
-                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-neutral-950 to-transparent z-20 pointer-events-none opacity-0 group-hover/carousel:opacity-100 transition-opacity"></div>
-                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-neutral-950 to-transparent z-20 pointer-events-none opacity-0 group-hover/carousel:opacity-100 transition-opacity"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-neutral-50 dark:from-neutral-950 to-transparent z-20 pointer-events-none opacity-0 group-hover/carousel:opacity-100 transition-opacity"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-neutral-50 dark:from-neutral-950 to-transparent z-20 pointer-events-none opacity-0 group-hover/carousel:opacity-100 transition-opacity"></div>
 
                     <div 
                         ref={scrollRef}
@@ -103,7 +103,7 @@ const EventHighlights: React.FC<EventHighlightsProps> = ({ highlights }) => {
                         {highlights.map((highlight, idx) => (
                             <div 
                                 key={idx} 
-                                className="flex-none w-[75vw] sm:w-[280px] lg:w-[300px] snap-center group relative flex flex-col p-6 bg-neutral-900/40 backdrop-blur-xl border border-white/5 hover:border-[var(--event-primary)]/30 transition-all duration-500 overflow-hidden"
+                                className="flex-none w-[75vw] sm:w-[280px] lg:w-[300px] snap-center group relative flex flex-col p-6 bg-neutral-100/80 dark:bg-neutral-900/40 backdrop-blur-xl border border-neutral-200 dark:border-white/5 hover:border-[var(--event-primary)]/30 transition-all duration-500 overflow-hidden"
                                 style={{ borderRadius: 'var(--event-radius)' }}
                             >
                                 {/* Decorative Background Glow */}
@@ -122,11 +122,11 @@ const EventHighlights: React.FC<EventHighlightsProps> = ({ highlights }) => {
                                         <Sparkles size={20} />
                                     </div>
                                     
-                                    <p className="text-base font-semibold text-neutral-300 leading-tight group-hover:text-white transition-colors duration-300 min-h-[60px]">
+                                    <p className="text-base font-semibold text-neutral-750 group-hover:text-neutral-950 dark:text-neutral-300 dark:group-hover:text-white transition-colors duration-300 min-h-[60px]">
                                         {highlight}
                                     </p>
-
-                                    <div className="mt-4 pt-4 border-t border-white/5 flex items-center gap-2 text-[var(--event-primary)] opacity-40 group-hover:opacity-100 transition-all duration-500">
+ 
+                                    <div className="mt-4 pt-4 border-t border-neutral-200 dark:border-white/5 flex items-center gap-2 text-[var(--event-primary)] opacity-40 group-hover:opacity-100 transition-all duration-500">
                                         <Check size={16} />
                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] leading-none">Incluso</span>
                                     </div>

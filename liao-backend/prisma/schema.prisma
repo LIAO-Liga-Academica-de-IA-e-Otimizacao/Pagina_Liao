@@ -27,6 +27,7 @@ model Event {
   fontClass    String?
   borderRadius String?        @default("round")
   subscribe    String?
+  themeMode    String?        @default("dark")
   agenda       AgendaItem[]
   speakers    EventSpeaker[]
   partners    Partner[]

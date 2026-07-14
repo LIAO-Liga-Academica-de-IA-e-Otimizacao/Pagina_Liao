@@ -99,6 +99,7 @@ async function main() {
     borderRadius: 'squared',
     fontClass: 'font-mono',
     subscribe: "https://example.com/subscribe",
+    themeMode: 'dark',
   }; 
 
   const event = await prisma.event.upsert({
@@ -142,7 +143,63 @@ async function main() {
     }
   });
 
-  console.log(`✅ Seed finished! Event created: ${event.title}`);
+  const lightEventData = {
+    title: 'Simpósio de Otimização e Sustentabilidade',
+    description: 'Um encontro aberto para discutir a aplicação de algoritmos de otimização no desenvolvimento de soluções sustentáveis e ecológicas.',
+    coverImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-06-15T09:00:00Z'),
+    location: 'Auditório 2 - Pavilhão de Aulas do IC',
+    highlights: [
+      'Modelagem Matemática Verde',
+      'Smart Grids Eficientes',
+      'Logística Reversa de Resíduos',
+      'Descarbonização com IA'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80'
+    ],
+    palette: ['#059669', '#0d9488', '#2563eb'],
+    borderRadius: 'round',
+    fontClass: 'font-space',
+    subscribe: "https://example.com/subscribe-sustentabilidade",
+    themeMode: 'light',
+  };
+
+  const lightEvent = await prisma.event.upsert({
+    where: { slug: 'simposio-otimizacao-sustentabilidade-2026' },
+    update: {
+        ...lightEventData,
+        partners: {
+            set: [{ id: partner2.id }, { id: partner3.id }]
+        }
+    },
+    create: {
+      ...lightEventData,
+      slug: 'simposio-otimizacao-sustentabilidade-2026',
+      agenda: {
+        create: [
+          { time: '09:00', title: 'Abertura do Simpósio', description: 'Boas-vindas e apresentação da agenda.' },
+          { time: '09:30', title: 'Palestras de Smart Grids', speakerName: 'Bruno Santos' },
+          { time: '11:00', title: 'Algoritmos e Clima', description: 'Estudo prático de redução de CO2.' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            memberId: member2.id,
+            role: 'Pesquisador de Infraestrutura',
+            link: 'https://github.com/bruno'
+          }
+        ]
+      },
+      partners: {
+        connect: [{ id: partner2.id }, { id: partner3.id }]
+      }
+    }
+  });
+
+  console.log(`✅ Seed finished! Events created: ${event.title} (Dark), ${lightEvent.title} (Light)`);
 
   // 3. System Config
   console.log('Seeding system config...');

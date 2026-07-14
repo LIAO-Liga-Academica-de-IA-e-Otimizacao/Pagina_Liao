@@ -28,8 +28,8 @@ const EventHero: React.FC<EventHeroProps> = ({
 }) => {
     return (
         <FadeInSection>
-            <Link to="/events" className="inline-flex items-center gap-2 text-neutral-400 hover:text-white mb-12 group transition-colors">
-                <div className="p-2 bg-white/5 rounded-full group-hover:bg-white/10 transition-colors">
+            <Link to="/events" className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white mb-12 group transition-colors">
+                <div className="p-2 bg-neutral-200/50 dark:bg-white/5 rounded-full group-hover:bg-neutral-200 dark:group-hover:bg-white/10 transition-colors">
                     <ArrowLeft size={20} />
                 </div>
                 <span className="font-medium tracking-wide text-sm">Voltar para eventos</span>
@@ -49,11 +49,11 @@ const EventHero: React.FC<EventHeroProps> = ({
                         <span>Evento Exclusivo</span>
                     </div>
                     
-                    <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-white to-white/60">
+                    <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/60">
                         {event.title}
                     </h1>
                     
-                    <p className="text-xl text-neutral-400 leading-relaxed font-light max-w-xl">
+                    <p className="text-xl text-neutral-600 dark:text-neutral-400 leading-relaxed font-light max-w-xl">
                         {descriptionOverride || event.description}
                     </p>
 
@@ -61,7 +61,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                         <div className="pt-2">
                             <button
                                 onClick={onOpenSchedule}
-                                className="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 hover:border-white/20 rounded-2xl transition-all hover:bg-white/10 overflow-hidden relative"
+                                className="group flex items-center gap-3 px-6 py-3 bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 hover:border-neutral-300 dark:hover:border-white/20 rounded-2xl transition-all hover:bg-neutral-200/50 dark:hover:bg-white/10 overflow-hidden relative"
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                                 <div 
@@ -72,7 +72,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 </div>
                                 <div className="text-left">
                                     <p className="text-xs text-neutral-500 font-bold uppercase tracking-wider">Visualizar</p>
-                                    <p className="font-bold text-white flex items-center gap-1">
+                                    <p className="font-bold text-neutral-900 dark:text-white flex items-center gap-1">
                                         Cronograma Completo
                                         <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
                                     </p>
@@ -81,8 +81,8 @@ const EventHero: React.FC<EventHeroProps> = ({
                         </div>
                     )}
 
-                    <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-white/10">
-                        <div className="flex items-center gap-3 text-neutral-300">
+                    <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-neutral-200 dark:border-white/10">
+                        <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
                             <div 
                                 className="p-3"
                                 style={{ 
@@ -95,11 +95,11 @@ const EventHero: React.FC<EventHeroProps> = ({
                             </div>
                             <div>
                                 <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-0.5">Data</p>
-                                <p className="font-medium text-white">{eventDate}</p>
+                                <p className="font-medium text-neutral-900 dark:text-white">{eventDate}</p>
                             </div>
                         </div>
-                        <div className="w-px h-12 bg-white/10 hidden sm:block"></div>
-                        <div className="flex items-center gap-3 text-neutral-300">
+                        <div className="w-px h-12 bg-neutral-200 dark:bg-white/10 hidden sm:block"></div>
+                        <div className="flex items-center gap-3 text-neutral-700 dark:text-neutral-300">
                             <div 
                                 className="p-3"
                                 style={{ 
@@ -112,7 +112,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                             </div>
                             <div>
                                 <p className="text-xs text-neutral-500 uppercase tracking-wider font-semibold mb-0.5">Local</p>
-                                <p className="font-medium text-white">
+                                <p className="font-medium text-neutral-900 dark:text-white">
                                     {event.location ? event.location.split('|').map((loc, i) => (
                                         <span key={i} className="block">{loc.trim()}</span>
                                     )) : 'A definir'}
@@ -142,10 +142,10 @@ const EventHero: React.FC<EventHeroProps> = ({
                 </div>
 
                 <div 
-                    className="relative lg:h-[600px] overflow-hidden group border border-white/10 shadow-2xl shadow-[var(--event-primary)]/5"
+                    className="relative lg:h-[600px] overflow-hidden group border border-neutral-200 dark:border-white/10 shadow-2xl shadow-[var(--event-primary)]/5"
                     style={{ borderRadius: 'var(--event-radius-lg)' }}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent z-10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-200/50 dark:from-neutral-950/80 via-transparent z-10"></div>
                     <img 
                         src={event.coverImage || ''} 
                         alt={event.title} 
