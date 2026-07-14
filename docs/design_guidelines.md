@@ -52,7 +52,7 @@ Sempre utilize as seguintes classes estruturadas sob `@layer components` para bo
 
 ### Botões (Buttons)
 * **`.btn-primary`**: Ação principal padrão. Possui gradiente de preto a verde escuro, bordas arredondadas médias (`rounded-lg`) e efeito de zoom ao passar o mouse (`hover:scale-105`).
-* **`.btn-premium`**: Ação premium/seletiva (ex: inscrição no processo seletivo). Possui uma borda com gradiente dourado metálico, fundo sólido (branco no Light Mode e preto/grafite no Dark Mode) e texto escuro no Light Mode (`text-neutral-900`) e claro no Dark Mode (`dark:text-white`).
+* **`.btn-premium`**: Ação premium/seletiva (ex: inscrição no processo seletivo). Possui fundo sólido com gradiente dourado metálico chamativo (`linear-gradient(135deg, #bf953f, #fcf6ba, #b38728)`) e fonte escura e contrastante (`text-neutral-950`) em ambos os modos para garantir legibilidade.
 * **`.btn-secondary`**: Ações secundárias. Fundo neutro cinza-claro/escuro adaptativo.
 
 ### Cartões (Cards)
