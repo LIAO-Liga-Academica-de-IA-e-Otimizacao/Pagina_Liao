@@ -4,7 +4,7 @@ import { apiService } from '../../services/api';
 import type { Member } from '../../models/Member';
 import type { Article } from '../../models/Article';
 import InteractiveBanner from '../../components/ui/InteractiveBanner';
-import Button from '../../components/ui/Button';
+import { useSEO } from '../../hooks/useSEO';
 
 // Simple Carousel Component
 const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {
@@ -114,6 +114,12 @@ const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {
 };
 
 const Dashboard: React.FC = () => {
+    useSEO({
+        title: 'LIAO UFBA | Liga Acadêmica de Inteligência Artificial e Otimização',
+        description: 'Site oficial da LIAO, a Liga Acadêmica de Inteligência Artificial e Otimização da UFBA. Conheça nossos projetos, artigos, membros e processo seletivo.',
+        ogImage: '/banner-new.jpg'
+    });
+
     const [loading, setLoading] = useState(true);
     const [stats, setStats] = useState({ members: 0, projects: 0, articles: 0, events: 0 });
     const [recentArticles, setRecentArticles] = useState<Article[]>([]);
@@ -174,12 +180,21 @@ const Dashboard: React.FC = () => {
             {/* Hero Section - Interactive Particle Canvas Banner */}
             <InteractiveBanner />
 
+            {/* Intro Section - SEO Entity & Presentation */}
+            <section className="py-16 bg-neutral-50 dark:bg-neutral-900/40 border-b border-neutral-100 dark:border-neutral-800 transition-colors duration-200">
+                <div className="max-w-3xl mx-auto px-4 text-center">
+                    <p className="text-lg sm:text-xl text-neutral-600 dark:text-neutral-300 leading-relaxed font-light">
+                        A <strong className="font-semibold text-neutral-900 dark:text-white">LIAO (Liga Acadêmica de Inteligência Artificial e Otimização)</strong> é uma entidade estudantil oficial da <strong className="font-semibold text-neutral-900 dark:text-white">UFBA (Universidade Federal da Bahia)</strong>, sediada em Salvador. Nosso objetivo é fomentar o ensino, a pesquisa e a extensão nas áreas de ciência de dados, machine learning e otimização de sistemas, preparando talentos para a inovação acadêmica e profissional.
+                    </p>
+                </div>
+            </section>
+
             {/* Stats Section - Clean & Modern */}
             <section className="py-20 section-bg-main">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
                         <span className="text-sm font-bold text-primary-600 uppercase tracking-widest">Nossa Comunidade</span>
-                        <h2 className="text-3xl font-bold mt-2 text-neutral-900 dark:text-white">Impacto em Números</h2>
+                        <h2 className="text-3xl font-bold mt-2 text-neutral-900 dark:text-white">Impacto Acadêmico e Científico da LIAO UFBA</h2>
                     </div>
 
                     {/* Desktop: 4 Columns | Mobile: Horizontal Scrollable Row (Swipeable Slider with 2 cards visible) */}
@@ -232,8 +247,8 @@ const Dashboard: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                         <div>
-                            <span className="text-sm font-bold text-success-600 dark:text-success-400 uppercase tracking-widest">Atualizações</span>
-                            <h2 className="text-4xl font-bold mt-2">Últimas Notícias</h2>
+                            <span className="text-sm font-bold text-success-400 uppercase tracking-widest">Atualizações</span>
+                            <h2 className="text-4xl font-bold mt-2">Últimas Notícias sobre IA e Otimização</h2>
                         </div>
                         <Link
                             to="/newsletter"
@@ -262,8 +277,8 @@ const Dashboard: React.FC = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] md:w-[600px] h-[350px] md:h-[600px] bg-gradient-to-tr from-[#bf953f]/10 to-[#b38728]/10 rounded-full blur-3xl pointer-events-none opacity-75 dark:opacity-30"></div>
                 
                 <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight font-display">
-                        Pronto para o próximo nível?
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+                        Participe da Liga Acadêmica LIAO UFBA
                     </h2>
                     <p className="text-xl text-neutral-600 dark:text-neutral-300 mb-10 leading-relaxed max-w-2xl mx-auto">
                         Faça parte de uma comunidade apaixonada por tecnologia e inovação.

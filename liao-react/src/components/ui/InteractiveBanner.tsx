@@ -367,12 +367,14 @@ const InteractiveBanner: React.FC = () => {
             {/* Overlay UI Layer */}
             <div className="relative z-10 w-full px-4 sm:px-8 md:px-16 max-w-7xl mx-auto pointer-events-none">
                 <div className="flex flex-col">
-                    <div className="logo-text flex items-center font-black">
+                    <h1 className="logo-text flex items-center font-black">
                         <span className="text-[#E53935] drop-shadow-[0_0_15px_rgba(229,57,53,0.4)]">L</span>
                         <span className="text-[#FBC02D] drop-shadow-[0_0_15px_rgba(251,192,45,0.4)]">I</span>
                         <span className="text-[#1E88E5] drop-shadow-[0_0_15px_rgba(30,136,229,0.4)] text-[1.1em] translate-y-[-0.05em]">Λ</span>
                         <span className="text-[#43A047] drop-shadow-[0_0_15px_rgba(67,160,71,0.4)]">O</span>
-                    </div>
+                        {/* Text for search engines and accessibility to match LIAO UFBA entity */}
+                        <span className="sr-only">LIAO UFBA - Liga Acadêmica de Inteligência Artificial e Otimização</span>
+                    </h1>
                     <p className="logo-sub text-sm sm:text-lg md:text-xl font-semibold mt-1.5 text-gray-200 tracking-wide">
                         Liga de Inteligência Artificial e Otimização
                     </p>

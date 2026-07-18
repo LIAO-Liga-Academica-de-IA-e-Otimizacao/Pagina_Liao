@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
-import Card from '../../components/ui/Card';
+import { useSEO } from '../../hooks/useSEO';
 
 const About: React.FC = () => {
+    useSEO({
+        title: 'Sobre a LIAO UFBA | História, Missão e Valores',
+        description: 'Saiba quem somos. A LIAO UFBA promove o ensino, pesquisa e desenvolvimento prático em Inteligência Artificial e Otimização de Sistemas na Bahia.',
+        ogImage: '/banner-new.jpg'
+    });
+
     const [images, setImages] = useState<string[]>([]);
     const [currentSlide, setCurrentSlide] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -163,9 +169,9 @@ const About: React.FC = () => {
                 <div className="flex justify-center mb-6 sm:mb-8">
                      <img src="/logo.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]" />
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight text-neutral-900 dark:text-white">Sobre Nós</h1>
-                <p className="text-neutral-600 dark:text-neutral-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
-                    Conheça a Liga Acadêmica de Inteligência Artificial e Otimização
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">Sobre a LIAO UFBA</h1>
+                <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
+                    Conheça a Liga Acadêmica de Inteligência Artificial e Otimização da UFBA
                 </p>
             </header>
 
