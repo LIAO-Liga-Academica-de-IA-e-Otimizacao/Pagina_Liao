@@ -66,6 +66,13 @@
             "null"
           ]
         },
+        "themeMode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": "dark"
+        },
         "agenda": {
           "type": "array",
           "items": {

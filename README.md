@@ -6,25 +6,17 @@ Complete full-stack web application for **LIAO (Liga Acadêmica de Inteligência
 
 ### Prerequisites
 - **Node.js** v18+
-- **PostgreSQL** database
+- **Docker** (recommended for automatic database setup) or local **PostgreSQL**
 - **npm**
 
-### 1. Initial Setup (Manual)
-First, create your database:
-```sql
-CREATE DATABASE liao_db;
-```
-
-### 2. Run the Full Stack
+### Run the Full Stack
 For a fresh setup, follow these steps in order:
 
 #### Backend
 ```bash
 cd liao-backend
 npm install
-cp .env.example .env # Update with your DB credentials
-npx prisma migrate dev --name init
-npx prisma db seed
+npm run db:setup
 npm run dev
 ```
 

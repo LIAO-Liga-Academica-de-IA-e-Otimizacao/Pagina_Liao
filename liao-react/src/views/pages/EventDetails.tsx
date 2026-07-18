@@ -123,12 +123,33 @@ const EventDetails: React.FC = () => {
         }
     }, [event?.fontClass]);
 
+    useEffect(() => {
+        if (!event) return;
+        
+        const hadDark = document.documentElement.classList.contains('dark');
+        const eventIsDark = (event as any).themeMode !== 'light';
+        
+        if (eventIsDark) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        
+        return () => {
+            if (hadDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        };
+    }, [event]);
+
     if (loading) {
         return (
-            <div className="min-h-screen bg-neutral-950 flex items-center justify-center">
+            <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex items-center justify-center">
                 <div className="relative">
-                    <div className="w-16 h-16 border-4 border-white/10 border-t-white rounded-full animate-spin"></div>
-                    <div className="absolute inset-0 bg-white/5 blur-xl rounded-full"></div>
+                    <div className="w-16 h-16 border-4 border-neutral-200 dark:border-white/10 border-t-primary-600 rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 bg-primary-500/5 blur-xl rounded-full"></div>
                 </div>
             </div>
         );
@@ -136,10 +157,10 @@ const EventDetails: React.FC = () => {
 
     if (!event) {
         return (
-            <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-neutral-400">
+            <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col items-center justify-center text-neutral-500 dark:text-neutral-400">
                 <Calendar size={48} className="mb-4 opacity-50" />
-                <h2 className="text-2xl font-bold text-white mb-2">Evento não encontrado</h2>
-                <Link to="/events" className="text-neutral-400 hover:text-white flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Evento não encontrado</h2>
+                <Link to="/events" className="text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white flex items-center gap-2">
                     <ArrowLeft size={20} /> Voltar para eventos
                 </Link>
             </div>
@@ -156,6 +177,8 @@ const EventDetails: React.FC = () => {
     const fontFamily = event.fontClass && FONT_MAP[event.fontClass] 
         ? FONT_MAP[event.fontClass].family 
         : 'inherit';
+
+    const isDarkMode = (event as any).themeMode !== 'light';
 
     const palette = (event as any).palette && (event as any).palette.length > 0 
         ? (event as any).palette 
@@ -190,19 +213,19 @@ const EventDetails: React.FC = () => {
                 <div 
                     className={`relative group p-4 md:p-8 rounded-3xl transition-colors ${
                         isPlus 
-                            ? 'bg-neutral-900/40 border-l-4 shadow-sm my-12' 
+                            ? 'bg-neutral-100 dark:bg-neutral-900/40 border border-neutral-200 dark:border-neutral-800 border-l-4 dark:border-l-4 shadow-sm my-12' 
                             : 'bg-transparent my-10'
                     }`}
-                    style={isPlus ? { borderLeftColor: 'var(--event-primary)' } : {}}
+                    style={isPlus ? { borderLeftColor: 'var(--event-primary)', borderLeftWidth: '4px' } : {}}
                 >
-                    {!isPlus && <div className="absolute -inset-x-6 -inset-y-4 bg-white/0 group-hover:bg-white/[0.02] transition-colors rounded-3xl -z-10"></div>}
+                    {!isPlus && <div className="absolute -inset-x-6 -inset-y-4 bg-transparent group-hover:bg-neutral-200/40 dark:group-hover:bg-white/[0.02] transition-colors rounded-3xl -z-10"></div>}
                     
-                    <h3 className="text-2xl md:text-3xl font-bold mb-6 text-white flex items-center gap-4">
+                    <h3 className="text-2xl md:text-3xl font-bold mb-6 text-neutral-900 dark:text-white flex items-center gap-4">
                         <div 
                             className={`flex items-center justify-center rounded-2xl ${
                                 isPlus 
-                                    ? 'w-12 h-12 bg-primary-500/20 border border-primary-500/30' 
-                                    : 'w-10 h-10 bg-primary-500/10 border border-primary-500/20 shadow-inner'
+                                    ? 'w-12 h-12 bg-neutral-200/50 dark:bg-primary-500/20 border border-neutral-300 dark:border-primary-500/30' 
+                                    : 'w-10 h-10 bg-neutral-100 dark:bg-primary-500/10 border border-neutral-200 dark:border-primary-500/20 shadow-inner'
                             }`}
                             style={{ color: 'var(--event-primary)' }}
                         >
@@ -213,13 +236,13 @@ const EventDetails: React.FC = () => {
                     
                     {/* Markdown rendering with Prose styling mimicking native App typography.  */}
                     <div 
-                        className="prose prose-invert prose-lg md:prose-xl max-w-none 
-                                    prose-headings:text-white prose-headings:font-bold 
-                                    prose-p:text-neutral-400 prose-p:leading-relaxed 
+                        className={`prose ${isDarkMode ? 'prose-invert' : ''} prose-lg md:prose-xl max-w-none 
+                                    prose-headings:text-neutral-900 dark:prose-headings:text-white prose-headings:font-bold 
+                                    prose-p:text-neutral-600 dark:prose-p:text-neutral-400 prose-p:leading-relaxed 
                                     prose-a:text-[color:var(--event-primary)] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
-                                    prose-strong:text-white 
+                                    prose-strong:text-neutral-900 dark:prose-strong:text-white 
                                     prose-ul:list-disc prose-ol:list-decimal
-                                    prose-li:text-neutral-400 prose-li:marker:text-[color:var(--event-primary)]"
+                                    prose-li:text-neutral-650 dark:prose-li:text-neutral-400 prose-li:marker:text-[color:var(--event-primary)]`}
                     >
                         <ReactMarkdown>
                             {content}
@@ -232,20 +255,20 @@ const EventDetails: React.FC = () => {
 
     return (
         <div 
-            className={`relative min-h-screen bg-neutral-950 text-neutral-50 overflow-x-hidden ${fontClass}`}
+            className={`relative min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 overflow-x-hidden transition-colors duration-300 ${fontClass}`}
             style={styleVariables}
         >
             {/* Background Effects */}
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
                 <div 
-                    className="absolute top-0 left-1/4 w-[1000px] h-[1000px] rounded-full blur-[120px] mix-blend-screen opacity-50"
-                    style={{ backgroundColor: `rgb(var(--event-primary-rgb) / 0.1)` }}
+                    className={`absolute top-0 left-1/4 w-[1000px] h-[1000px] rounded-full blur-[120px] opacity-40 dark:opacity-50 ${isDarkMode ? 'mix-blend-screen' : 'mix-blend-multiply'}`}
+                    style={{ backgroundColor: `rgb(var(--event-primary-rgb) / 0.15)` }}
                 ></div>
                 <div 
-                    className="absolute bottom-0 right-1/4 w-[800px] h-[800px] rounded-full blur-[120px] mix-blend-screen opacity-50"
-                    style={{ backgroundColor: `rgb(var(--event-secondary-rgb) / 0.1)` }}
+                    className={`absolute bottom-0 right-1/4 w-[800px] h-[800px] rounded-full blur-[120px] opacity-40 dark:opacity-50 ${isDarkMode ? 'mix-blend-screen' : 'mix-blend-multiply'}`}
+                    style={{ backgroundColor: `rgb(var(--event-secondary-rgb) / 0.15)` }}
                 ></div>
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('/bg-grid.svg')] opacity-[0.02]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('/bg-grid.svg')] opacity-[0.05] dark:opacity-[0.02]"></div>
             </div>
 
             <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-20">
@@ -267,19 +290,19 @@ const EventDetails: React.FC = () => {
                         </div>
 
                         {event.highlights && (
-                            <div className="pt-8 border-t border-white/5">
+                            <div className="pt-8 border-t border-neutral-200 dark:border-white/5">
                                 <EventHighlights highlights={event.highlights} />
                             </div>
                         )}
                         
                         {event.agenda && event.agenda.length > 0 && (
-                            <div className="pt-8 border-t border-white/5">
+                            <div className="pt-8 border-t border-neutral-200 dark:border-white/5">
                                 <EventAgenda agenda={event.agenda} palette={palette} />
                             </div>
                         )}
                         
                         {parsedContent?.schedule?.enabled && (
-                            <div className="pt-8 border-t border-white/5">
+                            <div className="pt-8 border-t border-neutral-200 dark:border-white/5">
                                 {renderContentSection('Cronograma', parsedContent.schedule.content, false, '')}
                             </div>
                         )}
@@ -319,7 +342,7 @@ const EventDetails: React.FC = () => {
                         <div className="mt-12 flex flex-col items-center">
                             <button 
                                 onClick={() => setIsFAQOpen(true)}
-                                className="group relative px-10 py-5 bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-500 overflow-hidden"
+                                className="group relative px-10 py-5 bg-neutral-100 dark:bg-white/5 border border-neutral-200 dark:border-white/10 hover:bg-neutral-200 dark:hover:bg-white/10 hover:border-neutral-300 dark:hover:bg-white/20 transition-all duration-500 overflow-hidden"
                                 style={{ borderRadius: 'var(--event-radius-lg)' }}
                             >
                                 {/* Button background accent */}
@@ -330,16 +353,16 @@ const EventDetails: React.FC = () => {
                                 
                                 <div className="relative z-10 flex items-center gap-4">
                                     <div 
-                                        className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center border border-white/10"
+                                        className="w-10 h-10 rounded-xl bg-neutral-200/50 dark:bg-white/5 flex items-center justify-center border border-neutral-300 dark:border-white/10"
                                         style={{ color: 'var(--event-primary)' }}
                                     >
                                         <Help size={20} />
                                     </div>
                                     <div className="text-left">
-                                        <div className="text-lg font-bold text-white leading-none">Dúvidas Frequentes</div>
+                                        <div className="text-lg font-bold text-neutral-900 dark:text-white leading-none">Dúvidas Frequentes</div>
                                         <div className="text-neutral-500 text-sm mt-1">Confira as respostas para as perguntas comuns</div>
                                     </div>
-                                    <div className="ml-4 text-neutral-600 group-hover:text-white transition-colors">
+                                    <div className="ml-4 text-neutral-500 group-hover:text-neutral-900 dark:text-neutral-600 dark:group-hover:text-white transition-colors">
                                         <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </div>

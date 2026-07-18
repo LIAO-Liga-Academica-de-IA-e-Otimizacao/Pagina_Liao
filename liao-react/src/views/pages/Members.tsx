@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import MemberCard from '../../components/domain/MemberCard';
+import TutorCard from '../../components/domain/TutorCard';
 import MemberModal from '../../components/ui/MemberModal';
 import PageLayout from '../layouts/PageLayout';
+import type { Tutor } from '../../models/Tutor';
 
 interface Member {
     id: number;
@@ -21,6 +24,10 @@ interface Member {
 
 const Members: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
+    const [tutors, setTutors] = useState<Tutor[]>([]);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const tabParam = searchParams.get('tab');
+
     // const [loading, setLoading] = useState(true);
     const [selectedMember, setSelectedMember] = useState<Member | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -29,11 +36,29 @@ const Members: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Navigation State
-    const [activeTab, setActiveTab] = useState<'directors' | 'members' | 'founders'>('directors');
+    const [activeTab, setActiveTab] = useState<'directors' | 'members' | 'founders' | 'tutors'>(() => {
+        if (tabParam === 'tutors' || tabParam === 'members' || tabParam === 'founders' || tabParam === 'directors') {
+            return tabParam as any;
+        }
+        return 'directors';
+    });
     const [selectedYear, setSelectedYear] = useState(2026);
     const [roleFilter, setRoleFilter] = useState<'all' | 'directors'>('all'); // New Sub-filter
     const [mobileViewMode, setMobileViewMode] = useState<'carousel' | 'grid'>('carousel'); // Mobile View Toggle
     const [isPaused, setIsPaused] = useState(false); // Mobile Carousel Pause Toggle
+
+    // Sync active tab with search parameter change
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        if (tab && ['directors', 'members', 'founders', 'tutors'].includes(tab)) {
+            setActiveTab(tab as any);
+        }
+    }, [searchParams]);
+
+    const handleTabChange = (tab: 'directors' | 'members' | 'founders' | 'tutors') => {
+        setActiveTab(tab);
+        setSearchParams({ tab });
+    };
 
     // Derived Data
     const availableYears = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
@@ -41,11 +66,16 @@ const Members: React.FC = () => {
     if (!availableYears.includes(2026)) availableYears.unshift(2026);
 
     useEffect(() => {
-        const fetchMembers = async () => {
+        const fetchData = async () => {
             try {
-                const response = await apiService.getMembers();
-                const data = (response.success && Array.isArray(response.data)) ? response.data : [];
-                setMembers(data);
+                const [membersRes, tutorsRes] = await Promise.all([
+                    apiService.getMembers(),
+                    apiService.getTutors()
+                ]);
+                const membersData = (membersRes.success && Array.isArray(membersRes.data)) ? membersRes.data : [];
+                const tutorsData = (tutorsRes.success && (tutorsRes.data?.tutors || tutorsRes.data)) || [];
+                setMembers(membersData);
+                setTutors(Array.isArray(tutorsData) ? tutorsData : []);
             } catch (err) {
                 console.error(err);
             } finally {
@@ -53,7 +83,7 @@ const Members: React.FC = () => {
             }
         };
 
-        fetchMembers();
+        fetchData();
     }, []);
 
     const handleCardClick = (member: Member) => {
@@ -107,24 +137,27 @@ const Members: React.FC = () => {
         setCurrentIndex(0);
     }, [activeTab, selectedYear, roleFilter]);
 
+    const getListLength = () => activeTab === 'tutors' ? tutors.length : filteredMembers.length;
+
     // Auto-advance
     useEffect(() => {
-        if (filteredMembers.length <= itemsPerView || isPaused) return;
+        const listLength = getListLength();
+        if (listLength <= itemsPerView || isPaused) return;
 
-        const maxIndex = Math.max(0, filteredMembers.length - itemsPerView);
+        const maxIndex = Math.max(0, listLength - itemsPerView);
         const interval = setInterval(() => {
             setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
         }, 3000);
         return () => clearInterval(interval);
-    }, [filteredMembers.length, itemsPerView, isPaused]);
+    }, [filteredMembers.length, tutors.length, activeTab, itemsPerView, isPaused]);
 
     const nextSlide = () => {
-        const maxIndex = Math.max(0, filteredMembers.length - itemsPerView);
+        const maxIndex = Math.max(0, getListLength() - itemsPerView);
         setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
     };
 
     const prevSlide = () => {
-        const maxIndex = Math.max(0, filteredMembers.length - itemsPerView);
+        const maxIndex = Math.max(0, getListLength() - itemsPerView);
         setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
     };
 
@@ -163,17 +196,23 @@ const Members: React.FC = () => {
             subtitle="Conheça as pessoas que fazem a LIAO acontecer"
         >
             {/* Header and Tabs (Unchanged code omitted for brevity matching existing context) */}
-            <div className="flex justify-center mb-8 space-x-4">
-                {['directors', 'members', 'founders'].map((tab) => (
+            <div className="flex flex-wrap justify-center mb-8 gap-3 sm:space-x-4">
+                {['directors', 'members', 'founders', 'tutors'].map((tab) => (
                     <button
                         key={tab}
-                        onClick={() => setActiveTab(tab as any)}
+                        onClick={() => handleTabChange(tab as any)}
                         className={`px-6 py-2 rounded-full font-bold transition-all ${activeTab === tab
                             ? 'bg-gradient-to-r from-black to-success-900 text-white shadow-lg scale-105'
                             : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
                             }`}
                     >
-                        {tab === 'directors' ? 'Diretoria Atual' : tab === 'members' ? 'Membros' : 'Fundadores'}
+                        {tab === 'directors' 
+                            ? 'Diretoria Atual' 
+                            : tab === 'members' 
+                            ? 'Membros' 
+                            : tab === 'founders' 
+                            ? 'Fundadores' 
+                            : 'Tutores'}
                     </button>
                 ))}
             </div>
@@ -211,7 +250,7 @@ const Members: React.FC = () => {
                 /* Mobile View Container */
                 <div className="space-y-4">
                     {/* Mobile View Toggle */}
-                    {filteredMembers.length > 0 && (
+                    {getListLength() > 0 && (
                         <div className="flex justify-end px-4 mb-2">
                             <div className="bg-white dark:bg-neutral-800 rounded-lg p-1 shadow-sm border border-neutral-100 dark:border-neutral-700 flex gap-1">
                                 <button
@@ -253,39 +292,66 @@ const Members: React.FC = () => {
                                 onTouchMove={handleTouchMove}
                                 onTouchEnd={handleTouchEnd}
                             >
-                                {filteredMembers.length > 0 ? (
-                                    <div
-                                        className="flex transition-transform duration-500 ease-in-out"
-                                        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                                    >
-                                        {filteredMembers.map((member) => (
-                                            <div
-                                                key={member.id}
-                                                style={{ width: '100%' }}
-                                                className="shrink-0 px-2 sm:px-4"
-                                            >
-                                                <div className="h-full flex justify-center">
-                                                    <MemberCard
-                                                        member={member}
-                                                        onSelect={handleCardClick}
-                                                    />
+                                {activeTab === 'tutors' ? (
+                                    tutors.length > 0 ? (
+                                        <div
+                                            className="flex transition-transform duration-500 ease-in-out"
+                                            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                                        >
+                                            {tutors.map((tutor) => (
+                                                <div
+                                                    key={tutor.id}
+                                                    style={{ width: '100%' }}
+                                                    className="shrink-0 px-2 sm:px-4"
+                                                >
+                                                    <div className="h-full flex justify-center">
+                                                        <TutorCard tutor={tutor} />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                                            <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                                                Nenhum tutor disponível no momento.
+                                            </p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
-                                        <p className="text-neutral-500 dark:text-neutral-400 text-lg">
-                                            Nenhum membro encontrado nesta categoria.
-                                        </p>
-                                    </div>
+                                    filteredMembers.length > 0 ? (
+                                        <div
+                                            className="flex transition-transform duration-500 ease-in-out"
+                                            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                                        >
+                                            {filteredMembers.map((member) => (
+                                                <div
+                                                    key={member.id}
+                                                    style={{ width: '100%' }}
+                                                    className="shrink-0 px-2 sm:px-4"
+                                                >
+                                                    <div className="h-full flex justify-center">
+                                                        <MemberCard
+                                                            member={member}
+                                                            onSelect={handleCardClick}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                                            <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                                                Nenhum membro encontrado nesta categoria.
+                                            </p>
+                                        </div>
+                                    )
                                 )}
                             </div>
 
                             {/* Mobile Indicators */}
-                            {filteredMembers.length > 1 && (
+                            {getListLength() > 1 && (
                                 <div className="flex justify-center mt-4 space-x-2">
-                                    {filteredMembers.map((_, idx) => (
+                                    {Array.from({ length: getListLength() }).map((_, idx) => (
                                         <div
                                             key={idx}
                                             className={`w-2 h-2 rounded-full transition-colors ${idx === currentIndex ? 'bg-success-600' : 'bg-neutral-300'}`}
@@ -297,37 +363,51 @@ const Members: React.FC = () => {
                     ) : (
                         /* Mobile Grid View (New) */
                         <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 px-2">
-                            {filteredMembers.length > 0 ? (
-                                filteredMembers.map((member) => (
-                                    <button
-                                        key={member.id}
-                                        onClick={() => handleCardClick(member)}
-                                        className="flex flex-col items-center bg-white dark:bg-neutral-800 p-2 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 hover:shadow-md transition-all active:scale-95"
-                                    >
-                                        <div className="w-full aspect-square mb-2 relative overflow-hidden rounded-lg">
-                                            <img
-                                                src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
-                                                alt={member.name}
-                                                className="w-full h-full object-cover"
-                                                loading="lazy"
-                                            />
-                                            {/* Role Badge (Tiny) */}
-                                            {member.role !== 'member' && (
-                                                <div className="absolute top-1 right-1 w-2 h-2 bg-warning-400 rounded-full shadow-sm"></div>
-                                            )}
+                            {activeTab === 'tutors' ? (
+                                tutors.length > 0 ? (
+                                    tutors.map((tutor) => (
+                                        <div key={tutor.id} className="w-full flex justify-center">
+                                            <TutorCard tutor={tutor} />
                                         </div>
-                                        <span className="text-xs font-semibold text-neutral-800 dark:text-white text-center line-clamp-2 leading-tight w-full">
-                                            {member.name}
-                                        </span>
-                                        <span className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 truncate w-full text-center">
-                                            {member.role === 'member' ? 'Membro' : member.role}
-                                        </span>
-                                    </button>
-                                ))
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center py-8">
+                                        <p className="text-neutral-500 text-sm">Nenhum tutor disponível.</p>
+                                    </div>
+                                )
                             ) : (
-                                <div className="col-span-full text-center py-8">
-                                    <p className="text-neutral-500 text-sm">Nenhum membro encontrado.</p>
-                                </div>
+                                filteredMembers.length > 0 ? (
+                                    filteredMembers.map((member) => (
+                                        <button
+                                            key={member.id}
+                                            onClick={() => handleCardClick(member)}
+                                            className="flex flex-col items-center bg-white dark:bg-neutral-800 p-2 rounded-xl shadow-sm border border-neutral-100 dark:border-neutral-700 hover:shadow-md transition-all active:scale-95"
+                                        >
+                                            <div className="w-full aspect-square mb-2 relative overflow-hidden rounded-lg">
+                                                <img
+                                                    src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
+                                                    alt={member.name}
+                                                    className="w-full h-full object-cover"
+                                                    loading="lazy"
+                                                />
+                                                {/* Role Badge (Tiny) */}
+                                                {member.role !== 'member' && (
+                                                    <div className="absolute top-1 right-1 w-2 h-2 bg-warning-400 rounded-full shadow-sm"></div>
+                                                )}
+                                            </div>
+                                            <span className="text-xs font-semibold text-neutral-800 dark:text-white text-center line-clamp-2 leading-tight w-full">
+                                                {member.name}
+                                            </span>
+                                            <span className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 truncate w-full text-center">
+                                                {member.role === 'member' ? 'Membro' : member.role}
+                                            </span>
+                                        </button>
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center py-8">
+                                        <p className="text-neutral-500 text-sm">Nenhum membro encontrado.</p>
+                                    </div>
+                                )
                             )}
                         </div>
                     )}
@@ -335,21 +415,37 @@ const Members: React.FC = () => {
             ) : (
                 /* Desktop Grid View */
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredMembers.length > 0 ? (
-                        filteredMembers.map((member) => (
-                            <div key={member.id} className="flex justify-center w-full">
-                                <MemberCard
-                                    member={member}
-                                    onSelect={handleCardClick}
-                                />
+                    {activeTab === 'tutors' ? (
+                        tutors.length > 0 ? (
+                            tutors.map((tutor) => (
+                                <div key={tutor.id} className="flex justify-center w-full">
+                                    <TutorCard tutor={tutor} />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                                <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                                    Nenhum tutor disponível no momento.
+                                </p>
                             </div>
-                        ))
+                        )
                     ) : (
-                        <div className="col-span-full text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
-                            <p className="text-neutral-500 dark:text-neutral-400 text-lg">
-                                Nenhum membro encontrado nesta categoria.
-                            </p>
-                        </div>
+                        filteredMembers.length > 0 ? (
+                            filteredMembers.map((member) => (
+                                <div key={member.id} className="flex justify-center w-full">
+                                    <MemberCard
+                                        member={member}
+                                        onSelect={handleCardClick}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-12 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
+                                <p className="text-neutral-500 dark:text-neutral-400 text-lg">
+                                    Nenhum membro encontrado nesta categoria.
+                                </p>
+                            </div>
+                        )
                     )}
                 </div>
             )}

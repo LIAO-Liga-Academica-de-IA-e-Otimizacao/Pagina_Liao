@@ -27,7 +27,7 @@ import { AuthRequest } from '../types';
  */
 export const createEvent = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe, themeMode } = req.body;
 
         const event = await prisma.event.create({
             data: {
@@ -43,6 +43,7 @@ export const createEvent = async (req: Request, res: Response): Promise<void> =>
                 fontClass,
                 borderRadius,
                 subscribe,
+                themeMode,
                 speakers: {
                     create: speakers?.map((s: any) => {
                         const name = typeof s === 'string' ? s : s.name;
@@ -202,7 +203,7 @@ export const getEventBySlug = async (req: Request, res: Response): Promise<void>
 export const updateEvent = async (req: Request, res: Response): Promise<void> => {
     try {
         const { id } = req.params;
-        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe } = req.body;
+        const { title, slug, description, coverImage, date, location, speakers, agenda, partners, gallery, highlights, palette, fontClass, borderRadius, subscribe, themeMode } = req.body;
 
         const event = await prisma.event.update({
             where: { id: Number(id) },
@@ -219,6 +220,7 @@ export const updateEvent = async (req: Request, res: Response): Promise<void> =>
                 fontClass,
                 borderRadius,
                 subscribe,
+                themeMode,
                 speakers: speakers ? {
                     deleteMany: {}, // Clear old speakers and re-insert
                     create: speakers.map((s: any) => {

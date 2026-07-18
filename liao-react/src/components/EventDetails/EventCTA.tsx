@@ -47,7 +47,7 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
     return (
         <FadeInSection delay="delay-500">
             <div 
-                className="relative overflow-hidden p-8 border border-white/10 shadow-2xl"
+                className="relative overflow-hidden p-8 border border-neutral-200 dark:border-white/10 shadow-xl dark:shadow-2xl"
                 style={{ borderRadius: 'var(--event-radius-lg)' }}
             >
                 <div 
@@ -58,14 +58,14 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                 ></div>
                 <div className="relative z-10 text-center space-y-6">
                     <div 
-                        className="w-16 h-16 mx-auto bg-white/10 flex items-center justify-center backdrop-blur-sm border border-white/20"
+                        className="w-16 h-16 mx-auto bg-neutral-800/10 dark:bg-white/10 flex items-center justify-center backdrop-blur-sm border border-neutral-200 dark:border-white/20"
                         style={{ borderRadius: 'var(--event-radius)' }}
                     >
-                        <Bell size={28} className="text-white" />
+                        <Bell size={28} className="text-neutral-800 dark:text-white" />
                     </div>
                     <div>
-                        <h3 className="text-2xl font-bold text-white mb-2">Não perca!</h3>
-                        <p className="text-neutral-300 text-sm leading-relaxed">
+                        <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">Não perca!</h3>
+                        <p className="text-neutral-600 dark:text-neutral-300 text-sm leading-relaxed">
                             Adicione este evento à sua agenda e fique por dentro de todas as novidades.
                         </p>
                     </div>
@@ -82,8 +82,8 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                         onClick={handleAddToCalendar}
                         className={`w-full py-4 font-bold transition-all active:scale-[0.98] ${
                             event.subscribe 
-                                ? 'bg-white/5 text-white hover:bg-white/10 border border-white/10' 
-                                : 'bg-white text-neutral-950 hover:bg-neutral-200 shadow-lg shadow-white/10'
+                                ? 'bg-neutral-800/5 dark:bg-white/5 text-neutral-850 dark:text-white hover:bg-neutral-850/10 dark:hover:bg-white/10 border border-neutral-300 dark:border-white/10' 
+                                : 'bg-neutral-900 dark:bg-white text-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-200 shadow-lg'
                         }`}
                         style={{ borderRadius: 'var(--event-radius-sm)' }}
                     >

@@ -13,9 +13,9 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
             to={`/tutors/${tutor.id}`}
             className="block h-full group"
         >
-            <div className="group relative w-full h-full min-h-[320px] rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer">
-                {/* White Content Container */}
-                <div className="bg-white rounded-2xl p-4 h-full flex flex-col items-center text-center relative z-10 gap-2">
+            <div className="group relative w-full h-full min-h-[320px] flex flex-col rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer">
+                {/* Content Container */}
+                <div className="bg-white dark:bg-neutral-900 rounded-2xl p-4 flex flex-col flex-1 items-center text-center relative z-10 gap-2">
 
                     {/* Avatar with Gradient Ring */}
                     <div className="relative mb-1">
@@ -28,18 +28,18 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
                                         : `https://ui-avatars.com/api/?name=${encodeURIComponent(tutor.name)}&background=random`
                                 }
                                 alt={tutor.name}
-                                className="w-full h-full object-cover rounded-full border-2 border-white"
+                                className="w-full h-full object-cover rounded-full border-2 border-white dark:border-neutral-900"
                             />
                         </div>
                     </div>
 
                     {/* Typography */}
-                    <h3 className="text-lg font-bold text-neutral-900 font-sans leading-tight">{tutor.name}</h3>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white font-sans leading-tight">{tutor.name}</h3>
 
                     {/* Subjects */}
                     <div className="flex flex-wrap justify-center gap-1 mb-1">
                         {tutor.subjects?.slice(0, 3).map((subject, index) => (
-                            <span key={index} className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                            <span key={index} className="text-xs font-medium text-gray-600 dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800 px-2 py-0.5 rounded-full">
                                 {subject}
                             </span>
                         ))}

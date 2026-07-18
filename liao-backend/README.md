@@ -17,15 +17,22 @@ Backend API and Database Engine for the LIAO (Liga Acadêmica de Inteligência A
 
 ### Prerequisites
 - Node.js (v18+)
-- PostgreSQL database
+- Docker (recommended for automatic database setup)
 
 ### Installation
-1. Install dependencies: `npm install`
-2. Configure environment: `cp .env.example .env`
-3. Edit `.env` with your DB credentials and `JWT_SECRET`.
-4. Initialize the DB: `npx prisma migrate dev --name init`
-5. Seed the DB: `npx prisma db seed`
-6. Start dev server: `npm run dev`
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Set up the development database:
+   ```bash
+   npm run db:setup
+   ```
+   *(This automatically copies `.env.example` to `.env`, spins up a PostgreSQL container via Docker, and runs migrations & seeding).*
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 ---
 
@@ -53,6 +60,15 @@ To populate the database with example data (members, tutors, events, etc.):
 # Only runs the seed script (prisma/seed.ts)
 npx prisma db seed
 ```
+
+### 4. 🔄 Toggling Environments (Dev vs. Prod)
+This project features an automated environment switcher. You can toggle between your local database and a production database without overriding your auto-configured local database string:
+
+1. Open `liao-backend/.env` and locate the **Database Configuration** section.
+2. Toggle the `DB_ENV` setting:
+   * `DB_ENV=dev`: Uses `DEV_DATABASE_URL` (automatically managed for your local machine or Docker).
+   * `DB_ENV=prod`: Uses `PROD_DATABASE_URL` (points to your production database URL).
+3. The active `DATABASE_URL` used by Prisma is automatically synchronized whenever you run `npm run dev`, `npm run build`, or `npm run db:setup`.
 
 ---
 

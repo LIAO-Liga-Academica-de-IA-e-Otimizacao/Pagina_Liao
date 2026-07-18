@@ -1,8 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './views/layouts/MainLayout';
 import Dashboard from './views/pages/Dashboard';
 import Members from './views/pages/Members';
-import Tutors from './views/pages/Tutors';
 import TutorDetails from './views/pages/TutorDetails';
 import ProSel from './views/pages/ProSel';
 import Newsletter from './views/pages/Newsletter';
@@ -25,7 +24,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="members" element={<Members />} />
-          <Route path="tutors" element={<Tutors />} />
+          <Route path="tutors" element={<Navigate to="/members?tab=tutors" replace />} />
           <Route path="tutors/:id" element={<TutorDetails />} />
           <Route path="prosel" element={<ProSel />} />
           <Route path="newsletter" element={<Newsletter />} />

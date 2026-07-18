@@ -1,0 +1,210 @@
+import * as fs from 'fs';
+import * as path from 'path';
+import { execSync } from 'child_process';
+import { Client } from 'pg';
+import * as net from 'net';
+
+function checkPort(port: number, host: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    const socket = new net.Socket();
+    const onError = () => {
+      socket.destroy();
+      resolve(false);
+    };
+    socket.setTimeout(1000);
+    socket.once('error', onError);
+    socket.once('timeout', onError);
+    socket.connect(port, host, () => {
+      socket.end();
+      resolve(true);
+    });
+  });
+}
+
+async function tryConnect(dbUrl: string): Promise<{ success: boolean; error?: any }> {
+  const client = new Client({ connectionString: dbUrl });
+  try {
+    await client.connect();
+    await client.end();
+    return { success: true };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+async function main() {
+  const envPath = path.join(__dirname, '../.env');
+  const envExamplePath = path.join(__dirname, '../.env.example');
+
+  // 1. Copy .env if not exists
+  let envCreated = false;
+  if (!fs.existsSync(envPath)) {
+    console.log('📝 Creating .env from .env.example...');
+    fs.copyFileSync(envExamplePath, envPath);
+    envCreated = true;
+  }
+
+  // Load environment variables
+  require('dotenv').config({ path: envPath });
+
+  const dbEnv = process.env.DB_ENV || 'dev';
+  let devDbUrl = process.env.DEV_DATABASE_URL || '';
+  let prodDbUrl = process.env.PROD_DATABASE_URL || '';
+  let dbUrl = process.env.DATABASE_URL || '';
+
+  const defaultPlaceholder = 'postgresql://username:password@localhost:5432/liao_db?schema=public';
+
+  if (dbEnv === 'dev') {
+    // 2. Autofix DEV_DATABASE_URL if it is the default placeholder
+    if (devDbUrl === defaultPlaceholder || envCreated) {
+      const isPortOpen = await checkPort(5432, 'localhost');
+      if (isPortOpen) {
+        const currentUser = process.env.USER || process.env.USERNAME || 'postgres';
+        const localUrl = `postgresql://${currentUser}@localhost:5432/postgres`;
+        console.log(`🔍 Port 5432 is open. Checking if we can connect as user "${currentUser}"...`);
+        
+        const connTest = await tryConnect(localUrl);
+        if (connTest.success) {
+          const newDbUrl = `postgresql://${currentUser}@localhost:5432/liao_db?schema=public`;
+          console.log(`⚙️ Detected running local PostgreSQL. Updating DEV_DATABASE_URL in .env to:`);
+          console.log(`   ${newDbUrl}`);
+          
+          let envContent = fs.readFileSync(envPath, 'utf8');
+          envContent = envContent
+            .replace(/^DEV_DATABASE_URL=.+$/m, `DEV_DATABASE_URL="${newDbUrl}"`)
+            .replace(/^DATABASE_URL=.+$/m, `DATABASE_URL="${newDbUrl}"`);
+          fs.writeFileSync(envPath, envContent, 'utf8');
+          devDbUrl = newDbUrl;
+          dbUrl = newDbUrl;
+          
+          // Reload environment variables
+          process.env.DEV_DATABASE_URL = devDbUrl;
+          process.env.DATABASE_URL = dbUrl;
+        }
+      }
+    }
+  } else {
+    // If we are in prod env, ensure DATABASE_URL matches PROD_DATABASE_URL
+    if (dbUrl !== prodDbUrl) {
+      console.log(`🔄 DB_ENV is set to "PROD". Synchronizing active DATABASE_URL...`);
+      let envContent = fs.readFileSync(envPath, 'utf8');
+      envContent = envContent.replace(/^DATABASE_URL=.+$/m, `DATABASE_URL="${prodDbUrl}"`);
+      fs.writeFileSync(envPath, envContent, 'utf8');
+      dbUrl = prodDbUrl;
+      process.env.DATABASE_URL = dbUrl;
+    }
+  }
+
+  // Parse DB details
+  const match = dbUrl.match(/postgres(?:ql)?:\/\/([^:]+)(?::([^@]+))?@([^:/]+)(?::(\d+))?\/([^?]+)/);
+  if (!match) {
+    console.error('❌ Invalid DATABASE_URL in .env');
+    process.exit(1);
+  }
+  const [_, user, password, host, portStr, dbName] = match;
+  const port = portStr ? parseInt(portStr) : 5432;
+
+  // 3. Connect/Start database
+  console.log(`📡 Connecting to PostgreSQL at ${host}:${port}...`);
+  let isReady = false;
+  
+  // Try connecting
+  const connCheck = await tryConnect(dbUrl);
+  if (connCheck.success) {
+    console.log('✅ Connected to database successfully.');
+    isReady = true;
+  } else {
+    const pgErr = connCheck.error as any;
+    // If database does not exist, we can create it
+    if (pgErr && pgErr.code === '3D000') {
+      console.log(`🚧 Database "${dbName}" does not exist. Attempting to create it...`);
+      const adminUrl = dbUrl.replace(`/${dbName}`, '/postgres');
+      const adminClient = new Client({ connectionString: adminUrl });
+      try {
+        await adminClient.connect();
+        await adminClient.query(`CREATE DATABASE "${dbName}"`);
+        await adminClient.end();
+        console.log(`✅ Created database "${dbName}" successfully.`);
+        isReady = true;
+      } catch (createErr) {
+        console.error(`❌ Failed to create database "${dbName}":`, (createErr as Error).message);
+        adminClient.end().catch(() => {});
+      }
+    } else if (host === 'localhost' || host === '127.0.0.1') {
+      // Check if port is already open (meaning another service is occupying it)
+      const isPortOccupied = await checkPort(port, host);
+      if (isPortOccupied) {
+        console.error(`\n⚠️  [Port Conflict] Port ${port} is already in use, but connection failed with: "${pgErr.message}".`);
+        console.error(`👉 If you have a local PostgreSQL running on port ${port}:`);
+        console.error(`   1. Please edit the DATABASE_URL in "liao-backend/.env" to include your correct password/credentials.`);
+        console.error(`   2. Or, stop your local PostgreSQL service and run this setup script again so Docker Compose can use the port.\n`);
+        process.exit(1);
+      }
+
+      // Connection refused or port closed, let's try starting docker-compose
+      console.log('🐳 Database connection failed. Attempting to start PostgreSQL via Docker Compose...');
+      try {
+        execSync('docker compose up -d', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
+        
+        console.log('⏳ Waiting for PostgreSQL container to start up...');
+        let retries = 30;
+        while (!isReady && retries > 0) {
+          const retryCheck = await tryConnect(dbUrl);
+          if (retryCheck.success) {
+            console.log('✅ PostgreSQL container is ready!');
+            isReady = true;
+          } else {
+            const retryErr = retryCheck.error as any;
+            if (retryErr && retryErr.code === '3D000') {
+              // Create it
+              const adminUrl = dbUrl.replace(`/${dbName}`, '/postgres');
+              const adminClient = new Client({ connectionString: adminUrl });
+              try {
+                await adminClient.connect();
+                await adminClient.query(`CREATE DATABASE "${dbName}"`);
+                await adminClient.end();
+                console.log(`✅ Created database "${dbName}" successfully.`);
+                isReady = true;
+              } catch (cErr) {
+                adminClient.end().catch(() => {});
+              }
+            } else {
+              retries--;
+              if (retries === 0) {
+                console.error('❌ Timed out waiting for PostgreSQL container.');
+                process.exit(1);
+              }
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+          }
+        }
+      } catch (dockerErr) {
+        console.error('❌ Failed to launch Docker Compose or connect to database:', (dockerErr as Error).message);
+        process.exit(1);
+      }
+    } else {
+      console.error('❌ Failed to connect to database:', pgErr.message);
+      process.exit(1);
+    }
+  }
+
+  if (!isReady) {
+    console.error('❌ Database is not ready. Setup aborted.');
+    process.exit(1);
+  }
+
+  // 4. Run Prisma migrations
+  console.log('🔄 Running Prisma migrations...');
+  try {
+    execSync('npx prisma migrate dev', { stdio: 'inherit', cwd: path.join(__dirname, '..') });
+    console.log('🚀 Database setup completed successfully!');
+  } catch (error) {
+    console.error('❌ Failed to run Prisma migrations.');
+    process.exit(1);
+  }
+}
+
+main().catch((err) => {
+  console.error('Unexpected error:', err);
+  process.exit(1);
+});

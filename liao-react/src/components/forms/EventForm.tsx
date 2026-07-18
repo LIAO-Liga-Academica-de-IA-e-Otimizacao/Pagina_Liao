@@ -23,7 +23,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         highlights: (event?.highlights as string[]) || [],
         partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[],
         locations: event?.location ? event.location.split(' | ') : [],
-        subscribe: event?.subscribe || ''
+        subscribe: event?.subscribe || '',
+        themeMode: (event as any)?.themeMode || 'dark'
     });
 
     const [allPartners, setAllPartners] = useState<Partner[]>([]);
@@ -209,6 +210,18 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                             onChange={(e) => setFormData({ ...formData, subscribe: e.target.value })}
                         />
                         <p className="text-[10px] text-neutral-500 mt-1">Habilita o botão "Realizar Inscrição" na página do evento.</p>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Tema da Página do Evento</label>
+                        <select
+                            className="input-field w-full"
+                            value={formData.themeMode}
+                            onChange={(e) => setFormData({ ...formData, themeMode: e.target.value })}
+                        >
+                            <option value="dark">Escuro (Dark Mode)</option>
+                            <option value="light">Claro (Light Mode)</option>
+                        </select>
+                        <p className="text-[10px] text-neutral-500 mt-1">Define se a página do evento será exibida com fundo claro ou escuro.</p>
                     </div>
                 </div>
 

@@ -1154,6 +1154,8 @@ export interface components {
             /** @default round */
             borderRadius: string | null;
             subscribe?: string | null;
+            /** @default dark */
+            themeMode: string | null;
             agenda?: components["schemas"]["AgendaItem"][];
             speakers?: components["schemas"]["EventSpeaker"][];
             partners?: components["schemas"]["Partner"][];
