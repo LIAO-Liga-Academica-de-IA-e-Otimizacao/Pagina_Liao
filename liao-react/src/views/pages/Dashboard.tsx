@@ -5,6 +5,7 @@ import type { Member } from '../../models/Member';
 import type { Article } from '../../models/Article';
 import InteractiveBanner from '../../components/ui/InteractiveBanner';
 import { useSEO } from '../../hooks/useSEO';
+import Button from '../../components/ui/Button';
 
 // Simple Carousel Component
 const NewsCarousel: React.FC<{ articles: Article[] }> = ({ articles }) => {

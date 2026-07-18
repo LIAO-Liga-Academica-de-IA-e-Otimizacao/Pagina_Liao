@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { apiService } from '../../services/api';
 import { useSEO } from '../../hooks/useSEO';
+import Card from '../../components/ui/Card';
 
 const About: React.FC = () => {
     useSEO({
