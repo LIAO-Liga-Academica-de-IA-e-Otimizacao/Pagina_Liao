@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx scripts/resolve-env.ts && prisma generate && nodemon",
     "build": "tsx scripts/resolve-env.ts && prisma generate && tsc",
-    "vercel-build": "prisma generate && tsc",
+    "vercel-build": "prisma generate && prisma migrate deploy && tsc",
     "postinstall": "prisma generate && npm run generate:types",
     "start": "node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
