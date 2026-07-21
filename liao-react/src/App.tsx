@@ -13,6 +13,7 @@ import Admin from './views/pages/Admin';
 import Events from './views/pages/Events';
 import EventDetails from './views/pages/EventDetails';
 import ProtectedRoute from './components/ui/ProtectedRoute';
+import ScrollToTop from './components/layout/ScrollToTop';
 
 import About from './views/pages/About';
 import Partnerships from './views/pages/Partnerships';
@@ -20,6 +21,7 @@ import Partnerships from './views/pages/Partnerships';
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
