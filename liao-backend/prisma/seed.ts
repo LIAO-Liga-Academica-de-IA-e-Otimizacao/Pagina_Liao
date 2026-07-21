@@ -199,7 +199,268 @@ async function main() {
     }
   });
 
-  console.log(`✅ Seed finished! Events created: ${event.title} (Dark), ${lightEvent.title} (Light)`);
+  console.log(`✅ Seed finished! Past events created: ${event.title} (Dark), ${lightEvent.title} (Light)`);
+
+  // Additional Finished Event (Past: March 2026)
+  const pastEventData = {
+    title: 'Minicurso: Introdução ao Python para Ciência de Dados',
+    description: 'Minicurso prático introdutório cobrindo manipulação de dados com Pandas e NumPy e introdução a modelos preditivos.',
+    coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-03-10T14:00:00Z'),
+    location: 'Laboratório de Informática 3 - IC UFBA',
+    highlights: [
+      'Fundamentos de Python',
+      'Numpy & Pandas',
+      'Visualização de Dados',
+      'Casos Práticos'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=800&q=80'
+    ],
+    palette: ['#D97706', '#B45309'],
+    borderRadius: 'squared',
+    fontClass: 'font-mono',
+    themeMode: 'light',
+  };
+
+  await prisma.event.upsert({
+    where: { slug: 'minicurso-python-dados-2026' },
+    update: {
+      ...pastEventData,
+      partners: { set: [{ id: partner2.id }] }
+    },
+    create: {
+      ...pastEventData,
+      slug: 'minicurso-python-dados-2026',
+      agenda: {
+        create: [
+          { time: '14:00', title: 'Instalação e Conceitos Fundamentais', description: 'Ambiente Jupyter e bibliotecas' },
+          { time: '15:30', title: 'Análise Exploratória na Prática', description: 'Manipulação de conjuntos de dados reais' },
+          { time: '17:00', title: 'Primeiro Modelo de Regressão', description: 'Scikit-learn hands-on' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            memberId: member1.id,
+            role: 'Instrutora Principal',
+            link: 'https://github.com/alice'
+          }
+        ]
+      },
+      partners: { connect: [{ id: partner2.id }] }
+    }
+  });
+
+  // Future Event 1 (September 2026)
+  const futureEvent1Data = {
+    title: 'Hackathon LIAO 2026: IA & Otimização Combinatória',
+    description: '36 horas de maratona intensiva para criar soluções baseadas em Inteligência Artificial e Otimização para problemas do setor produtivo e social.',
+    coverImage: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-09-12T08:00:00Z'),
+    location: 'Auditório Principal & Hub de Inovação - UFBA',
+    highlights: [
+      'Maratona Prática de 36 Horas',
+      'Premiação para Equipes Destaque',
+      'Mentoria com Especialistas do Mercado',
+      'Certificado e Certificação de Impacto'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80'
+    ],
+    palette: ['#2563EB', '#7C3AED'],
+    borderRadius: 'round',
+    fontClass: 'font-outfit',
+    subscribe: 'https://example.com/hackathon-2026',
+    themeMode: 'dark',
+  };
+
+  await prisma.event.upsert({
+    where: { slug: 'hackathon-liao-2026' },
+    update: {
+      ...futureEvent1Data,
+      partners: { set: [{ id: partner1.id }, { id: partner3.id }] }
+    },
+    create: {
+      ...futureEvent1Data,
+      slug: 'hackathon-liao-2026',
+      agenda: {
+        create: [
+          { time: '08:00', title: 'Abertura & Formação de Equipes', description: 'Recepção, network e pitch de problemas' },
+          { time: '09:00', title: 'Liberação dos Desafios', description: 'Início da maratona de desenvolvimento' },
+          { time: '18:00', title: 'Checkpoint de Mentoria', description: 'Feedback técnico e validação de MVPs' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            memberId: member2.id,
+            role: 'Coordenador Técnico',
+            link: 'https://github.com/bruno'
+          }
+        ]
+      },
+      partners: { connect: [{ id: partner1.id }, { id: partner3.id }] }
+    }
+  });
+
+  // Future Event 2 (October 2026)
+  const futureEvent2Data = {
+    title: 'Semana da Inteligência Artificial e Otimização 2026',
+    description: 'Edição 2026 da nossa semana acadêmica com palestras internacionais, workshops de ponta e apresentação de pesquisas inovadoras.',
+    coverImage: 'https://images.unsplash.com/photo-1485827404703-89b55fcc596e?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-10-20T09:00:00Z'),
+    location: 'Centro de Convenções UFBA - PAF I',
+    highlights: [
+      'Palestras com Pesquisadores Internacionais',
+      'Minicursos Práticos de Deep Learning',
+      'Sessão de Pôsteres Acadêmicos',
+      'Mesa Redonda: Ética e Futuro do Trabalho'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=800&q=80'
+    ],
+    palette: ['#0D9488', '#0284C7'],
+    borderRadius: 'round',
+    fontClass: 'font-space',
+    subscribe: 'https://example.com/semana-ia-2026',
+    themeMode: 'light',
+  };
+
+  await prisma.event.upsert({
+    where: { slug: 'semana-da-ia-e-otimizacao-2026' },
+    update: {
+      ...futureEvent2Data,
+      partners: { set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }] }
+    },
+    create: {
+      ...futureEvent2Data,
+      slug: 'semana-da-ia-e-otimizacao-2026',
+      agenda: {
+        create: [
+          { time: '09:00', title: 'Solene de Abertura', description: 'Boas-vindas com a diretoria do LIAO' },
+          { time: '10:00', title: 'Keynote: O Futuro dos Modelos Generativos', speakerName: 'Dra. Helena Costa' },
+          { time: '14:00', title: 'Workshop: Otimização de Hiperparâmetros', description: 'Prática em cluster GPU' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            name: 'Dra. Helena Costa',
+            role: 'Head of AI',
+            company: 'TechCorp Global',
+            photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
+            link: 'https://linkedin.com/in/helenacosta'
+          }
+        ]
+      },
+      partners: { connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }] }
+    }
+  });
+
+  // Future Event 3 (August 2026)
+  const futureEvent3Data = {
+    title: 'Bootcamp IA & Visão Computacional: Do Conceito à Aplicação',
+    description: 'Imersão de 3 dias em Visão Computacional cobrindo processamento de imagens com OpenCV, arquiteturas de CNNs e detecção de objetos em tempo real com YOLO.',
+    coverImage: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-08-25T13:00:00Z'),
+    location: 'Laboratório de Redes e IA - Instituto de Computação',
+    highlights: [
+      'Processamento Digital de Imagens',
+      'Treinamento de Modelos YOLO',
+      'Segmentação e Rastreamento',
+      'Deploy em Dispositivos Edge'
+    ],
+    gallery: [
+      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80'
+    ],
+    palette: ['#6366F1', '#EC4899'],
+    borderRadius: 'round',
+    fontClass: 'font-mono',
+    subscribe: 'https://example.com/bootcamp-visao-2026',
+    themeMode: 'dark',
+  };
+
+  await prisma.event.upsert({
+    where: { slug: 'bootcamp-ia-visao-computacional-2026' },
+    update: {
+      ...futureEvent3Data,
+      partners: { set: [{ id: partner1.id }, { id: partner2.id }] }
+    },
+    create: {
+      ...futureEvent3Data,
+      slug: 'bootcamp-ia-visao-computacional-2026',
+      agenda: {
+        create: [
+          { time: '13:00', title: 'Fundamentos de Processamento de Imagens', description: 'Filtros, transformações e OpenCV' },
+          { time: '15:00', title: 'Deep Learning para Visão', description: 'Redes convolucionais e transfer learning' },
+          { time: '17:00', title: 'Prática de Detecção em Tempo Real', description: 'Execução de inferências no browser e edge' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            memberId: member1.id,
+            role: 'Instrutora de Visão Computacional',
+            link: 'https://github.com/alice'
+          }
+        ]
+      },
+      partners: { connect: [{ id: partner1.id }, { id: partner2.id }] }
+    }
+  });
+
+  // Future Event 4 (November 2026)
+  const futureEvent4Data = {
+    title: 'Encontro LIAO: Algoritmos de Otimização em Escala',
+    description: 'Palestra técnica e mesa redonda focada em meta-heurísticas, algoritmos genéticos e solução de problemas NP-difíceis no setor logístico.',
+    coverImage: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=1470&auto=format&fit=crop',
+    date: new Date('2026-11-15T15:00:00Z'),
+    location: 'Auditório Magno - Instituto de Computação',
+    highlights: [
+      'Algoritmos Genéticos & Swarm Intelligence',
+      'Otimização Estocástica e Robusta',
+      'Casos de Sucesso na Indústria',
+      'Sessão de Perguntas e Respostas'
+    ],
+    gallery: [],
+    palette: ['#059669', '#3B82F6'],
+    borderRadius: 'squared',
+    fontClass: 'font-outfit',
+    subscribe: 'https://example.com/encontro-otimizacao-2026',
+    themeMode: 'light',
+  };
+
+  await prisma.event.upsert({
+    where: { slug: 'encontro-liao-otimizacao-escala-2026' },
+    update: {
+      ...futureEvent4Data,
+      partners: { set: [{ id: partner3.id }] }
+    },
+    create: {
+      ...futureEvent4Data,
+      slug: 'encontro-liao-otimizacao-escala-2026',
+      agenda: {
+        create: [
+          { time: '15:00', title: 'Abertura e Apresentação de Pesquisas', description: 'Projetos em andamento no LIAO' },
+          { time: '16:00', title: 'Mesa Redonda: Meta-heurísticas na Indústria', description: 'Debate com convidados' }
+        ]
+      },
+      speakers: {
+        create: [
+          {
+            memberId: member2.id,
+            role: 'Pesquisador em Otimização',
+            link: 'https://github.com/bruno'
+          }
+        ]
+      },
+      partners: { connect: [{ id: partner3.id }] }
+    }
+  });
+
+  console.log('✅ Seed finished! Events created (past and future successfully added).');
 
   // 3. System Config
   console.log('Seeding system config...');

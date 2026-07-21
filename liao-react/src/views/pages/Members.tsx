@@ -5,6 +5,7 @@ import MemberCard from '../../components/domain/MemberCard';
 import TutorCard from '../../components/domain/TutorCard';
 import MemberModal from '../../components/ui/MemberModal';
 import PageLayout from '../layouts/PageLayout';
+import FilterTabs from '../../components/ui/FilterTabs';
 import type { Tutor } from '../../models/Tutor';
 
 interface Member {
@@ -195,29 +196,20 @@ const Members: React.FC = () => {
             title="Nossos Membros" 
             subtitle="Conheça as pessoas que fazem a LIAO acontecer"
         >
-            {/* Header and Tabs (Unchanged code omitted for brevity matching existing context) */}
-            <div className="flex flex-wrap justify-center mb-8 gap-3 sm:space-x-4">
-                {['directors', 'members', 'founders', 'tutors'].map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => handleTabChange(tab as any)}
-                        className={`px-6 py-2 rounded-full font-bold transition-all ${activeTab === tab
-                            ? 'bg-gradient-to-r from-black to-success-900 text-white shadow-lg scale-105'
-                            : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700'
-                            }`}
-                    >
-                        {tab === 'directors' 
-                            ? 'Diretoria Atual' 
-                            : tab === 'members' 
-                            ? 'Membros' 
-                            : tab === 'founders' 
-                            ? 'Fundadores' 
-                            : 'Tutores'}
-                    </button>
-                ))}
-            </div>
+            {/* Standardized Header Tabs */}
+            <FilterTabs
+                tabs={[
+                    { id: 'directors', label: 'Diretoria Atual' },
+                    { id: 'members', label: 'Membros' },
+                    { id: 'founders', label: 'Fundadores' },
+                    { id: 'tutors', label: 'Tutores' }
+                ]}
+                activeTab={activeTab}
+                onChange={handleTabChange}
+                className="mb-8"
+            />
 
-            {/* Sub-filters (Year/Role) re-inserted if matching previous code flow or simplified */}
+            {/* Sub-filters (Year/Role) */}
             {activeTab === 'members' && (
                 <div className="flex flex-col items-center mb-8">
                     <div className="overflow-x-auto pb-4 w-full">
@@ -237,10 +229,15 @@ const Members: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                    <div className="flex space-x-3 mt-4">
-                        <button onClick={() => setRoleFilter('all')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border dark:border-neutral-600 ${roleFilter === 'all' ? 'bg-neutral-800 text-white' : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300'}`}>Todos</button>
-                        <button onClick={() => setRoleFilter('directors')} className={`px-4 py-1.5 rounded-full text-sm font-semibold border dark:border-neutral-600 ${roleFilter === 'directors' ? 'bg-neutral-800 text-white' : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300'}`}>Apenas Diretores</button>
-                    </div>
+                    <FilterTabs
+                        tabs={[
+                            { id: 'all', label: 'Todos' },
+                            { id: 'directors', label: 'Apenas Diretores' }
+                        ]}
+                        activeTab={roleFilter}
+                        onChange={setRoleFilter}
+                        className="mt-4"
+                    />
                 </div>
             )}
 

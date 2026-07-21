@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { EventApi } from '../../models/Event';
+import EventStatusBadge from './EventStatusBadge';
 
 type EventCardProps = {
     event: EventApi;
@@ -37,6 +38,9 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
                     <span className="bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm text-primary-600 dark:text-primary-400 px-4 py-1.5 rounded-full text-sm font-bold shadow-sm">
                         {eventDate}
                     </span>
+                </div>
+                <div className="absolute top-4 right-4">
+                    <EventStatusBadge date={event.date as string} />
                 </div>
             </div>
 
