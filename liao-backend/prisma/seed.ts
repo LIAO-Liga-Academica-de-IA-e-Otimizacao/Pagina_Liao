@@ -13,7 +13,81 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   console.log('🌱 Starting seed...');
 
-  // 1. Create a few Members first so we can link them to events
+  // 1. Create Founders
+  console.log('Creating founders...');
+  const founder1 = await prisma.member.upsert({
+    where: { email: 'andre.luiz@liao.ufba.br' },
+    update: { isFounder: true },
+    create: {
+      name: 'Prof. Dr. André Luiz',
+      email: 'andre.luiz@liao.ufba.br',
+      role: 'Professor Fundador & Coordenador Geral',
+      course: 'Ciência da Computação',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+      bio: 'Doutor em Ciência da Computação. Fundador do LIAO, especialista em Otimização Combinatória e Inteligência Artificial.',
+      linkedin: 'https://linkedin.com/in/andre-luiz-ufba',
+      github: 'https://github.com/andreluiz-ufba',
+      isActive: true,
+      isFounder: true,
+      year: 2020
+    },
+  });
+
+  const founder2 = await prisma.member.upsert({
+    where: { email: 'maria.clara@liao.ufba.br' },
+    update: { isFounder: true },
+    create: {
+      name: 'Profa. Dra. Maria Clara Santos',
+      email: 'maria.clara@liao.ufba.br',
+      role: 'Fundadora & Pesquisadora Senior de IA',
+      course: 'Engenharia de Computação',
+      photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300',
+      bio: 'Co-fundadora do laboratório. Pesquisadora em Deep Learning, Processamento de Linguagem Natural e Visão Computacional.',
+      linkedin: 'https://linkedin.com/in/mariaclarasantos',
+      github: 'https://github.com/mariaclara-ai',
+      isActive: true,
+      isFounder: true,
+      year: 2020
+    },
+  });
+
+  const founder3 = await prisma.member.upsert({
+    where: { email: 'lucas.mendes@liao.ufba.br' },
+    update: { isFounder: true },
+    create: {
+      name: 'Dr. Lucas Mendes',
+      email: 'lucas.mendes@liao.ufba.br',
+      role: 'Fundador & Ex-Pesquisador LIAO',
+      course: 'Ciência da Computação',
+      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300',
+      bio: 'Membro fundador. Atua no desenvolvimento de algoritmos de otimização em larga escala e computação paralela.',
+      linkedin: 'https://linkedin.com/in/lucasmendes-ai',
+      github: 'https://github.com/lucasmendes',
+      isActive: false,
+      isFounder: true,
+      year: 2020
+    },
+  });
+
+  const founder4 = await prisma.member.upsert({
+    where: { email: 'beatriz.ramos@liao.ufba.br' },
+    update: { isFounder: true },
+    create: {
+      name: 'Dra. Beatriz Ramos',
+      email: 'beatriz.ramos@liao.ufba.br',
+      role: 'Fundadora & Ex-Coordenadora de Projetos',
+      course: 'Engenharia de Sistemas',
+      photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300',
+      bio: 'Pioneira no estabelecimento de parcerias institucionais e projetos de pesquisa aplicada no LIAO.',
+      linkedin: 'https://linkedin.com/in/beatrizramos',
+      github: 'https://github.com/bramos',
+      isActive: false,
+      isFounder: true,
+      year: 2020
+    },
+  });
+
+  // 2. Create Members
   console.log('Creating members...');
   const member1 = await prisma.member.upsert({
     where: { email: 'alice@liao.com' },
@@ -23,9 +97,12 @@ async function main() {
       email: 'alice@liao.com',
       role: 'Coordenadora de Projetos',
       course: 'Engenharia de Computação',
-      photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200',
-      bio: 'Apaixonada por Visão Computacional e Otimização.',
+      photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300',
+      bio: 'Apaixonada por Visão Computacional, Aprendizado por Reforço e Otimização.',
+      linkedin: 'https://linkedin.com/in/alice-oliveira',
+      github: 'https://github.com/alice',
       isActive: true,
+      isFounder: false,
       year: 2024
     },
   });
@@ -36,53 +113,552 @@ async function main() {
     create: {
       name: 'Bruno Santos',
       email: 'bruno@liao.com',
-      role: 'Desenvolvedor Full Stack',
+      role: 'Desenvolvedor Full Stack & Pesquisador',
       course: 'Ciência da Computação',
-      photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
-      bio: 'Entusiasta de sistemas distribuídos e infraestrutura.',
+      photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300',
+      bio: 'Entusiasta de sistemas distribuídos, MLOps e infraestrutura para IA.',
+      linkedin: 'https://linkedin.com/in/bruno-santos-dev',
+      github: 'https://github.com/bruno',
       isActive: true,
+      isFounder: false,
       year: 2025
     },
   });
 
-  // 1.5 Create Partners
-  console.log('Creating partners...');
-  const partner1 = await prisma.partner.upsert({
-    where: { id: 1 },
+  const member3 = await prisma.member.upsert({
+    where: { email: 'carolina.lima@liao.ufba.br' },
     update: {},
     create: {
+      name: 'Carolina Lima',
+      email: 'carolina.lima@liao.ufba.br',
+      role: 'Pesquisadora em Visão Computacional',
+      course: 'Ciência da Computação',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300',
+      bio: 'Foco em segmentação de imagens médicas e modelos generativos para saúde.',
+      linkedin: 'https://linkedin.com/in/carol-lima-ai',
+      github: 'https://github.com/carollima',
+      isActive: true,
+      isFounder: false,
+      year: 2024
+    },
+  });
+
+  const member4 = await prisma.member.upsert({
+    where: { email: 'gabriel.rocha@liao.ufba.br' },
+    update: {},
+    create: {
+      name: 'Gabriel Rocha',
+      email: 'gabriel.rocha@liao.ufba.br',
+      role: 'Engenheiro Backend & DevOps',
+      course: 'Engenharia de Computação',
+      photo: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=300',
+      bio: 'Especialista em pipelines de CI/CD, microsserviços em Go e Docker para projetos de pesquisa.',
+      linkedin: 'https://linkedin.com/in/gabrielrocha-dev',
+      github: 'https://github.com/grocha',
+      isActive: true,
+      isFounder: false,
+      year: 2025
+    },
+  });
+
+  const member5 = await prisma.member.upsert({
+    where: { email: 'mariana.santos@liao.ufba.br' },
+    update: {},
+    create: {
+      name: 'Mariana Santos',
+      email: 'mariana.santos@liao.ufba.br',
+      role: 'Pesquisadora em NLP & LLMs',
+      course: 'Ciência da Computação',
+      photo: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=300',
+      bio: 'Estuda fine-tuning de LLMs, alinhamento de modelos e processamento de linguagem natural em Português.',
+      linkedin: 'https://linkedin.com/in/mariana-santos-nlp',
+      github: 'https://github.com/msantos-nlp',
+      isActive: true,
+      isFounder: false,
+      year: 2025
+    },
+  });
+
+  const member6 = await prisma.member.upsert({
+    where: { email: 'fernando.castro@liao.ufba.br' },
+    update: {},
+    create: {
+      name: 'Fernando Castro',
+      email: 'fernando.castro@liao.ufba.br',
+      role: 'Pesquisador em Otimização Combinatória',
+      course: 'Matemática Aplicada',
+      photo: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&q=80&w=300',
+      bio: 'Desenvolve heurísticas avançadas e programação linear inteira aplicadas à logística urbana.',
+      linkedin: 'https://linkedin.com/in/fernando-castro-math',
+      github: 'https://github.com/fcastro-opt',
+      isActive: true,
+      isFounder: false,
+      year: 2024
+    },
+  });
+
+  // 3. Create Partners
+  console.log('Creating partnerships...');
+  const partner1 = await prisma.partner.upsert({
+    where: { id: 1 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 1,
       name: 'Google Cloud',
       imageUrl: 'https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg',
-      websiteUrl: 'https://cloud.google.com'
+      websiteUrl: 'https://cloud.google.com',
+      isLeaguePartner: true
     }
   });
 
   const partner2 = await prisma.partner.upsert({
     where: { id: 2 },
-    update: {},
+    update: { isLeaguePartner: true },
     create: {
+      id: 2,
       name: 'GitHub',
       imageUrl: 'https://github.githubassets.com/images/modules/logos_page/GitHub-Logo.png',
-      websiteUrl: 'https://github.com'
+      websiteUrl: 'https://github.com',
+      isLeaguePartner: true
     }
   });
 
   const partner3 = await prisma.partner.upsert({
     where: { id: 3 },
-    update: {},
+    update: { isLeaguePartner: true },
     create: {
+      id: 3,
       name: 'NVIDIA',
       imageUrl: 'https://www.nvidia.com/content/dam/en-zz/Solutions/about-nvidia/logo-and-brand/01-nvidia-logo-vert-500x200-2c50-p@2x.png',
-      websiteUrl: 'https://nvidia.com'
+      websiteUrl: 'https://nvidia.com',
+      isLeaguePartner: true
     }
   });
 
-  // 2. Create a massive Event with relations
+  const partner4 = await prisma.partner.upsert({
+    where: { id: 4 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 4,
+      name: 'Amazon Web Services',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg',
+      websiteUrl: 'https://aws.amazon.com',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner5 = await prisma.partner.upsert({
+    where: { id: 5 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 5,
+      name: 'Microsoft',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg',
+      websiteUrl: 'https://microsoft.com',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner6 = await prisma.partner.upsert({
+    where: { id: 6 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 6,
+      name: 'Meta AI',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg',
+      websiteUrl: 'https://ai.meta.com',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner7 = await prisma.partner.upsert({
+    where: { id: 7 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 7,
+      name: 'SENAI CIMATEC',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/SENAI_logo.svg/320px-SENAI_logo.svg.png',
+      websiteUrl: 'https://senaicimatec.com.br',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner8 = await prisma.partner.upsert({
+    where: { id: 8 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 8,
+      name: 'Petrobras',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Petrobras_logo.svg',
+      websiteUrl: 'https://petrobras.com.br',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner9 = await prisma.partner.upsert({
+    where: { id: 9 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 9,
+      name: 'Hub Salvador',
+      imageUrl: 'https://hubsalvador.com.br/wp-content/uploads/2020/09/logo-hub-salvador.png',
+      websiteUrl: 'https://hubsalvador.com.br',
+      isLeaguePartner: true
+    }
+  });
+
+  const partner10 = await prisma.partner.upsert({
+    where: { id: 10 },
+    update: { isLeaguePartner: true },
+    create: {
+      id: 10,
+      name: 'IBM Quantum',
+      imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg',
+      websiteUrl: 'https://ibm.com/quantum',
+      isLeaguePartner: true
+    }
+  });
+
+  // 4. Create Projects
+  console.log('Creating projects...');
+  const project1 = await prisma.project.upsert({
+    where: { id: 1 },
+    update: {
+      title: 'OptiRoute Salvador: Otimização do Transporte Público',
+      description: 'Sistema inteligente de roteamento e otimização de horários para frotas de ônibus urbanos utilizando algoritmos genéticos e aprendizado por reforço para diminuir o tempo de espera nas estações.',
+      images: [
+        'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80'
+      ],
+    },
+    create: {
+      id: 1,
+      title: 'OptiRoute Salvador: Otimização do Transporte Público',
+      description: 'Sistema inteligente de roteamento e otimização de horários para frotas de ônibus urbanos utilizando algoritmos genéticos e aprendizado por reforço para diminuir o tempo de espera nas estações.',
+      images: [
+        'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80'
+      ],
+      date: new Date('2025-11-10T10:00:00Z'),
+    }
+  });
+
+  const project2 = await prisma.project.upsert({
+    where: { id: 2 },
+    update: {
+      title: 'BioVision: IA para Triagem Radiológica e Diagnóstico Clínico',
+      description: 'Plataforma baseada em redes neurais convolucionais e modelos Vision Transformer para auxílio no diagnóstico precoce de patologias pulmonares a partir de imagens de raio-X.',
+      images: [
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1200&q=80'
+      ],
+    },
+    create: {
+      id: 2,
+      title: 'BioVision: IA para Triagem Radiológica e Diagnóstico Clínico',
+      description: 'Plataforma baseada em redes neurais convolucionais e modelos Vision Transformer para auxílio no diagnóstico precoce de patologias pulmonares a partir de imagens de raio-X.',
+      images: [
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&w=1200&q=80'
+      ],
+      date: new Date('2026-02-15T14:00:00Z'),
+    }
+  });
+
+  const project3 = await prisma.project.upsert({
+    where: { id: 3 },
+    update: {
+      title: 'LIAO-LLM: Assistente Virtual de Pesquisa Acadêmica',
+      description: 'Desenvolvimento de um modelo de linguagem em Português ajustado com RAG (Retrieval-Augmented Generation) para responder dúvidas de alunos e apoiar buscas bibliográficas na UFBA.',
+      images: [
+        'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'
+      ],
+    },
+    create: {
+      id: 3,
+      title: 'LIAO-LLM: Assistente Virtual de Pesquisa Acadêmica',
+      description: 'Desenvolvimento de um modelo de linguagem em Português ajustado com RAG (Retrieval-Augmented Generation) para responder dúvidas de alunos e apoiar buscas bibliográficas na UFBA.',
+      images: [
+        'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'
+      ],
+      date: new Date('2026-04-01T09:00:00Z'),
+    }
+  });
+
+  const project4 = await prisma.project.upsert({
+    where: { id: 4 },
+    update: {
+      title: 'EcoGrid: Previsão de Demanda Energética e Redes Inteligentes',
+      description: 'Aplicação de séries temporais com LSTM e Transformers para previsão de picos de consumo elétrico e integração eficiente de fontes renováveis na matriz baiana.',
+      images: [
+        'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=80'
+      ],
+    },
+    create: {
+      id: 4,
+      title: 'EcoGrid: Previsão de Demanda Energética e Redes Inteligentes',
+      description: 'Aplicação de séries temporais com LSTM e Transformers para previsão de picos de consumo elétrico e integração eficiente de fontes renováveis na matriz baiana.',
+      images: [
+        'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80',
+        'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?auto=format&fit=crop&w=1200&q=80'
+      ],
+      date: new Date('2026-05-18T11:30:00Z'),
+    }
+  });
+
+  // 5. Create Newsletter / Articles
+  console.log('Creating newsletter articles...');
+  await prisma.article.upsert({
+    where: { id: 1 },
+    update: {
+      title: 'A Revolução dos Modelos de Linguagem e os Desafios em Língua Portuguesa',
+      description: 'Uma análise detalhada sobre como os grandes modelos de linguagem estão moldando a pesquisa acadêmica e a necessidade urgente de datasets representativos em Português do Brasil.',
+      content: `### Introdução aos Modelos de Linguagem Nativos
+
+Os modelos de linguagem de grande porte (LLMs) transformaram drasticamente o campo do Processamento de Linguagem Natural (PLN). No entanto, grande parte do progresso concentrou-se inicialmente na língua inglesa.
+
+No **LIAO (Laboratório de Inteligência Artificial e Otimização)**, estamos investindo em pesquisas focadas no fine-tuning e na construção de corpora de dados adaptados à realidade cultural e linguística brasileira.
+
+### Desafios Técnicos
+
+1. **Tokenização Eficiente**: Tokenizadores pré-treinados em inglês tendem a fragmentar palavras em português em múltiplos sub-tokens, aumentando o custo computacional.
+2. **Alinhamento e Avaliação**: Criar benchmarks de avaliação rigorosos para tarefas em PT-BR.
+3. **Privacidade e Governança**: Garantir o uso ético e seguro de dados universitários e públicos.
+
+### O Projeto LIAO-LLM
+
+Recentemente lançamos o nosso protótipo de assistente acadêmico baseado em RAG (Retrieval-Augmented Generation), capaz de indexar milhares de artigos científicos e planos de curso da UFBA.`,
+      images: [
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['IA', 'LLM', 'NLP', 'Pesquisa Acadêmica'],
+      isPublished: true,
+      references: [
+        'https://arxiv.org/abs/2303.08774',
+        'https://liao.ufba.br/pesquisas/nlp'
+      ],
+      authorId: member5.id,
+      authorName: member5.name,
+      likes: 38
+    },
+    create: {
+      id: 1,
+      title: 'A Revolução dos Modelos de Linguagem e os Desafios em Língua Portuguesa',
+      description: 'Uma análise detalhada sobre como os grandes modelos de linguagem estão moldando a pesquisa acadêmica e a necessidade urgente de datasets representativos em Português do Brasil.',
+      content: `### Introdução aos Modelos de Linguagem Nativos
+
+Os modelos de linguagem de grande porte (LLMs) transformaram drasticamente o campo do Processamento de Linguagem Natural (PLN). No entanto, grande parte do progresso concentrou-se inicialmente na língua inglesa.
+
+No **LIAO (Laboratório de Inteligência Artificial e Otimização)**, estamos investindo em pesquisas focadas no fine-tuning e na construção de corpora de dados adaptados à realidade cultural e linguística brasileira.
+
+### Desafios Técnicos
+
+1. **Tokenização Eficiente**: Tokenizadores pré-treinados em inglês tendem a fragmentar palavras em português em múltiplos sub-tokens, aumentando o custo computacional.
+2. **Alinhamento e Avaliação**: Criar benchmarks de avaliação rigorosos para tarefas em PT-BR.
+3. **Privacidade e Governança**: Garantir o uso ético e seguro de dados universitários e públicos.
+
+### O Projeto LIAO-LLM
+
+Recentemente lançamos o nosso protótipo de assistente acadêmico baseado em RAG (Retrieval-Augmented Generation), capaz de indexar milhares de artigos científicos e planos de curso da UFBA.`,
+      images: [
+        'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['IA', 'LLM', 'NLP', 'Pesquisa Acadêmica'],
+      isPublished: true,
+      references: [
+        'https://arxiv.org/abs/2303.08774',
+        'https://liao.ufba.br/pesquisas/nlp'
+      ],
+      authorId: member5.id,
+      authorName: member5.name,
+      likes: 38
+    }
+  });
+
+  await prisma.article.upsert({
+    where: { id: 2 },
+    update: {
+      title: 'Otimização Combinatória no Mundo Real: Do Caixeiro Viajante às Cidades Inteligentes',
+      description: 'Entenda como algoritmos genéticos, Simulated Annealing e programação inteira resolvem problemas complexos de distribuição logística e planejamento urbano.',
+      content: `### O Problema da Roteirização em Grandes Centros
+
+Organizar rotas de entrega e itinerários de transporte público em grandes cidades como Salvador apresenta complexidades computacionais classificadas como NP-duras.
+
+### Meta-heurísticas Aplicadas
+
+Para solucionar estes gargalos, a otimização combinatória recorre a abordagens estocásticas e meta-heurísticas:
+
+* **Algoritmos Genéticos**: Simulação do processo evolutivo para iterar sobre populações de soluções candidatas.
+* **Busca Tabu**: Evita que o algoritmo fique preso em ótimos locais por meio de estruturas de memória.
+* **Otimização por Colônia de Formigas (ACO)**: Algoritmo inspirado na natureza para encontrar caminhos ótimos em grafos.
+
+### Resultados Práticos
+
+Com o projeto *OptiRoute*, nossa equipe demonstrou uma redução estimada de 18% no tempo médio de espera de passageiros em horários de pico.`,
+      images: [
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Otimização', 'Algoritmos Genéticos', 'Logística', 'Cidades Inteligentes'],
+      isPublished: true,
+      references: [
+        'https://liao.ufba.br/projetos/optiroute'
+      ],
+      authorId: member6.id,
+      authorName: member6.name,
+      likes: 29
+    },
+    create: {
+      id: 2,
+      title: 'Otimização Combinatória no Mundo Real: Do Caixeiro Viajante às Cidades Inteligentes',
+      description: 'Entenda como algoritmos genéticos, Simulated Annealing e programação inteira resolvem problemas complexos de distribuição logística e planejamento urbano.',
+      content: `### O Problema da Roteirização em Grandes Centros
+
+Organizar rotas de entrega e itinerários de transporte público em grandes cidades como Salvador apresenta complexidades computacionais classificadas como NP-duras.
+
+### Meta-heurísticas Aplicadas
+
+Para solucionar estes gargalos, a otimização combinatória recorre a abordagens estocásticas e meta-heurísticas:
+
+* **Algoritmos Genéticos**: Simulação do processo evolutivo para iterar sobre populações de soluções candidatas.
+* **Busca Tabu**: Evita que o algoritmo fique preso em ótimos locais por meio de estruturas de memória.
+* **Otimização por Colônia de Formigas (ACO)**: Algoritmo inspirado na natureza para encontrar caminhos ótimos em grafos.
+
+### Resultados Práticos
+
+Com o projeto *OptiRoute*, nossa equipe demonstrou uma redução estimada de 18% no tempo médio de espera de passageiros em horários de pico.`,
+      images: [
+        'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Otimização', 'Algoritmos Genéticos', 'Logística', 'Cidades Inteligentes'],
+      isPublished: true,
+      references: [
+        'https://liao.ufba.br/projetos/optiroute'
+      ],
+      authorId: member6.id,
+      authorName: member6.name,
+      likes: 29
+    }
+  });
+
+  await prisma.article.upsert({
+    where: { id: 3 },
+    update: {
+      title: 'Visão Computacional na Saúde: O Impacto do Aprendizado Profundo no Diagnóstico Médico',
+      description: 'Explorando como arquiteturas convolucionais e modelos multimodal estão apoiando profissionais de saúde no diagnóstico rápido e preciso.',
+      content: `### Inteligência Artificial no Diagnóstico por Imagem
+
+A interpretação médica de exames radiológicos exige precisão cirúrgica e tempo hábil. A integração de modelos de visão computacional treinados em milhares de exames anonimizados vem acelerando esse fluxo.
+
+### Arquiteturas em Destaque
+
+1. **U-Net**: Padrão-ouro para segmentação médica detalhada de órgãos e lesões.
+2. **Vision Transformers (ViT)**: Capturam relações globais e contextuais na imagem com mecanismos de atenção.
+3. **Modelos Grad-CAM**: Oferecem explicabilidade ao indicar graficamente quais regiões da imagem influenciaram a predição da rede.`,
+      images: [
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Visão Computacional', 'Saúde', 'Deep Learning', 'Inovação'],
+      isPublished: true,
+      references: [
+        'https://nature.com/articles/s41591-020-0937-5'
+      ],
+      authorId: member3.id,
+      authorName: member3.name,
+      likes: 45
+    },
+    create: {
+      id: 3,
+      title: 'Visão Computacional na Saúde: O Impacto do Aprendizado Profundo no Diagnóstico Médico',
+      description: 'Explorando como arquiteturas convolucionais e modelos multimodal estão apoiando profissionais de saúde no diagnóstico rápido e preciso.',
+      content: `### Inteligência Artificial no Diagnóstico por Imagem
+
+A interpretação médica de exames radiológicos exige precisão cirúrgica e tempo hábil. A integração de modelos de visão computacional treinados em milhares de exames anonimizados vem acelerando esse fluxo.
+
+### Arquiteturas em Destaque
+
+1. **U-Net**: Padrão-ouro para segmentação médica detalhada de órgãos e lesões.
+2. **Vision Transformers (ViT)**: Capturam relações globais e contextuais na imagem com mecanismos de atenção.
+3. **Modelos Grad-CAM**: Oferecem explicabilidade ao indicar graficamente quais regiões da imagem influenciaram a predição da rede.`,
+      images: [
+        'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Visão Computacional', 'Saúde', 'Deep Learning', 'Inovação'],
+      isPublished: true,
+      references: [
+        'https://nature.com/articles/s41591-020-0937-5'
+      ],
+      authorId: member3.id,
+      authorName: member3.name,
+      likes: 45
+    }
+  });
+
+  await prisma.article.upsert({
+    where: { id: 4 },
+    update: {
+      title: 'Retrospectiva LIAO: Conquistas de 2025 & Perspectivas para 2026',
+      description: 'Um resumo dos principais marcos do laboratório, publicação de artigos internacionais, expansão do time e parcerias com o setor industrial.',
+      content: `### Um Ano de Crescimento e Impacto Científico
+
+O ano de 2025 marcou um período extraordinário para o **LIAO**. Expandimos nossa infraestrutura de cálculo, consolidamos novos membros e ampliamos nossas parcerias com grandes empresas e hubs de inovação.
+
+### Destaques do Ano
+
+- **5 Artigos Publicados** em conferências internacionais qualificadas.
+- **Ampliação do Time**: Inclusão de novos pesquisadores de graduação e pós-graduação.
+- **Hackathon LIAO**: Integração de mais de 100 participantes focados em soluções de impacto social.
+
+Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto possível!`,
+      images: [
+        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Institucional', 'Retrospectiva', 'LIAO', 'UFBA'],
+      isPublished: true,
+      references: [
+        'https://liao.ufba.br'
+      ],
+      authorId: member1.id,
+      authorName: member1.name,
+      likes: 62
+    },
+    create: {
+      id: 4,
+      title: 'Retrospectiva LIAO: Conquistas de 2025 & Perspectivas para 2026',
+      description: 'Um resumo dos principais marcos do laboratório, publicação de artigos internacionais, expansão do time e parcerias com o setor industrial.',
+      content: `### Um Ano de Crescimento e Impacto Científico
+
+O ano de 2025 marcou um período extraordinário para o **LIAO**. Expandimos nossa infraestrutura de cálculo, consolidamos novos membros e ampliamos nossas parcerias com grandes empresas e hubs de inovação.
+
+### Destaques do Ano
+
+- **5 Artigos Publicados** em conferências internacionais qualificadas.
+- **Ampliação do Time**: Inclusão de novos pesquisadores de graduação e pós-graduação.
+- **Hackathon LIAO**: Integração de mais de 100 participantes focados em soluções de impacto social.
+
+Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto possível!`,
+      images: [
+        'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80'
+      ],
+      tags: ['Institucional', 'Retrospectiva', 'LIAO', 'UFBA'],
+      isPublished: true,
+      references: [
+        'https://liao.ufba.br'
+      ],
+      authorId: member1.id,
+      authorName: member1.name,
+      likes: 62
+    }
+  });
+
+  // 6. Create Events
   console.log('Creating events...');
   const eventData = {
     title: 'Workshop IA Avançada: Do Zero ao Deploy',
     description: 'Um evento imersivo focado em construção de LLMs e deploy escalável em nuvem.',
-    coverImage: 'https://images.unsplash.com/photo-1745674684463-62f62cb88d4c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    coverImage: 'https://images.unsplash.com/photo-1745674684463-62f62cb88d4c?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-05-20T14:00:00Z'),
     location: 'Auditório Magno - Instituto de Computação',
     highlights: [
@@ -107,7 +683,7 @@ async function main() {
     update: {
         ...eventData,
         partners: {
-            set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }]
+            set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }, { id: partner4.id }]
         }
     },
     create: {
@@ -138,7 +714,7 @@ async function main() {
         ]
       },
       partners: {
-        connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }]
+        connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }, { id: partner4.id }]
       }
     }
   });
@@ -171,7 +747,7 @@ async function main() {
     update: {
         ...lightEventData,
         partners: {
-            set: [{ id: partner2.id }, { id: partner3.id }]
+            set: [{ id: partner2.id }, { id: partner3.id }, { id: partner7.id }, { id: partner8.id }]
         }
     },
     create: {
@@ -194,14 +770,12 @@ async function main() {
         ]
       },
       partners: {
-        connect: [{ id: partner2.id }, { id: partner3.id }]
+        connect: [{ id: partner2.id }, { id: partner3.id }, { id: partner7.id }, { id: partner8.id }]
       }
     }
   });
 
-  console.log(`✅ Seed finished! Past events created: ${event.title} (Dark), ${lightEvent.title} (Light)`);
-
-  // Additional Finished Event (Past: March 2026)
+  // Additional Past Event
   const pastEventData = {
     title: 'Minicurso: Introdução ao Python para Ciência de Dados',
     description: 'Minicurso prático introdutório cobrindo manipulação de dados com Pandas e NumPy e introdução a modelos preditivos.',
@@ -227,7 +801,7 @@ async function main() {
     where: { slug: 'minicurso-python-dados-2026' },
     update: {
       ...pastEventData,
-      partners: { set: [{ id: partner2.id }] }
+      partners: { set: [{ id: partner2.id }, { id: partner5.id }] }
     },
     create: {
       ...pastEventData,
@@ -248,7 +822,7 @@ async function main() {
           }
         ]
       },
-      partners: { connect: [{ id: partner2.id }] }
+      partners: { connect: [{ id: partner2.id }, { id: partner5.id }] }
     }
   });
 
@@ -280,7 +854,7 @@ async function main() {
     where: { slug: 'hackathon-liao-2026' },
     update: {
       ...futureEvent1Data,
-      partners: { set: [{ id: partner1.id }, { id: partner3.id }] }
+      partners: { set: [{ id: partner1.id }, { id: partner3.id }, { id: partner6.id }, { id: partner9.id }] }
     },
     create: {
       ...futureEvent1Data,
@@ -301,7 +875,7 @@ async function main() {
           }
         ]
       },
-      partners: { connect: [{ id: partner1.id }, { id: partner3.id }] }
+      partners: { connect: [{ id: partner1.id }, { id: partner3.id }, { id: partner6.id }, { id: partner9.id }] }
     }
   });
 
@@ -332,14 +906,14 @@ async function main() {
     where: { slug: 'semana-da-ia-e-otimizacao-2026' },
     update: {
       ...futureEvent2Data,
-      partners: { set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }] }
+      partners: { set: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }, { id: partner5.id }, { id: partner10.id }] }
     },
     create: {
       ...futureEvent2Data,
       slug: 'semana-da-ia-e-otimizacao-2026',
       agenda: {
         create: [
-          { time: '09:00', title: 'Solene de Abertura', description: 'Boas-vindas com a diretoria do LIAO' },
+          { time: '09:00', title: 'Sessão Solene de Abertura', description: 'Boas-vindas com a diretoria do LIAO' },
           { time: '10:00', title: 'Keynote: O Futuro dos Modelos Generativos', speakerName: 'Dra. Helena Costa' },
           { time: '14:00', title: 'Workshop: Otimização de Hiperparâmetros', description: 'Prática em cluster GPU' }
         ]
@@ -355,114 +929,11 @@ async function main() {
           }
         ]
       },
-      partners: { connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }] }
+      partners: { connect: [{ id: partner1.id }, { id: partner2.id }, { id: partner3.id }, { id: partner5.id }, { id: partner10.id }] }
     }
   });
 
-  // Future Event 3 (August 2026)
-  const futureEvent3Data = {
-    title: 'Bootcamp IA & Visão Computacional: Do Conceito à Aplicação',
-    description: 'Imersão de 3 dias em Visão Computacional cobrindo processamento de imagens com OpenCV, arquiteturas de CNNs e detecção de objetos em tempo real com YOLO.',
-    coverImage: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1470&auto=format&fit=crop',
-    date: new Date('2026-08-25T13:00:00Z'),
-    location: 'Laboratório de Redes e IA - Instituto de Computação',
-    highlights: [
-      'Processamento Digital de Imagens',
-      'Treinamento de Modelos YOLO',
-      'Segmentação e Rastreamento',
-      'Deploy em Dispositivos Edge'
-    ],
-    gallery: [
-      'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80'
-    ],
-    palette: ['#6366F1', '#EC4899'],
-    borderRadius: 'round',
-    fontClass: 'font-mono',
-    subscribe: 'https://example.com/bootcamp-visao-2026',
-    themeMode: 'dark',
-  };
-
-  await prisma.event.upsert({
-    where: { slug: 'bootcamp-ia-visao-computacional-2026' },
-    update: {
-      ...futureEvent3Data,
-      partners: { set: [{ id: partner1.id }, { id: partner2.id }] }
-    },
-    create: {
-      ...futureEvent3Data,
-      slug: 'bootcamp-ia-visao-computacional-2026',
-      agenda: {
-        create: [
-          { time: '13:00', title: 'Fundamentos de Processamento de Imagens', description: 'Filtros, transformações e OpenCV' },
-          { time: '15:00', title: 'Deep Learning para Visão', description: 'Redes convolucionais e transfer learning' },
-          { time: '17:00', title: 'Prática de Detecção em Tempo Real', description: 'Execução de inferências no browser e edge' }
-        ]
-      },
-      speakers: {
-        create: [
-          {
-            memberId: member1.id,
-            role: 'Instrutora de Visão Computacional',
-            link: 'https://github.com/alice'
-          }
-        ]
-      },
-      partners: { connect: [{ id: partner1.id }, { id: partner2.id }] }
-    }
-  });
-
-  // Future Event 4 (November 2026)
-  const futureEvent4Data = {
-    title: 'Encontro LIAO: Algoritmos de Otimização em Escala',
-    description: 'Palestra técnica e mesa redonda focada em meta-heurísticas, algoritmos genéticos e solução de problemas NP-difíceis no setor logístico.',
-    coverImage: 'https://images.unsplash.com/photo-1509228468518-180dd4864904?q=80&w=1470&auto=format&fit=crop',
-    date: new Date('2026-11-15T15:00:00Z'),
-    location: 'Auditório Magno - Instituto de Computação',
-    highlights: [
-      'Algoritmos Genéticos & Swarm Intelligence',
-      'Otimização Estocástica e Robusta',
-      'Casos de Sucesso na Indústria',
-      'Sessão de Perguntas e Respostas'
-    ],
-    gallery: [],
-    palette: ['#059669', '#3B82F6'],
-    borderRadius: 'squared',
-    fontClass: 'font-outfit',
-    subscribe: 'https://example.com/encontro-otimizacao-2026',
-    themeMode: 'light',
-  };
-
-  await prisma.event.upsert({
-    where: { slug: 'encontro-liao-otimizacao-escala-2026' },
-    update: {
-      ...futureEvent4Data,
-      partners: { set: [{ id: partner3.id }] }
-    },
-    create: {
-      ...futureEvent4Data,
-      slug: 'encontro-liao-otimizacao-escala-2026',
-      agenda: {
-        create: [
-          { time: '15:00', title: 'Abertura e Apresentação de Pesquisas', description: 'Projetos em andamento no LIAO' },
-          { time: '16:00', title: 'Mesa Redonda: Meta-heurísticas na Indústria', description: 'Debate com convidados' }
-        ]
-      },
-      speakers: {
-        create: [
-          {
-            memberId: member2.id,
-            role: 'Pesquisador em Otimização',
-            link: 'https://github.com/bruno'
-          }
-        ]
-      },
-      partners: { connect: [{ id: partner3.id }] }
-    }
-  });
-
-  console.log('✅ Seed finished! Events created (past and future successfully added).');
-
-  // 3. System Config
+  // 7. System Config
   console.log('Seeding system config...');
   await prisma.systemConfig.upsert({
     where: { key: 'CONTACT_EMAIL' },
@@ -473,7 +944,7 @@ async function main() {
     }
   });
 
-  // 4. Create Tutors
+  // 8. Create Tutors
   console.log('Creating tutors...');
   await prisma.tutor.upsert({
     where: { email: 'carlos@liao.com' },
@@ -500,11 +971,13 @@ async function main() {
       photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
     }
   });
+
+  console.log('🎉 Seed completed successfully with founders, members, projects, newsletter articles, partnerships, events, and tutors!');
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error('❌ Error during seed execution:', e);
     process.exit(1);
   })
   .finally(async () => {
