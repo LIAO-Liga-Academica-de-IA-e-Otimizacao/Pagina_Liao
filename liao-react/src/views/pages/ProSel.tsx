@@ -207,7 +207,7 @@ const ProSel: React.FC = () => {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full btn-special disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {loading ? 'Enviando...' : 'Enviar Inscrição'}
                             </button>

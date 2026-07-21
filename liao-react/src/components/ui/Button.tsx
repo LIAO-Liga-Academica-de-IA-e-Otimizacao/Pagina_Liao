@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
-    variant?: 'primary' | 'secondary' | 'premium' | 'outline' | 'ghost';
+    variant?: 'primary' | 'secondary' | 'special' | 'premium' | 'outline' | 'ghost';
     size?: 'sm' | 'md' | 'lg';
     className?: string;
     loading?: boolean;
@@ -28,9 +28,10 @@ const Button: React.FC<ButtonProps> = ({
     const variantClasses = {
         primary: 'btn-primary',
         secondary: 'btn-secondary',
+        special: 'btn-special',
         premium: 'btn-premium',
-        outline: 'border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 rounded-lg',
-        ghost: 'text-neutral-600 dark:text-neutral-450 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 rounded-lg',
+        outline: 'border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 rounded-xl',
+        ghost: 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200 rounded-xl',
     };
 
     return (

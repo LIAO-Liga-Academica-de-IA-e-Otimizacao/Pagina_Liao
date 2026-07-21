@@ -72,10 +72,10 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                     {event.subscribe && (
                         <button 
                             onClick={() => window.open(event.subscribe as string, '_blank', 'noopener,noreferrer')}
-                            className="w-full py-4 bg-primary-600 text-white font-bold hover:bg-primary-700 transition-colors shadow-lg shadow-primary-500/20 active:scale-[0.98] transition-all"
+                            className="w-full py-4 bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow text-white font-bold transition-all shadow-lg shadow-red-500/25 hover:scale-[1.02] active:scale-[0.98]"
                             style={{ borderRadius: 'var(--event-radius-sm)' }}
                         >
-                            Realizar Inscrição
+                            Quero me Inscrever
                         </button>
                     )}
                     <button 

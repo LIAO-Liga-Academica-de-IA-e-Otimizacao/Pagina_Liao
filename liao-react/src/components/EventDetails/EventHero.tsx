@@ -127,15 +127,13 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 href={(event as any).subscribe} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 group"
+                                className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow shadow-xl shadow-red-500/25 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 group"
                                 style={{ 
-                                    background: `linear-gradient(135deg, rgb(var(--event-primary-rgb)), rgb(var(--event-secondary-rgb)))`,
-                                    borderRadius: 'var(--event-radius)',
-                                    boxShadow: `0 10px 30px -10px rgb(var(--event-primary-rgb) / 0.5)`
+                                    borderRadius: 'var(--event-radius)'
                                 }}
                             >
                                 <Rocket size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                                Realizar Inscrição
+                                Quero me Inscrever
                             </a>
                         </div>
                     )}

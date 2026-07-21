@@ -131,7 +131,7 @@ const Projects: React.FC = () => {
                                         LIAO
                                     </span>
                                     <button
-                                        className="px-4 py-2 bg-black text-white text-sm font-bold rounded-lg hover:bg-primary-700 transition-colors shadow-sm hover:shadow-md active:transform active:scale-95"
+                                        className="btn-secondary text-sm font-semibold py-1.5 px-4 rounded-xl"
                                     >
                                         Ler Mais
                                     </button>

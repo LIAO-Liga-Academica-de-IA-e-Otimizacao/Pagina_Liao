@@ -58,9 +58,9 @@ const TutorCard: React.FC<TutorCardProps> = ({ tutor }) => {
 
                     <div className="flex-grow"></div>
 
-                    {/* Pill Button - Black to Dark Green Gradient */}
+                    {/* Pill Button - LIAO Green Secondary */}
                     <div
-                        className="w-3/5 py-1.5 px-4 rounded-full text-white font-semibold text-xs shadow-md transform transition-transform group-hover:scale-105 active:scale-95 bg-gradient-to-r from-black to-success-900"
+                        className="w-3/5 py-1.5 px-4 rounded-full text-white font-semibold text-xs shadow-md transform transition-transform group-hover:scale-105 active:scale-95 bg-liao-green hover:bg-success-700 transition-colors"
                     >
                         Sobre
                     </div>
