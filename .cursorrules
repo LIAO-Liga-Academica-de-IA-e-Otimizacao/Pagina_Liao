@@ -3,9 +3,13 @@
 This file describes the guidelines to ensure design consistency, avoid boilerplate, and maximize the reuse of components and global configurations in this repository.
 
 ## 1. Design & Theme Guidelines
+* **Mandatory Design Rules Inspection**: Before making ANY frontend, UI, styling, or component changes, AI Agents and LLMs MUST read the design rules in `docs/src/design-rules/` (specifically [`docs/src/design-rules/color-system.md`](docs/src/design-rules/color-system.md)).
+  - **LIAO Blue (`liao-blue` / `primary-600`)**: Primary & Nav-ish buttons (`.btn-primary`), main navigation, and filter tabs (`FilterTabs`).
+  - **LIAO Green (`liao-green` / `success-600`)**: Secondary & supporting action buttons (`.btn-secondary`), card profile buttons ("Sobre", "Ler Mais"). NEVER use dark/black-green gradients (`from-black to-success-900`).
+  - **LIAO Red-Yellow (`liao-red` + `liao-yellow`)**: Special conversion call-to-action buttons (`.btn-special`), such as "Quero me Inscrever" and Processo Seletivo apply buttons.
 * **Semantic Colors**: Never hardcode hexadecimal or arbitrary colors in Tailwind classes (e.g., `bg-[#141414]`). Use the colors and extended shades in the `tailwind.config.js` configuration file (such as `primary`, `neutral`, `success`, `warning`, `danger`, `liao-bg`, `liao-card`).
 * **Theme-Responsive Design (Light/Dark Mode)**: Ensure all screens and components seamlessly support Light Mode and Dark Mode using appropriate semantic Tailwind classes or the `dark:` modifier.
-* **Global and Utility Classes**: Reference and use global styling classes (such as `.card`, `.section-bg-main`, `.section-bg-alt`, `.btn-premium`) declared in `src/index.css` instead of replicating the same set of ad-hoc classes.
+* **Global and Utility Classes**: Reference and use global styling classes (such as `.card`, `.section-bg-main`, `.section-bg-alt`, `.btn-premium`, `.btn-primary`, `.btn-secondary`, `.btn-special`) declared in `src/index.css` instead of replicating the same set of ad-hoc classes.
 
 ## 2. Component Reuse
 * **Check the Components Folder**: Before creating or styling any element from scratch (such as cards, buttons, modals, or layouts), inspect the shared components in `src/components/ui/` or `src/components/layout/` and use them.
