@@ -17,7 +17,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     return (
         <Link 
             to={`/events/${event.slug}`}
-            className="group block bg-white dark:bg-neutral-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-neutral-100 dark:border-neutral-700 h-full transform hover:-translate-y-2"
+            className="group block bg-white dark:bg-neutral-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 border border-neutral-200 dark:border-neutral-700 h-full transform hover:-translate-y-2"
         >
             {/* Image Container */}
             <div className="relative h-56 overflow-hidden">

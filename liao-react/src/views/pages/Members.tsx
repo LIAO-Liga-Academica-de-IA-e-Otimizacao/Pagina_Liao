@@ -359,7 +359,7 @@ const Members: React.FC = () => {
                         </>
                     ) : (
                         /* Mobile Grid View (New) */
-                        <div className="grid grid-cols-2 xs:grid-cols-3 gap-3 px-2">
+                        <div className="grid grid-cols-2 xs:grid-cols-3 gap-2.5 px-1">
                             {activeTab === 'tutors' ? (
                                 tutors.length > 0 ? (
                                     tutors.map((tutor) => (
@@ -411,7 +411,7 @@ const Members: React.FC = () => {
                 </div>
             ) : (
                 /* Desktop Grid View */
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
                     {activeTab === 'tutors' ? (
                         tutors.length > 0 ? (
                             tutors.map((tutor) => (

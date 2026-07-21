@@ -20,22 +20,18 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
     return (
         <div
             onClick={() => onSelect(member)}
-            className="group relative w-[230px] min-h-[350px] flex flex-col rounded-2xl p-[2px] bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+            className="group relative w-[230px] min-h-[350px] flex flex-col rounded-2xl p-4 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer items-center text-center gap-2"
         >
-            {/* White Content Container */}
-            <div className="bg-white dark:bg-neutral-800 rounded-2xl p-4 flex flex-col flex-1 items-center text-center relative z-10 gap-2 transition-colors duration-200">
-
-                {/* Avatar with Gradient Ring */}
-                <div className="relative mb-1">
-                    <div className="absolute inset-0 bg-gradient-to-br from-danger-500 to-success-500 rounded-full blur-sm opacity-50 group-hover:opacity-100 transition-opacity"></div>
-                    <div className="relative w-24 h-24 p-1 bg-gradient-to-br from-danger-500 via-warning-400 to-success-500 rounded-full">
-                        <img
-                            src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
-                            alt={member.name}
-                            className="w-full h-full object-cover rounded-full border-2 border-white dark:border-neutral-700"
-                        />
-                    </div>
+            {/* Avatar with Subtle Border */}
+            <div className="relative mb-1">
+                <div className="w-24 h-24 p-0.5 rounded-full border-2 border-neutral-200 dark:border-neutral-700 group-hover:border-primary-500 transition-colors">
+                    <img
+                        src={member.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`}
+                        alt={member.name}
+                        className="w-full h-full object-cover rounded-full"
+                    />
                 </div>
+            </div>
 
                 {/* Typography */}
                 <h3 className="text-lg font-bold text-neutral-900 dark:text-white font-sans leading-tight">{member.name}</h3>
@@ -94,7 +90,6 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, onSelect }) => {
                 >
                     Sobre
                 </button>
-            </div>
         </div>
     );
 };

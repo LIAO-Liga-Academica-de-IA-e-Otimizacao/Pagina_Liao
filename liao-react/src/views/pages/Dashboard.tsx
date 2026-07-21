@@ -201,7 +201,7 @@ const Dashboard: React.FC = () => {
                     {/* Desktop: 4 Columns | Mobile: Horizontal Scrollable Row (Swipeable Slider with 2 cards visible) */}
                     <div className="flex md:grid overflow-x-auto md:overflow-visible gap-4 md:gap-6 md:grid-cols-4 pb-6 md:pb-0 snap-x snap-mandatory scrollbar-none">
                         {/* L - Membros Ativos (Red) */}
-                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-200 dark:border-neutral-700 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
                             <div className="text-3xl sm:text-4xl md:text-6xl font-black mb-1 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#E53935] to-[#ef5350] drop-shadow-[0_2px_8px_rgba(229,57,53,0.15)]">
                                 {stats.members}
                             </div>
@@ -210,7 +210,7 @@ const Dashboard: React.FC = () => {
                         </div>
 
                         {/* I - Projetos Realizados (Yellow) */}
-                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-200 dark:border-neutral-700 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
                             <div className="text-3xl sm:text-4xl md:text-6xl font-black mb-1 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#FBC02D] to-[#fdd835] drop-shadow-[0_2px_8px_rgba(251,192,45,0.15)]">
                                 {stats.projects}
                             </div>
@@ -219,7 +219,7 @@ const Dashboard: React.FC = () => {
                         </div>
 
                         {/* A - Artigos e Newsletter (Blue) */}
-                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-200 dark:border-neutral-700 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
                             <div className="text-3xl sm:text-4xl md:text-6xl font-black mb-1 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#1E88E5] to-[#42a5f5] drop-shadow-[0_2px_8px_rgba(30,136,229,0.15)]">
                                 {stats.articles}
                             </div>
@@ -228,7 +228,7 @@ const Dashboard: React.FC = () => {
                         </div>
 
                         {/* O - Eventos e Extensão (Green) */}
-                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-100 dark:border-neutral-800 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
+                        <div className="w-[calc(50%-8px)] min-w-[145px] md:w-auto md:min-w-0 flex-shrink-0 snap-center p-4 md:p-8 rounded-2xl bg-neutral-50 dark:bg-neutral-800/40 border border-neutral-200 dark:border-neutral-700 hover:shadow-xl dark:hover:shadow-neutral-950/40 hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center">
                             <div className="text-3xl sm:text-4xl md:text-6xl font-black mb-1 md:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#43A047] to-[#66bb6a] drop-shadow-[0_2px_8px_rgba(67,160,71,0.15)]">
                                 {stats.events}
                             </div>
