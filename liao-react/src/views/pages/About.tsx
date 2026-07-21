@@ -168,10 +168,11 @@ const About: React.FC = () => {
             {/* Header / Logo */}
             <header className="text-center w-full max-w-7xl mx-auto mb-12 sm:mb-20 fade-in-up">
                 <div className="flex justify-center mb-6 sm:mb-8">
-                     <img src="/logo.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)] dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]" />
+                     <img src="/logo.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain dark:hidden transition-all duration-300" />
+                     <img src="/logo-dark.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain hidden dark:block transition-all duration-300" />
                 </div>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight text-white">Sobre a LIAO UFBA</h1>
-                <p className="text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight text-neutral-900 dark:text-white">Sobre a LIAO UFBA</h1>
+                <p className="text-neutral-600 dark:text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">
                     Conheça a Liga Acadêmica de Inteligência Artificial e Otimização da UFBA
                 </p>
             </header>

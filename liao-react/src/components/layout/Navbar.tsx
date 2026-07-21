@@ -50,6 +50,23 @@ const Navbar: React.FC = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [location.pathname]);
 
+    const [isDocDark, setIsDocDark] = React.useState(() => 
+        typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
+    );
+
+    React.useEffect(() => {
+        const checkDark = () => {
+            setIsDocDark(document.documentElement.classList.contains('dark'));
+        };
+        checkDark();
+
+        const observer = new MutationObserver(checkDark);
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        return () => observer.disconnect();
+    }, []);
+
+    const isDark = theme === 'dark' || isHeroAdjacent || isDocDark;
+
     const navLinks = [
         { name: 'Home', path: '/' },
         { name: 'Membros', path: '/members' },
@@ -72,7 +89,11 @@ const Navbar: React.FC = () => {
                 <div className="flex items-center h-16">
                     {/* Logo */}
                     <Link to="/" className="flex items-center space-x-3">
-                        <img src="/logo.png" alt="LIAO Logo" className="w-12 h-12 object-contain" />
+                        <img 
+                            src={isDark ? "/logo-dark.png" : "/logo.png"} 
+                            alt="LIAO Logo" 
+                            className="w-12 h-12 object-contain transition-all duration-300" 
+                        />
                         <img src="/liao-text.png" alt="LIAO" className="h-8 object-contain" />
                     </Link>
 
@@ -80,7 +101,6 @@ const Navbar: React.FC = () => {
                     <div className="hidden md:flex ml-auto space-x-1">
                         {navLinks.map((link) => {
                             const active = isActive(link.path);
-                            const isDark = theme === 'dark' || isHeroAdjacent;
                             return (
                                 <Link
                                     key={link.path}
@@ -123,7 +143,7 @@ const Navbar: React.FC = () => {
                         <button
                             onClick={toggleTheme}
                             className={`hidden md:flex p-2 rounded-full transition-all ml-2 ${
-                                (theme === 'dark' || isHeroAdjacent)
+                                isDark
                                     ? 'hover:bg-neutral-800/60 text-neutral-300 hover:text-white'
                                     : 'hover:bg-neutral-100 text-neutral-600'
                             }`}
@@ -140,7 +160,7 @@ const Navbar: React.FC = () => {
                     <button
                         onClick={() => setIsOpen(!isOpen)}
                         className={`md:hidden ml-auto p-2 rounded-lg transition-colors ${
-                            (theme === 'dark' || isHeroAdjacent)
+                            isDark
                                 ? 'hover:bg-neutral-800/60 text-white'
                                 : 'hover:bg-neutral-100 text-neutral-600'
                         }`}
@@ -175,7 +195,6 @@ const Navbar: React.FC = () => {
                     <div className="md:hidden pb-4 space-y-1">
                         {navLinks.map((link) => {
                             const active = isActive(link.path);
-                            const isDark = theme === 'dark' || isHeroAdjacent;
                             return (
                                 <Link
                                     key={link.path}
@@ -201,14 +220,14 @@ const Navbar: React.FC = () => {
                         {/* Theme Toggle (Mobile) */}
                         {!isEventDetailsPage && (
                             <div className={`px-4 py-2 border-t mt-2 ${
-                                (theme === 'dark' || isHeroAdjacent) 
+                                isDark 
                                     ? 'border-white/10' 
                                     : 'border-neutral-100'
                             }`}>
                                 <button
                                     onClick={toggleTheme}
                                     className={`flex items-center space-x-2 w-full transition-colors ${
-                                        (theme === 'dark' || isHeroAdjacent)
+                                        isDark
                                             ? 'text-neutral-300 hover:text-white'
                                             : 'text-neutral-700'
                                     }`}
