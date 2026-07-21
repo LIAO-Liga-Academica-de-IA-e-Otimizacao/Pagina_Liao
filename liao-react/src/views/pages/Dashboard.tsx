@@ -286,7 +286,7 @@ const Dashboard: React.FC = () => {
                         Inscreva-se no nosso processo seletivo e potencialize sua jornada acadêmica.
                     </p>
                     <Link to="/prosel">
-                        <Button variant="premium" size="lg">
+                        <Button variant="special" size="lg">
                             Quero me Inscrever
                         </Button>
                     </Link>

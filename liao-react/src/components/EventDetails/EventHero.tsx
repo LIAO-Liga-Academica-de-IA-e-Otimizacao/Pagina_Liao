@@ -127,7 +127,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 href={(event as any).subscribe} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow shadow-xl shadow-red-500/25 hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 group"
+                                className="btn-special inline-flex items-center gap-3 px-8 py-4 text-lg group"
                                 style={{ 
                                     borderRadius: 'var(--event-radius)'
                                 }}
