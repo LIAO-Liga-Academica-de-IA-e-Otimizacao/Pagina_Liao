@@ -13,20 +13,40 @@ const Navbar: React.FC = () => {
     const isActive = (path: string) => location.pathname === path;
     const isEventDetailsPage = location.pathname.startsWith('/events/') && location.pathname !== '/events';
 
-    // Scroll state for Hero section adjacency (only on home route "/")
+    // Scroll & Smart Sticky states
     const [isHeroAdjacent, setIsHeroAdjacent] = React.useState(location.pathname === '/');
+    const [isVisible, setIsVisible] = React.useState(true);
+    const lastScrollY = React.useRef(0);
 
     React.useEffect(() => {
+        const threshold = 80;
+
         const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Hero section adjacency (only on home route "/")
             if (location.pathname === '/') {
-                setIsHeroAdjacent(window.scrollY < 180);
+                setIsHeroAdjacent(currentScrollY < 180);
             } else {
                 setIsHeroAdjacent(false);
             }
+
+            // Smart sticky behavior
+            if (currentScrollY <= threshold) {
+                setIsVisible(true);
+            } else if (currentScrollY > lastScrollY.current + 5) {
+                // Scrolling down past threshold -> hide header
+                setIsVisible(false);
+            } else if (currentScrollY < lastScrollY.current - 5) {
+                // Scrolling up -> reveal header
+                setIsVisible(true);
+            }
+
+            lastScrollY.current = currentScrollY;
         };
 
         handleScroll();
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => window.removeEventListener('scroll', handleScroll);
     }, [location.pathname]);
 
@@ -41,10 +61,12 @@ const Navbar: React.FC = () => {
     ];
 
     return (
-        <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+        <nav className={`sticky top-0 z-50 transition-all duration-300 ease-in-out ${
+            isVisible || isOpen ? 'translate-y-0' : '-translate-y-full pointer-events-none'
+        } ${
             isHeroAdjacent 
                 ? 'bg-[#141417] dark:bg-[#0a0a0c] shadow-none border-b border-white/5' 
-                : 'bg-white dark:bg-neutral-900 shadow-md'
+                : 'bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md shadow-md border-b border-neutral-200/50 dark:border-white/5'
         }`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center h-16">
