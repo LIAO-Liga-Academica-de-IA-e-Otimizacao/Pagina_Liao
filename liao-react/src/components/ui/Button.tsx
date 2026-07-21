@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
     return (
         <button
             disabled={disabled || loading}
-            className={`inline-flex items-center justify-center gap-2 transition-all duration-200 ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
+            className={`inline-flex items-center justify-center gap-2 transition-all duration-200 cursor-pointer disabled:cursor-not-allowed ${sizeClasses[size]} ${variantClasses[variant]} ${className}`}
             {...props}
         >
             {loading && (

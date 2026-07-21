@@ -14,6 +14,16 @@ body {
   @apply bg-neutral-50 text-neutral-900 font-sans dark:bg-neutral-900 dark:text-neutral-100 transition-colors duration-200;
 }
 
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
 @layer components {
   /* Semantic Backgrounds for Modular Sections */
   .section-bg-main {
@@ -33,19 +43,19 @@ body {
   }
 
   .btn-primary {
-    @apply px-6 py-3 bg-liao-blue hover:bg-primary-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-md shadow-primary-600/20 active:scale-95;
+    @apply px-6 py-3 bg-liao-blue hover:bg-primary-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-md shadow-primary-600/20 active:scale-95 cursor-pointer;
   }
 
   .btn-secondary {
-    @apply px-6 py-3 bg-liao-green hover:bg-success-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-sm active:scale-95;
+    @apply px-6 py-3 bg-liao-green hover:bg-success-700 text-white rounded-xl font-semibold transition-all duration-200 shadow-sm active:scale-95 cursor-pointer;
   }
 
   .btn-special {
-    @apply px-6 py-3 bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow text-white rounded-xl font-bold hover:scale-[1.03] active:scale-95 transition-all duration-300 shadow-lg shadow-red-500/25;
+    @apply px-6 py-3 bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow text-white rounded-xl font-bold hover:scale-[1.03] active:scale-95 transition-all duration-300 shadow-lg shadow-red-500/25 cursor-pointer;
   }
 
   .btn-premium {
-    @apply px-6 py-3 text-neutral-950 rounded-xl font-bold hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg relative overflow-hidden;
+    @apply px-6 py-3 text-neutral-950 rounded-xl font-bold hover:scale-105 transition-all duration-200 shadow-md hover:shadow-lg relative overflow-hidden cursor-pointer;
     background-image: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728);
   }
 
