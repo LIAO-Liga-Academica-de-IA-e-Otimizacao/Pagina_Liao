@@ -72,8 +72,11 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                     {event.subscribe && (
                         <button 
                             onClick={() => window.open(event.subscribe as string, '_blank', 'noopener,noreferrer')}
-                            className="w-full btn-special py-4"
-                            style={{ borderRadius: 'var(--event-radius-sm)' }}
+                            className="w-full py-4 text-base font-bold text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-2"
+                            style={{ 
+                                background: 'linear-gradient(135deg, var(--event-primary), var(--event-secondary))',
+                                borderRadius: 'var(--event-radius-sm)' 
+                            }}
                         >
                             Quero me Inscrever
                         </button>

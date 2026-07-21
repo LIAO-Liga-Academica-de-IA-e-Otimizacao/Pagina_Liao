@@ -25,11 +25,14 @@ This specification defines the LIAO Brand Color System and mandatory button hier
 
 ### 3. Special Conversion Call-to-Action Buttons (Red-Yellow Gradient)
 * **Classes**: `.btn-special` | `bg-gradient-to-r from-liao-red via-red-500 to-liao-yellow`
-* **Application**: High-priority conversion actions ("Quero me Inscrever", "Enviar Inscrição", Processo Seletivo applications).
+* **Application**: High-priority conversion actions ("Enviar Inscrição", Processo Seletivo applications).
 * **Styling**: Vibrant red-to-yellow gradient with scale transition (`hover:scale-[1.03]`).
+* **Constraint**: Must NOT be used on Event Detail pages (`/events/:slug`), which must adhere exclusively to their event-specific Prisma color model.
 
 ## Mandatory Development Rules
 
 1. Do not use black gradients in action or card buttons.
 2. Use `<Button />` (`src/components/ui/Button.tsx`) or `<FilterTabs />` (`src/components/ui/FilterTabs.tsx`) instead of custom button markups.
 3. Adhere strictly to the color roles: Blue for Primary/Nav, Green for Secondary, Red-Yellow for Special CTAs.
+4. **Event Details Page Color Protocol**: The Event Detail page (`/events/:slug` / `EventDetails`) is strictly scoped to the colors specified in its Prisma `Event` model (`palette`, `themeMode`). Universal style overrides or replacement classes (such as `.btn-special` or `.btn-primary`) MUST NOT be applied to buttons or elements on the event page (e.g. the "Quero me Inscrever" button). All interactive elements, CTAs, and accents on an event page must derive their visual styling strictly from the event's dynamic color palette (`var(--event-primary)`, `var(--event-secondary)`, etc.).
+

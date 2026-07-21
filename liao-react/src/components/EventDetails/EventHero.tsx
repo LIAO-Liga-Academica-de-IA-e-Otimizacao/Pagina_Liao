@@ -65,8 +65,11 @@ const EventHero: React.FC<EventHeroProps> = ({
                             >
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                                 <div 
-                                    className="p-2 rounded-lg bg-primary-500/10 text-primary-400 group-hover:bg-primary-500/20 transition-colors"
-                                    style={{ color: 'var(--event-primary)' }}
+                                    className="p-2 rounded-lg transition-colors"
+                                    style={{ 
+                                        backgroundColor: 'rgb(var(--event-primary-rgb) / 0.1)', 
+                                        color: 'var(--event-primary)' 
+                                    }}
                                 >
                                     <Calendar size={20} />
                                 </div>
@@ -127,8 +130,9 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 href={(event as any).subscribe} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                className="btn-special inline-flex items-center gap-3 px-8 py-4 text-lg group"
+                                className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-white shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-300 group"
                                 style={{ 
+                                    background: 'linear-gradient(135deg, var(--event-primary), var(--event-secondary))',
                                     borderRadius: 'var(--event-radius)'
                                 }}
                             >

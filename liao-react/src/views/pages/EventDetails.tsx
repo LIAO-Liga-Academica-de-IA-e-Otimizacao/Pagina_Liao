@@ -224,10 +224,14 @@ const EventDetails: React.FC = () => {
                         <div 
                             className={`flex items-center justify-center rounded-2xl ${
                                 isPlus 
-                                    ? 'w-12 h-12 bg-neutral-200/50 dark:bg-primary-500/20 border border-neutral-300 dark:border-primary-500/30' 
-                                    : 'w-10 h-10 bg-neutral-100 dark:bg-primary-500/10 border border-neutral-200 dark:border-primary-500/20 shadow-inner'
+                                    ? 'w-12 h-12 bg-neutral-200/50 border border-neutral-300 shadow-sm' 
+                                    : 'w-10 h-10 bg-neutral-100 border border-neutral-200 shadow-inner'
                             }`}
-                            style={{ color: 'var(--event-primary)' }}
+                            style={{ 
+                                backgroundColor: isPlus ? 'rgb(var(--event-primary-rgb) / 0.15)' : 'rgb(var(--event-primary-rgb) / 0.1)',
+                                borderColor: isPlus ? 'rgb(var(--event-primary-rgb) / 0.3)' : 'rgb(var(--event-primary-rgb) / 0.2)',
+                                color: 'var(--event-primary)' 
+                            }}
                         >
                             <Sparkles size={isPlus ? 24 : 20} className={isPlus ? "animate-pulse" : ""} />
                         </div>
@@ -271,7 +275,7 @@ const EventDetails: React.FC = () => {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('/bg-grid.svg')] opacity-[0.05] dark:opacity-[0.02]"></div>
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:py-20">
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
                 <EventHero 
                     event={event} 
                     eventDate={eventDate} 
