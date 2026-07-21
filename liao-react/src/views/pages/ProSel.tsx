@@ -75,7 +75,7 @@ const ProSel: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 py-12">
+        <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 page-padding-y">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h1 className="section-title">Processo Seletivo</h1>

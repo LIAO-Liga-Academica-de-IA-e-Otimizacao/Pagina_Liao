@@ -107,7 +107,7 @@ const About: React.FC = () => {
     }
 
     return (
-        <div className="about-page-wrapper section-bg-main text-neutral-900 dark:text-white min-h-screen pt-28 pb-16 sm:pt-32 sm:pb-24 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center w-full relative overflow-hidden">
+        <div className="about-page-wrapper section-bg-main text-neutral-900 dark:text-white min-h-screen page-padding-y px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center w-full relative overflow-hidden">
             
             {/* Styles Injection */}
             <style dangerouslySetInnerHTML={{ __html: `

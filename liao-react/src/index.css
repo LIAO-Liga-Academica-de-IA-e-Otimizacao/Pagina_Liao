@@ -86,6 +86,19 @@ button:disabled,
   .gradient-bg {
     @apply bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700;
   }
+
+  /* Standardized Page Spacing Tokens */
+  .page-padding-top {
+    @apply pt-20 sm:pt-24;
+  }
+
+  .page-padding-bottom {
+    @apply pb-16 sm:pb-20;
+  }
+
+  .page-padding-y {
+    @apply pt-20 pb-16 sm:pt-24 sm:pb-20;
+  }
 }
 
 @layer utilities {
