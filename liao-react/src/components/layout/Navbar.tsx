@@ -55,24 +55,37 @@ const Navbar: React.FC = () => {
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex ml-auto space-x-2">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.path}
-                                to={link.path}
-                                className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                                    (theme === 'dark' || isHeroAdjacent)
-                                        ? isActive(link.path)
-                                            ? 'bg-primary-700 text-white'
-                                            : 'text-neutral-300 hover:text-white hover:bg-neutral-800/60'
-                                        : isActive(link.path)
-                                            ? 'bg-primary-800 text-white'
-                                            : 'text-neutral-600 hover:text-primary-800 hover:bg-primary-50'
-                                }`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
+                    <div className="hidden md:flex ml-auto space-x-1">
+                        {navLinks.map((link) => {
+                            const active = isActive(link.path);
+                            const isDark = theme === 'dark' || isHeroAdjacent;
+                            return (
+                                <Link
+                                    key={link.path}
+                                    to={link.path}
+                                    className={`relative px-3 py-2 text-sm font-medium transition-colors duration-200 ${
+                                        isDark
+                                            ? active
+                                                ? 'text-white font-semibold'
+                                                : 'text-neutral-300 hover:text-white'
+                                            : active
+                                                ? 'text-primary-800 font-semibold'
+                                                : 'text-neutral-600 hover:text-primary-800'
+                                    }`}
+                                >
+                                    {link.name}
+                                    <span
+                                        className={`absolute bottom-0 left-2 right-2 h-[2.5px] rounded-full transition-all duration-300 ${
+                                            active
+                                                ? isDark 
+                                                    ? 'bg-primary-400 opacity-100 scale-x-100 shadow-[0_0_8px_rgba(55,165,248,0.6)]' 
+                                                    : 'bg-primary-600 opacity-100 scale-x-100'
+                                                : 'bg-transparent opacity-0 scale-x-0'
+                                        }`}
+                                    />
+                                </Link>
+                            );
+                        })}
                     </div>
 
                     {/* Partner Logos */}
@@ -137,26 +150,32 @@ const Navbar: React.FC = () => {
 
                 {/* Mobile Navigation */}
                 {isOpen && (
-                    <div className="md:hidden pb-4">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.path}
-                                to={link.path}
-                                onClick={() => setIsOpen(false)}
-                                className={`block px-4 py-2 rounded-lg font-medium transition-all ${
-                                    (theme === 'dark' || isHeroAdjacent)
-                                        ? isActive(link.path)
-                                            ? 'bg-primary-900/50 text-white'
-                                            : 'text-neutral-300 hover:bg-neutral-800/60 hover:text-white'
-                                        : isActive(link.path)
-                                            ? 'bg-primary-100 text-primary-700'
-                                            : 'text-neutral-700 hover:bg-neutral-100'
-                                }`}
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
-
+                    <div className="md:hidden pb-4 space-y-1">
+                        {navLinks.map((link) => {
+                            const active = isActive(link.path);
+                            const isDark = theme === 'dark' || isHeroAdjacent;
+                            return (
+                                <Link
+                                    key={link.path}
+                                    to={link.path}
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex items-center justify-between px-4 py-2.5 rounded-lg text-base font-medium transition-all ${
+                                        isDark
+                                            ? active
+                                                ? 'text-white font-semibold bg-white/5 border-l-4 border-primary-400'
+                                                : 'text-neutral-300 hover:bg-neutral-800/60 hover:text-white border-l-4 border-transparent'
+                                            : active
+                                                ? 'text-primary-800 font-semibold bg-primary-50/60 border-l-4 border-primary-600'
+                                                : 'text-neutral-700 hover:bg-neutral-100 border-l-4 border-transparent'
+                                    }`}
+                                >
+                                    <span>{link.name}</span>
+                                    {active && (
+                                        <span className={`w-1.5 h-1.5 rounded-full ${isDark ? 'bg-primary-400' : 'bg-primary-600'}`} />
+                                    )}
+                                </Link>
+                            );
+                        })}
                         {/* Theme Toggle (Mobile) */}
                         {!isEventDetailsPage && (
                             <div className={`px-4 py-2 border-t mt-2 ${
