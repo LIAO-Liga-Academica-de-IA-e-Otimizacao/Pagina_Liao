@@ -67,7 +67,7 @@ const Projects: React.FC = () => {
                             key={project.id}
                             onClick={() => navigate(`/projects/${project.id}`)}
                             className={`
-                                group bg-white dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer
+                                group bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-200 dark:border-neutral-700 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer
                                 ${viewMode === 'list' ? 'flex flex-row h-40' : 'flex flex-col h-full'}
                             `}
                         >

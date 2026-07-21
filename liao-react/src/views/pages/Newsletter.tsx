@@ -86,7 +86,7 @@ const Newsletter: React.FC = () => {
                             key={article.id}
                             onClick={() => navigate(`/newsletter/${article.id}`)}
                             className={`
-                                group bg-white dark:bg-neutral-800 rounded-lg border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer
+                                group bg-white dark:bg-neutral-800 rounded-2xl border border-neutral-100 dark:border-neutral-700 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer
                                 ${viewMode === 'list' ? 'flex flex-row h-56' : 'flex flex-col h-full'}
                             `}
                         >

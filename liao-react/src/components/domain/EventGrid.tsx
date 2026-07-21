@@ -16,7 +16,7 @@ export const EventGrid: React.FC<EventGridProps> = ({ events, emptyState }) => {
     if (events.length === 0 && emptyState) {
         const isEmerald = emptyState.variant === 'emerald';
         return (
-            <div className={`text-center py-12 px-6 rounded-3xl border border-dashed ${
+            <div className={`text-center py-12 px-6 rounded-2xl border border-dashed ${
                 isEmerald 
                     ? 'bg-emerald-50/50 dark:bg-emerald-950/10 border-emerald-200 dark:border-emerald-900/40'
                     : 'bg-white dark:bg-neutral-800/40 border-neutral-200 dark:border-neutral-700'
