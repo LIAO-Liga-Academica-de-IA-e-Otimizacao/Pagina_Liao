@@ -160,6 +160,27 @@ button:disabled,
   animation: techBgFadeIn 400ms ease-out forwards;
 }
 
+@keyframes techScanline {
+  0% {
+    top: 0%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+.animate-tech-scanline {
+  animation: techScanline 7s ease-in-out infinite;
+}
+
 /* Hide scrollbars for sliders */
 .scrollbar-none::-webkit-scrollbar {
   display: none;
