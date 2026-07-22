@@ -8,7 +8,7 @@ import { FaSun, FaMoon } from 'react-icons/fa';
 const Navbar: React.FC = () => {
     const location = useLocation();
     const [isOpen, setIsOpen] = React.useState(false);
-    const { theme, toggleTheme } = useTheme();
+    const { toggleTheme } = useTheme();
 
     const isActive = (path: string) => location.pathname === path;
     const isEventDetailsPage = location.pathname.startsWith('/events/') && location.pathname !== '/events';
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
         return () => observer.disconnect();
     }, []);
 
-    const isDark = theme === 'dark' || isHeroAdjacent || isDocDark;
+    const isDark = isHeroAdjacent || isDocDark;
 
     const navLinks = [
         { name: 'Home', path: '/' },
@@ -149,7 +149,7 @@ const Navbar: React.FC = () => {
                             }`}
                             aria-label="Alternar tema"
                         >
-                            {theme === 'dark' ? <FaSun className="w-5 h-5 text-warning-400" /> : <FaMoon className="w-5 h-5" />}
+                            {isDocDark ? <FaSun className="w-5 h-5 text-warning-400" /> : <FaMoon className="w-5 h-5" />}
                         </button>
                     )}
 
@@ -232,7 +232,7 @@ const Navbar: React.FC = () => {
                                             : 'text-neutral-700'
                                     }`}
                                 >
-                                    {theme === 'dark' ? (
+                                    {isDocDark ? (
                                         <>
                                             <FaSun className="w-5 h-5 text-warning-400" />
                                             <span>Modo Claro</span>
