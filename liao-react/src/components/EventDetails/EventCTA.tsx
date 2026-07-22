@@ -136,7 +136,7 @@ const EventCTA: React.FC<EventCTAProps> = ({ event }) => {
                         )}
 
                         <Link 
-                            to="/events"
+                            to="/events?tab=next"
                             className="w-full py-3.5 px-4 font-bold text-neutral-800 dark:text-white bg-neutral-200/60 dark:bg-white/10 hover:bg-neutral-300 dark:hover:bg-white/20 border border-neutral-300/60 dark:border-white/15 transition-all flex items-center justify-center gap-2 text-sm"
                             style={{ borderRadius: 'var(--event-radius-sm)' }}
                         >

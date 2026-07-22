@@ -44,6 +44,11 @@ function App() {
             <Admin />
           </ProtectedRoute>
         } />
+        <Route path="/admin/:section" element={
+          <ProtectedRoute>
+            <Admin />
+          </ProtectedRoute>
+        } />
       </Routes>
     </Router>
   );

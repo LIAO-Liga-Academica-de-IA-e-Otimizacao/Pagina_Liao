@@ -2,6 +2,7 @@ import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import bcrypt from 'bcryptjs';
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -1067,7 +1068,48 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
     }
   });
 
-  console.log('🎉 Seed completed successfully with founders, members, projects, newsletter articles, partnerships, events, and tutors!');
+  // 9. Create Dev Admin User "test" (Dev environment only)
+  const isDev = process.env.NODE_ENV !== 'production' && (process.env.DB_ENV === 'dev' || !process.env.DB_ENV);
+  if (isDev) {
+    console.log('Creating dev admin user test...');
+    const hashedPassword = await bcrypt.hash('123', 10);
+
+    await prisma.user.upsert({
+      where: { email: 'test@liao.com' },
+      update: {
+        password: hashedPassword,
+        name: 'test',
+        role: 'master',
+        permissions: ['*'],
+      },
+      create: {
+        email: 'test@liao.com',
+        password: hashedPassword,
+        name: 'test',
+        role: 'master',
+        permissions: ['*'],
+      },
+    });
+
+    await prisma.user.upsert({
+      where: { email: 'test' },
+      update: {
+        password: hashedPassword,
+        name: 'test',
+        role: 'master',
+        permissions: ['*'],
+      },
+      create: {
+        email: 'test',
+        password: hashedPassword,
+        name: 'test',
+        role: 'master',
+        permissions: ['*'],
+      },
+    });
+  }
+
+  console.log('🎉 Seed completed successfully with founders, members, projects, newsletter articles, partnerships, events, tutors, and admin user!');
 }
 
 main()

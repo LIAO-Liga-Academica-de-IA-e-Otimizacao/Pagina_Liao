@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import type { EventApi } from '../../models/Event';
 import PageLayout from '../layouts/PageLayout';
@@ -216,12 +217,33 @@ const FALLBACK_EVENTS: EventApi[] = [
     }
 ];
 
-type FilterTab = 'all' | 'upcoming' | 'finished';
+type FilterTab = 'all' | 'next' | 'finished';
+
+const getValidTab = (tabParam: string | null): FilterTab => {
+    if (tabParam === 'next' || tabParam === 'upcoming') return 'next';
+    if (tabParam === 'finished') return 'finished';
+    return 'all';
+};
 
 const Events: React.FC = () => {
     const [events, setEvents] = useState<EventApi[]>([]);
     const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState<FilterTab>('all');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [filter, setFilter] = useState<FilterTab>(() => getValidTab(searchParams.get('tab')));
+
+    useEffect(() => {
+        const tabParam = searchParams.get('tab');
+        if (tabParam) {
+            setFilter(getValidTab(tabParam));
+        } else {
+            setFilter('all');
+        }
+    }, [searchParams]);
+
+    const handleTabChange = (newTab: FilterTab) => {
+        setFilter(newTab);
+        setSearchParams({ tab: newTab });
+    };
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -254,7 +276,7 @@ const Events: React.FC = () => {
         .filter(event => new Date(event.date as string) < now)
         .sort((a, b) => new Date(b.date as string).getTime() - new Date(a.date as string).getTime());
 
-    const showUpcomingSection = filter === 'all' || filter === 'upcoming';
+    const showUpcomingSection = filter === 'all' || filter === 'next';
     const showFinishedSection = filter === 'all' || filter === 'finished';
 
     return (
@@ -267,11 +289,11 @@ const Events: React.FC = () => {
                 <FilterTabs
                     tabs={[
                         { id: 'all', label: 'Todos os Eventos', icon: <GridIcon size={18} />, count: events.length },
-                        { id: 'upcoming', label: 'Próximos Eventos', icon: <CalendarIcon size={18} />, count: upcomingEvents.length },
+                        { id: 'next', label: 'Próximos Eventos', icon: <CalendarIcon size={18} />, count: upcomingEvents.length },
                         { id: 'finished', label: 'Eventos Realizados', icon: <CheckmarkIcon size={18} />, count: finishedEvents.length }
                     ]}
                     activeTab={filter}
-                    onChange={setFilter}
+                    onChange={handleTabChange}
                     className="mb-12"
                 />
 
