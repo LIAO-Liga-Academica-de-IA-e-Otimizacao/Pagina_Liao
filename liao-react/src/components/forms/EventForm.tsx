@@ -24,7 +24,13 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         partners: (event?.partners as Partner[])?.map(p => p.id) || [] as number[],
         locations: event?.location ? event.location.split(' | ') : [],
         subscribe: event?.subscribe || '',
-        themeMode: (event as any)?.themeMode || 'dark'
+        themeMode: (event as any)?.themeMode || 'dark',
+        materials: {
+            slidesUrl: (event as any)?.materials?.slidesUrl || '',
+            recordingUrl: (event as any)?.materials?.recordingUrl || '',
+            photosUrl: (event as any)?.materials?.photosUrl || '',
+            certificatesUrl: (event as any)?.materials?.certificatesUrl || ''
+        }
     });
 
     const [allPartners, setAllPartners] = useState<Partner[]>([]);
@@ -222,6 +228,51 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
                             <option value="light">Claro (Light Mode)</option>
                         </select>
                         <p className="text-[10px] text-neutral-500 mt-1">Define se a página do evento será exibida com fundo claro ou escuro.</p>
+                    </div>
+
+                    {/* Materiais Pós-Evento */}
+                    <div className="pt-4 border-t dark:border-neutral-800 space-y-3">
+                        <h4 className="text-sm font-bold text-neutral-800 dark:text-neutral-200">Materiais do Evento (Pós-Evento)</h4>
+                        <div>
+                            <label className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">URL da Gravação / Vídeo</label>
+                            <input
+                                type="url"
+                                placeholder="https://youtube.com/watch?v=..."
+                                className="input-field w-full text-xs"
+                                value={formData.materials.recordingUrl}
+                                onChange={(e) => setFormData({ ...formData, materials: { ...formData.materials, recordingUrl: e.target.value } })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">URL dos Slides / Apresentação</label>
+                            <input
+                                type="url"
+                                placeholder="https://drive.google.com/..."
+                                className="input-field w-full text-xs"
+                                value={formData.materials.slidesUrl}
+                                onChange={(e) => setFormData({ ...formData, materials: { ...formData.materials, slidesUrl: e.target.value } })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">URL do Álbum de Fotos Extra</label>
+                            <input
+                                type="url"
+                                placeholder="https://photos.google.com/..."
+                                className="input-field w-full text-xs"
+                                value={formData.materials.photosUrl}
+                                onChange={(e) => setFormData({ ...formData, materials: { ...formData.materials, photosUrl: e.target.value } })}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-semibold text-neutral-600 dark:text-neutral-400 mb-1">URL de Emissão de Certificados</label>
+                            <input
+                                type="url"
+                                placeholder="https://exemplo.com/certificados"
+                                className="input-field w-full text-xs"
+                                value={formData.materials.certificatesUrl}
+                                onChange={(e) => setFormData({ ...formData, materials: { ...formData.materials, certificatesUrl: e.target.value } })}
+                            />
+                        </div>
                     </div>
                 </div>
 

@@ -12,6 +12,7 @@ import EventGallery from '../../components/EventDetails/EventGallery';
 import EventSpeakers from '../../components/EventDetails/EventSpeakers';
 import EventCTA from '../../components/EventDetails/EventCTA';
 import EventPartners from '../../components/EventDetails/EventPartners';
+import EventStats from '../../components/EventDetails/EventStats';
 import PublicFAQModal from '../../components/EventDetails/PublicFAQModal';
 import ScheduleModal from '../../components/EventDetails/ScheduleModal';
 import FadeInSection from '../../components/EventDetails/FadeInSection';
@@ -64,9 +65,21 @@ const EventDetails: React.FC = () => {
     const [isScheduleOpen, setIsScheduleOpen] = useState(false);
     const [isFAQOpen, setIsFAQOpen] = useState(false);
 
+    // Helper to strip markdown from hero description summary
+    const stripMarkdown = (text: string) => {
+        if (!text) return '';
+        return text
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/_(.*?)_/g, '$1')
+            .replace(/`([^`]+)`/g, '$1')
+            .replace(/#+\s?/g, '')
+            .trim();
+    };
+
     // Parsing structured description
     let parsedContent: EventContentState | null = null;
-    let descriptionText = event?.description || '';
+    let descriptionText = event?.description ? stripMarkdown(event.description) : '';
 
     if (event?.description) {
         const trimmedDescription = event.description.trim();
@@ -75,13 +88,23 @@ const EventDetails: React.FC = () => {
                 // Sanitize string if it contains raw newlines that haven't been escaped
                 const sanitized = trimmedDescription.replace(/\n/g, "\\n").replace(/\r/g, "\\r").replace(/\t/g, "\\t");
                 parsedContent = JSON.parse(sanitized);
-                descriptionText = parsedContent?.presentation?.content || event.description;
+                descriptionText = parsedContent?.presentation?.content 
+                    ? stripMarkdown(parsedContent.presentation.content) 
+                    : stripMarkdown(event.description);
+                if ((parsedContent as any)?.materials && event && !(event as any).materials) {
+                    (event as any).materials = (parsedContent as any).materials;
+                }
             } catch (e) {
                 console.warn("Detais: Failed to parse structured content", e);
                 // Fallback to raw if sanitize failed too
                 try {
                     parsedContent = JSON.parse(trimmedDescription);
-                    descriptionText = parsedContent?.presentation?.content || event.description;
+                    descriptionText = parsedContent?.presentation?.content 
+                        ? stripMarkdown(parsedContent.presentation.content) 
+                        : stripMarkdown(event.description);
+                    if ((parsedContent as any)?.materials && event) {
+                        (event as any).materials = (parsedContent as any).materials;
+                    }
                 } catch(e2) {}
             }
         }
@@ -257,6 +280,8 @@ const EventDetails: React.FC = () => {
         );
     };
 
+    const isPast = event.date ? new Date(event.date as string) < new Date() : false;
+
     return (
         <div 
             className={`relative min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 overflow-x-hidden transition-colors duration-300 ${fontClass}`}
@@ -282,12 +307,30 @@ const EventDetails: React.FC = () => {
                     descriptionOverride={descriptionText}
                     hasSchedule={!!parsedContent?.scheduleTable?.enabled}
                     onOpenSchedule={() => setIsScheduleOpen(true)}
+                    isPast={isPast}
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-16">
                     {/* Main Content Column */}
                     <div className="lg:col-span-2 space-y-16 pb-24">
+                        {/* Highlights/Gallery & Stats prioritized for past events */}
+                        {isPast && parsedContent?.stats && parsedContent.stats.length > 0 && (
+                            <EventStats stats={parsedContent.stats} />
+                        )}
+
+                        {isPast && event.gallery && event.gallery.length > 0 && (
+                            <div className="pb-4">
+                                <EventGallery gallery={event.gallery} />
+                            </div>
+                        )}
+
                         <div className="space-y-4">
+                            {parsedContent?.presentation?.enabled && renderContentSection(
+                                isPast ? 'Sobre a Edição' : 'Sobre o Evento', 
+                                parsedContent.presentation.content, 
+                                false, 
+                                ''
+                            )}
                             {parsedContent?.objectives?.enabled && renderContentSection('Objetivos', parsedContent.objectives.content, false, '')}
                             {parsedContent?.targetAudience?.enabled && renderContentSection('Público-alvo', parsedContent.targetAudience.content, false, 'delay-150')}
                             {parsedContent?.structure?.enabled && renderContentSection('Estrutura Geral', parsedContent.structure.content, false, 'delay-300')}
@@ -295,7 +338,7 @@ const EventDetails: React.FC = () => {
 
                         {event.highlights && (
                             <div className="pt-8 border-t border-neutral-200 dark:border-white/5">
-                                <EventHighlights highlights={event.highlights} />
+                                <EventHighlights highlights={event.highlights} isPast={isPast} />
                             </div>
                         )}
                         
@@ -322,7 +365,7 @@ const EventDetails: React.FC = () => {
                         
                         {parsedContent?.finalConsiderations?.enabled && renderContentSection('Considerações Finais', parsedContent.finalConsiderations.content, false, '')}
 
-                        {event.gallery && <EventGallery gallery={event.gallery} />}
+                        {!isPast && event.gallery && <EventGallery gallery={event.gallery} />}
                     </div>
 
                     {/* Sidebar */}

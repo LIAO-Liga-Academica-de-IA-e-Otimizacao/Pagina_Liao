@@ -657,7 +657,32 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
   console.log('Creating events...');
   const eventData = {
     title: 'Workshop IA Avançada: Do Zero ao Deploy',
-    description: 'Um evento imersivo focado em construção de LLMs e deploy escalável em nuvem.',
+    description: JSON.stringify({
+      presentation: {
+        enabled: true,
+        content: "O Workshop IA Avançada: Do Zero ao Deploy proporcionou uma imersão prática completa sobre a arquitetura moderna de Transformers e Large Language Models (LLMs).\n\nConduzido pela Dra. Helena Costa (TechCorp Global) e pelos pesquisadores do LIAO, o workshop cobriu desde as bases teóricas de atenção self-attention até estratégias avançadas de Fine-Tuning com LoRA (Low-Rank Adaptation) e containerização escalável em nuvem com Docker e Kubernetes."
+      },
+      objectives: {
+        enabled: true,
+        content: "- Dominar os conceitos de atenção e arquiteturas modernas de LLMs.\n- Executar fine-tuning eficiente utilizando adaptadores LoRA e quantização.\n- Realizar deploy escalável da API do modelo utilizando Docker e Kubernetes."
+      },
+      finalConsiderations: {
+        enabled: true,
+        content: "Edição encerrada com grande engajamento de alunos e profissionais! Confira abaixo a gravação completa, os slides de apresentação e o álbum de fotos."
+      },
+      materials: {
+        recordingUrl: 'https://youtube.com/watch?v=demo-workshop-ia',
+        slidesUrl: 'https://drive.google.com/file/d/demo-workshop-slides/view',
+        photosUrl: 'https://photos.google.com/share/demo-workshop-album',
+        certificatesUrl: 'https://exemplo.com/certificados/workshop-ia-2026'
+      },
+      stats: [
+        { id: '1', value: '80+', label: 'Desenvolvedores e Pesquisadores' },
+        { id: '2', value: '6h', label: 'Imersão de Fine-Tuning' },
+        { id: '3', value: '12', label: 'Modelos LLMs Deployed' },
+        { id: '4', value: '100%', label: 'Vagas Preenchidas' }
+      ]
+    }),
     coverImage: 'https://images.unsplash.com/photo-1745674684463-62f62cb88d4c?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-05-20T14:00:00Z'),
     location: 'Auditório Magno - Instituto de Computação',
@@ -721,7 +746,30 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
 
   const lightEventData = {
     title: 'Simpósio de Otimização e Sustentabilidade',
-    description: 'Um encontro aberto para discutir a aplicação de algoritmos de otimização no desenvolvimento de soluções sustentáveis e ecológicas.',
+    description: JSON.stringify({
+      presentation: {
+        enabled: true,
+        content: "O Simpósio de Otimização e Sustentabilidade reuniu pesquisadores, estudantes e profissionais do setor energético para debater o papel dos Algoritmos Meta-heurísticos e da Inteligência Artificial na transição energética e na redução de emissões de carbono.\n\nO encontro contou com painéis sobre Smart Grids, otimização de rotas para logística reversa e modelagem matemática verde aplicada à indústria."
+      },
+      objectives: {
+        enabled: true,
+        content: "- Promover o debate entre academia e indústria sobre tecnologias limpas.\n- Apresentar estudos de caso práticos de aplicação de otimização combinatória em sustentabilidade.\n- Fomentar projetos de pesquisa interdisciplinares na UFBA."
+      },
+      finalConsiderations: {
+        enabled: true,
+        content: "Agradecemos a todos os palestrantes e congressistas! Acesse os materiais das apresentações abaixo."
+      },
+      materials: {
+        recordingUrl: 'https://youtube.com/watch?v=demo-simposio',
+        slidesUrl: 'https://drive.google.com/file/d/demo-simposio-slides/view',
+        certificatesUrl: 'https://exemplo.com/certificados/simposio-2026'
+      },
+      stats: [
+        { id: '1', value: '120+', label: 'Congressistas e Palestrantes' },
+        { id: '2', value: '15', label: 'Artigos Apresentados' },
+        { id: '3', value: '8', label: 'Empresas Parceiras' }
+      ]
+    }),
     coverImage: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-06-15T09:00:00Z'),
     location: 'Auditório 2 - Pavilhão de Aulas do IC',
@@ -778,7 +826,32 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
   // Additional Past Event
   const pastEventData = {
     title: 'Minicurso: Introdução ao Python para Ciência de Dados',
-    description: 'Minicurso prático introdutório cobrindo manipulação de dados com Pandas e NumPy e introdução a modelos preditivos.',
+    description: JSON.stringify({
+      presentation: {
+        enabled: true,
+        content: "O Minicurso de Introdução ao Python para Ciência de Dados foi realizado com sucesso no Laboratório de Informática 3 do IC-UFBA.\n\nMais de 45 estudantes e pesquisadores participaram ativamente aprendendo a manipular grandes conjuntos de dados com Pandas e NumPy, visualizar padrões estatísticos com Seaborn e construir seu primeiro modelo preditivo com Scikit-Learn."
+      },
+      objectives: {
+        enabled: true,
+        content: "- Capacitar estudantes no uso de bibliotecas fundamentais de Python.\n- Apresentar boas práticas de limpeza e pré-processamento de dados.\n- Construir um pipeline básico de Aprendizado de Máquina do zero."
+      },
+      finalConsiderations: {
+        enabled: true,
+        content: "Agradecemos a presença de todos! Os notebooks interativos do curso e os certificados de participação já estão disponíveis abaixo."
+      },
+      materials: {
+        recordingUrl: 'https://youtube.com/watch?v=demo-python',
+        slidesUrl: 'https://drive.google.com/file/d/demo-python-slides/view',
+        photosUrl: 'https://photos.google.com/share/demo-python-album',
+        certificatesUrl: 'https://exemplo.com/certificados/python-2026'
+      },
+      stats: [
+        { id: '1', value: '45+', label: 'Participantes Inscritos' },
+        { id: '2', value: '4h', label: 'Prática Intensiva' },
+        { id: '3', value: '100%', label: 'Exercícios Concluídos' },
+        { id: '4', value: '4.9/5', label: 'Avaliação dos Alunos' }
+      ]
+    }),
     coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-03-10T14:00:00Z'),
     location: 'Laboratório de Informática 3 - IC UFBA',
@@ -829,7 +902,20 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
   // Future Event 1 (September 2026)
   const futureEvent1Data = {
     title: 'Hackathon LIAO 2026: IA & Otimização Combinatória',
-    description: '36 horas de maratona intensiva para criar soluções baseadas em Inteligência Artificial e Otimização para problemas do setor produtivo e social.',
+    description: JSON.stringify({
+      presentation: {
+        enabled: true,
+        content: "O Hackathon LIAO 2026 é o maior desafio prático de IA e Otimização da UFBA! Serão 36 horas ininterruptas de desenvolvimento, ideação e codificação para resolver problemas reais propostos por empresas parceiras e órgãos públicos.\n\nAs equipes terão acesso a mentoria dedicada de professores, pesquisadores do LIAO e engenheiros de tecnologia durante toda a maratona."
+      },
+      objectives: {
+        enabled: true,
+        content: "- Resolver problemas de alta complexidade em logística, saúde e planejamento urbano.\n- Desenvolver protótipos funcionais utilizando bibliotecas modernas de Otimização e Machine Learning.\n- Conectar talentos universitários a grandes empresas e oportunidades de carreira."
+      },
+      targetAudience: {
+        enabled: true,
+        content: "Estudantes de graduação e pós-graduação em Ciência da Computação, Engenharias, Matemática, Estatística e áreas correlatas com interesse em resolução de problemas complexos."
+      }
+    }),
     coverImage: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-09-12T08:00:00Z'),
     location: 'Auditório Principal & Hub de Inovação - UFBA',
@@ -882,7 +968,16 @@ Agradecemos a todos os mentores, estudantes e parceiros que tornam esse projeto 
   // Future Event 2 (October 2026)
   const futureEvent2Data = {
     title: 'Semana da Inteligência Artificial e Otimização 2026',
-    description: 'Edição 2026 da nossa semana acadêmica com palestras internacionais, workshops de ponta e apresentação de pesquisas inovadoras.',
+    description: JSON.stringify({
+      presentation: {
+        enabled: true,
+        content: "A Semana da Inteligência Artificial e Otimização 2026 é a edição anual da nossa semana acadêmica, reunindo palestrantes nacionais e internacionais, workshops de ponta e sessões de apresentação de pôsteres científicos.\n\nUm espaço de integração, aprendizado acelerado e networking para toda a comunidade acadêmica e entusiastas de tecnologia."
+      },
+      objectives: {
+        enabled: true,
+        content: "- Apresentar o estado da arte das pesquisas em IA e Otimização Combinatória no Brasil e no mundo.\n- Oferecer minicurso hands-on sobre ferramentas e frameworks atuais.\n- Exibir trabalhos desenvolvidos por alunos do laboratório LIAO."
+      }
+    }),
     coverImage: 'https://images.unsplash.com/photo-1485827404703-89b55fcc596e?q=80&w=1470&auto=format&fit=crop',
     date: new Date('2026-10-20T09:00:00Z'),
     location: 'Centro de Convenções UFBA - PAF I',

@@ -6,7 +6,9 @@ import {
     IoLocationOutline as MapPin,
     IoSparkles as Sparkles,
     IoRocketOutline as Rocket,
-    IoChevronForward
+    IoChevronForward,
+    IoCheckmarkCircleOutline as CheckmarkIcon,
+    IoImagesOutline as PhotosIcon
 } from 'react-icons/io5';
 import type { EventApi } from '../../models/Event';
 import FadeInSection from './FadeInSection';
@@ -17,6 +19,7 @@ interface EventHeroProps {
     descriptionOverride?: string;
     hasSchedule?: boolean;
     onOpenSchedule?: () => void;
+    isPast?: boolean;
 }
 
 const EventHero: React.FC<EventHeroProps> = ({ 
@@ -24,8 +27,18 @@ const EventHero: React.FC<EventHeroProps> = ({
     eventDate, 
     descriptionOverride, 
     hasSchedule, 
-    onOpenSchedule 
+    onOpenSchedule,
+    isPast: isPastProp
 }) => {
+    const isPast = isPastProp ?? (event.date ? new Date(event.date as string) < new Date() : false);
+
+    const scrollToGallery = () => {
+        const galleryEl = document.getElementById('event-gallery-section');
+        if (galleryEl) {
+            galleryEl.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <FadeInSection>
             <Link to="/events" className="inline-flex items-center gap-2 text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white mb-12 group transition-colors">
@@ -38,15 +51,15 @@ const EventHero: React.FC<EventHeroProps> = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
                 <div className="space-y-8">
                     <div 
-                        className="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-widest mb-4 border"
+                        className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-4 border"
                         style={{ 
-                            backgroundColor: `rgb(var(--event-primary-rgb) / 0.2)`, 
-                            color: `rgb(var(--event-primary-rgb) / 1)`, 
-                            borderColor: `rgb(var(--event-primary-rgb) / 0.3)` 
+                            backgroundColor: isPast ? 'rgba(16, 185, 129, 0.15)' : `rgb(var(--event-primary-rgb) / 0.2)`, 
+                            color: isPast ? '#10b981' : `rgb(var(--event-primary-rgb) / 1)`, 
+                            borderColor: isPast ? 'rgba(16, 185, 129, 0.3)' : `rgb(var(--event-primary-rgb) / 0.3)` 
                         }}
                     >
-                        <Sparkles size={14} />
-                        <span>Evento Exclusivo</span>
+                        {isPast ? <CheckmarkIcon size={16} /> : <Sparkles size={14} />}
+                        <span>{isPast ? 'Evento Realizado' : 'Evento Exclusivo'}</span>
                     </div>
                     
                     <h1 className="text-5xl lg:text-7xl font-bold leading-[1.1] tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-700 dark:from-white dark:via-white dark:to-white/60">
@@ -76,7 +89,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 <div className="text-left">
                                     <p className="text-xs text-neutral-500 font-bold uppercase tracking-wider">Visualizar</p>
                                     <p className="font-bold text-neutral-900 dark:text-white flex items-center gap-1">
-                                        Cronograma Completo
+                                        {isPast ? 'Programação Realizada' : 'Cronograma Completo'}
                                         <IoChevronForward className="group-hover:translate-x-1 transition-transform" />
                                     </p>
                                 </div>
@@ -124,7 +137,7 @@ const EventHero: React.FC<EventHeroProps> = ({
                         </div>
                     </div>
 
-                    {(event as any).subscribe && (
+                    {!isPast && (event as any).subscribe && (
                         <div className="pt-4">
                             <a 
                                 href={(event as any).subscribe} 
@@ -139,6 +152,24 @@ const EventHero: React.FC<EventHeroProps> = ({
                                 <Rocket size={24} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                 Quero me Inscrever
                             </a>
+                        </div>
+                    )}
+
+                    {isPast && (
+                        <div className="pt-4 flex flex-wrap gap-4">
+                            {event.gallery && event.gallery.length > 0 && (
+                                <button 
+                                    onClick={scrollToGallery}
+                                    className="inline-flex items-center gap-3 px-8 py-4 text-base font-bold text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 group"
+                                    style={{ 
+                                        background: 'linear-gradient(135deg, var(--event-primary), var(--event-secondary))',
+                                        borderRadius: 'var(--event-radius)'
+                                    }}
+                                >
+                                    <PhotosIcon size={22} className="group-hover:scale-110 transition-transform" />
+                                    Ver Galeria de Fotos
+                                </button>
+                            )}
                         </div>
                     )}
                 </div>
