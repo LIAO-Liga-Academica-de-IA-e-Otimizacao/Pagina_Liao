@@ -37,6 +37,8 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="events" element={<Events />} />
           <Route path="events/:slug" element={<EventDetails />} />
+          <Route path="numeros" element={<Navigate to="/about" replace />} />
+          <Route path="liao-em-numeros" element={<Navigate to="/about" replace />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={

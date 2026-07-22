@@ -26,12 +26,12 @@ const Footer: React.FC = () => {
                         <ul className="space-y-2">
                             <li>
                                 <Link to="/members" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
-                                    Membros
+                                    Membros & Tutores
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/members?tab=tutors" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
-                                    Tutores
+                                <Link to="/about#numeros" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
+                                    LIAO em Números
                                 </Link>
                             </li>
                             <li>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/faq" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
+                                <Link to="/newsletter" className="text-neutral-600 dark:text-neutral-400 hover:text-primary-800 dark:hover:text-white transition-colors">
                                     Newsletter
                                 </Link>
                             </li>
