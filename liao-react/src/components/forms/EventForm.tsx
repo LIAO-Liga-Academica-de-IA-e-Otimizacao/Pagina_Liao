@@ -10,7 +10,66 @@ interface EventFormProps {
     onCancel: () => void;
 }
 
+const extractMaterialsFromDescription = (description?: string | null) => {
+    if (!description) return {};
+    try {
+        const parsed = JSON.parse(description);
+        const materials = parsed?.materials;
+        if (!materials || typeof materials !== 'object') return {};
+        return {
+            slidesUrl: typeof materials.slidesUrl === 'string' ? materials.slidesUrl : '',
+            recordingUrl: typeof materials.recordingUrl === 'string' ? materials.recordingUrl : '',
+            photosUrl: typeof materials.photosUrl === 'string' ? materials.photosUrl : '',
+            certificatesUrl: typeof materials.certificatesUrl === 'string' ? materials.certificatesUrl : ''
+        };
+    } catch {
+        return {};
+    }
+};
+
+const mergeMaterialsIntoDescription = (
+    description: string,
+    materials: {
+        slidesUrl: string;
+        recordingUrl: string;
+        photosUrl: string;
+        certificatesUrl: string;
+    }
+) => {
+    const normalizedMaterials = {
+        slidesUrl: materials.slidesUrl.trim(),
+        recordingUrl: materials.recordingUrl.trim(),
+        photosUrl: materials.photosUrl.trim(),
+        certificatesUrl: materials.certificatesUrl.trim()
+    };
+    const hasMaterials = Object.values(normalizedMaterials).some(Boolean);
+
+    try {
+        const parsed = JSON.parse(description);
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+            throw new Error('invalid description json shape');
+        }
+        const nextDescription = { ...parsed } as Record<string, unknown>;
+        if (hasMaterials) {
+            nextDescription.materials = normalizedMaterials;
+        } else {
+            delete nextDescription.materials;
+        }
+        return JSON.stringify(nextDescription);
+    } catch {
+        if (!hasMaterials) return description;
+        return JSON.stringify({
+            presentation: {
+                enabled: Boolean(description.trim()),
+                content: description
+            },
+            materials: normalizedMaterials
+        });
+    }
+};
+
 const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => {
+    const materialsFromDescription = extractMaterialsFromDescription(event?.description);
     const [formData, setFormData] = useState({
         title: event?.title || '',
         slug: event?.slug || '',
@@ -31,10 +90,10 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
             ? (event as any).palette
             : ['#6366f1', '#a855f7', '#ec4899'],
         materials: {
-            slidesUrl: (event as any)?.materials?.slidesUrl || '',
-            recordingUrl: (event as any)?.materials?.recordingUrl || '',
-            photosUrl: (event as any)?.materials?.photosUrl || '',
-            certificatesUrl: (event as any)?.materials?.certificatesUrl || ''
+            slidesUrl: (event as any)?.materials?.slidesUrl || materialsFromDescription.slidesUrl || '',
+            recordingUrl: (event as any)?.materials?.recordingUrl || materialsFromDescription.recordingUrl || '',
+            photosUrl: (event as any)?.materials?.photosUrl || materialsFromDescription.photosUrl || '',
+            certificatesUrl: (event as any)?.materials?.certificatesUrl || materialsFromDescription.certificatesUrl || ''
         }
     });
 
@@ -63,7 +122,8 @@ const EventForm: React.FC<EventFormProps> = ({ event, onSuccess, onCancel }) => 
         try {
             const dataToSubmit = {
                 ...formData,
-                location: formData.locations.join(' | ')
+                location: formData.locations.join(' | '),
+                description: mergeMaterialsIntoDescription(formData.description, formData.materials)
             };
             if (event && event.id !== undefined) {
                 await apiService.updateEvent(event.id, dataToSubmit);
