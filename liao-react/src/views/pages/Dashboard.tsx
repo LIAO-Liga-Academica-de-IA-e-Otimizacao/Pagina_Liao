@@ -362,7 +362,7 @@ const Dashboard: React.FC = () => {
                 
                 <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
                     <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        Participe da Liga Acadêmica LIAO UFBA
+                        Participe da LIAO
                     </h2>
                     <p className="text-xl text-neutral-600 dark:text-neutral-300 mb-10 leading-relaxed max-w-2xl mx-auto">
                         Faça parte de uma comunidade apaixonada por tecnologia e inovação.
