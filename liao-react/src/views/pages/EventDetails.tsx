@@ -91,9 +91,6 @@ const EventDetails: React.FC = () => {
                 descriptionText = parsedContent?.presentation?.content 
                     ? stripMarkdown(parsedContent.presentation.content) 
                     : stripMarkdown(event.description);
-                if ((parsedContent as any)?.materials && event && !(event as any).materials) {
-                    (event as any).materials = (parsedContent as any).materials;
-                }
             } catch (e) {
                 console.warn("Detais: Failed to parse structured content", e);
                 // Fallback to raw if sanitize failed too
@@ -102,9 +99,6 @@ const EventDetails: React.FC = () => {
                     descriptionText = parsedContent?.presentation?.content 
                         ? stripMarkdown(parsedContent.presentation.content) 
                         : stripMarkdown(event.description);
-                    if ((parsedContent as any)?.materials && event) {
-                        (event as any).materials = (parsedContent as any).materials;
-                    }
                 } catch(e2) {}
             }
         }
@@ -189,6 +183,11 @@ const EventDetails: React.FC = () => {
             </div>
         );
     }
+
+    const eventWithMaterials = {
+        ...event,
+        materials: event.materials ?? (parsedContent as any)?.materials
+    };
 
     const eventDate = new Date(event.date as string).toLocaleDateString('pt-BR', {
         day: '2-digit',
@@ -371,7 +370,7 @@ const EventDetails: React.FC = () => {
                     {/* Sidebar */}
                     <div className="space-y-8">
                         <EventSpeakers speakers={event.speakers} palette={palette} />
-                        <EventCTA event={event} />
+                        <EventCTA event={eventWithMaterials} />
                     </div>
                 </div>
 
