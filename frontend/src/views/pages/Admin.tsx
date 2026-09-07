@@ -550,7 +550,7 @@ const Admin: React.FC = () => {
             <div className="bg-white dark:bg-neutral-800 shadow rounded-lg p-6 mt-6 border dark:border-neutral-700">
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-lg font-medium text-neutral-900 dark:text-white">Administradores Permitidos</h3>
-                    {['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'].includes(user.email) && (
+                    {isMaster && (
                         <button
                             onClick={() => setShowAdminForm(!showAdminForm)}
                             className="text-sm bg-primary-600 text-white px-3 py-2 rounded-md hover:bg-primary-700"
@@ -560,7 +560,7 @@ const Admin: React.FC = () => {
                     )}
                 </div>
 
-                {showAdminForm && (
+                {isMaster && showAdminForm && (
                     <form onSubmit={handleCreateAdmin} className="mb-6 bg-neutral-50 dark:bg-neutral-900/50 p-4 rounded-2xl border border-neutral-200 dark:border-neutral-700 space-y-4">
                         <h4 className="text-sm font-bold dark:text-white">Novo Administrador</h4>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -651,22 +651,20 @@ const Admin: React.FC = () => {
                             <tbody className="bg-white dark:bg-neutral-800 divide-y divide-neutral-200 dark:divide-neutral-700">
                                 {admins.map((admin) => {
                                     const isSelf = admin.email === user.email;
-                                    const isActingMaster = ['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'].includes(user.email);
-                                    const isTargetMaster = ['liaoufba@gmail.com', 'bispodeivisnan@gmail.com'].includes(admin.email);
-    
-                                    const canDelete = isSelf || (isActingMaster && !isTargetMaster);
+                                    const isTargetMaster = admin.role === 'master';
+                                    const canDelete = isSelf || (isMaster && !isTargetMaster);
     
                                     return (
                                         <tr key={admin.id}>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-neutral-900 dark:text-white">
                                                 {admin.name}
-                                                {(admin.role === 'master' || isTargetMaster) && (
+                                                {isTargetMaster && (
                                                     <span className="ml-2 px-1.5 py-0.5 text-[9px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded-full uppercase">Master</span>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">{admin.email}</td>
                                             <td className="px-6 py-4 text-sm">
-                                                {isTargetMaster || admin.role === 'master' ? (
+                                                {isTargetMaster ? (
                                                     <span className="text-xs text-amber-600 dark:text-amber-400 font-semibold">Acesso Total</span>
                                                 ) : admin.permissions && admin.permissions.length > 0 ? (
                                                     <div className="flex flex-wrap gap-1">
