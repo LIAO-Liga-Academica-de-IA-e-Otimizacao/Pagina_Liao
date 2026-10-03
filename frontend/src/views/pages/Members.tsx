@@ -10,7 +10,8 @@ import type { Tutor } from '../../models/Tutor';
 import { 
     IoBriefcaseOutline as DirectorsIcon, 
     IoPeopleOutline as MembersIcon, 
-    IoRibbonOutline as FoundersIcon, 
+    IoLayersOutline as AllIcon,
+    IoTimeOutline as FormerIcon,
     IoSchoolOutline as TutorsIcon 
 } from 'react-icons/io5';
 
@@ -29,6 +30,28 @@ interface Member {
     course?: string;
 }
 
+type MembersTab = 'directors' | 'current' | 'all' | 'former' | 'tutors';
+type YearSort = 'desc' | 'asc';
+
+const MEMBER_TABS: MembersTab[] = ['directors', 'current', 'all', 'former', 'tutors'];
+
+function resolveTab(tab: string | null): MembersTab | null {
+    if (!tab) return null;
+    if (tab === 'members') return 'current';
+    if (tab === 'founders') return 'all';
+    if (MEMBER_TABS.includes(tab as MembersTab)) return tab as MembersTab;
+    return null;
+}
+
+function isDirector(member: Member): boolean {
+    const role = member.role.trim().toLowerCase();
+    return role.includes('diretor') || role.includes('diretora') || role.startsWith('dir.') || role.startsWith('dir ');
+}
+
+function isCurrentMember(member: Member): boolean {
+    return member.isActive !== false;
+}
+
 const Members: React.FC = () => {
     const [members, setMembers] = useState<Member[]>([]);
     const [tutors, setTutors] = useState<Tutor[]>([]);
@@ -43,33 +66,21 @@ const Members: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     // Navigation State
-    const [activeTab, setActiveTab] = useState<'directors' | 'members' | 'founders' | 'tutors'>(() => {
-        if (tabParam === 'tutors' || tabParam === 'members' || tabParam === 'founders' || tabParam === 'directors') {
-            return tabParam as any;
-        }
-        return 'directors';
-    });
-    const [selectedYear, setSelectedYear] = useState<number | 'all'>(2026);
+    const [activeTab, setActiveTab] = useState<MembersTab>(() => resolveTab(tabParam) ?? 'current');
+    const [yearSort, setYearSort] = useState<YearSort>('desc');
     const [mobileViewMode, setMobileViewMode] = useState<'carousel' | 'grid'>('carousel'); // Mobile View Toggle
     const [isPaused, setIsPaused] = useState(false); // Mobile Carousel Pause Toggle
 
     // Sync active tab with search parameter change
     useEffect(() => {
-        const tab = searchParams.get('tab');
-        if (tab && ['directors', 'members', 'founders', 'tutors'].includes(tab)) {
-            setActiveTab(tab as any);
-        }
+        const tab = resolveTab(searchParams.get('tab'));
+        if (tab) setActiveTab(tab);
     }, [searchParams]);
 
-    const handleTabChange = (tab: 'directors' | 'members' | 'founders' | 'tutors') => {
+    const handleTabChange = (tab: MembersTab) => {
         setActiveTab(tab);
         setSearchParams({ tab });
     };
-
-    // Derived Data
-    const availableYears = Array.from(new Set(members.map(m => m.year || 2025))).sort((a, b) => b - a);
-    // Ensure 2026 is always available if specific requirement
-    if (!availableYears.includes(2026)) availableYears.unshift(2026);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -97,20 +108,22 @@ const Members: React.FC = () => {
         setIsModalOpen(true);
     };
 
-    // Filter Logic
-    // Filter Logic
-    let filteredMembers = members.filter(member => {
-        if (activeTab === 'directors') {
-            return member.role !== 'member' && member.isActive !== false;
-        }
-        if (activeTab === 'founders') {
-            return member.isFounder === true;
-        }
-        if (activeTab === 'members') {
-            return selectedYear === 'all' || (member.year === selectedYear || (!member.year && selectedYear === 2025));
-        }
-        return false;
-    });
+    const filteredMembers = members
+        .filter((member) => {
+            if (activeTab === 'directors') return isDirector(member) && isCurrentMember(member);
+            if (activeTab === 'current') return isCurrentMember(member);
+            if (activeTab === 'former') return !isCurrentMember(member);
+            if (activeTab === 'all') return true;
+            return false;
+        })
+        .sort((a, b) => {
+            const yearA = a.year ?? 0;
+            const yearB = b.year ?? 0;
+            if (yearA !== yearB) {
+                return yearSort === 'desc' ? yearB - yearA : yearA - yearB;
+            }
+            return a.name.localeCompare(b.name, 'pt-BR');
+        });
 
     // Responsive Carousel Logic
     const [itemsPerView, setItemsPerView] = useState(3);
@@ -127,7 +140,7 @@ const Members: React.FC = () => {
     // Reset index when tab or filter changes
     useEffect(() => {
         setCurrentIndex(0);
-    }, [activeTab, selectedYear]);
+    }, [activeTab, yearSort]);
 
     const getListLength = () => activeTab === 'tutors' ? tutors.length : filteredMembers.length;
 
@@ -190,9 +203,10 @@ const Members: React.FC = () => {
             {/* Standardized Header Tabs */}
             <FilterTabs
                 tabs={[
-                    { id: 'directors', label: 'Diretoria Atual', icon: <DirectorsIcon size={18} /> },
-                    { id: 'members', label: 'Membros', icon: <MembersIcon size={18} /> },
-                    { id: 'founders', label: 'Fundadores', icon: <FoundersIcon size={18} /> },
+                    { id: 'directors', label: 'Diretores', icon: <DirectorsIcon size={18} /> },
+                    { id: 'current', label: 'Atuais', icon: <MembersIcon size={18} /> },
+                    { id: 'all', label: 'Todos', icon: <AllIcon size={18} /> },
+                    { id: 'former', label: 'Ex-membros', icon: <FormerIcon size={18} /> },
                     { id: 'tutors', label: 'Tutores', icon: <TutorsIcon size={18} /> }
                 ]}
                 activeTab={activeTab}
@@ -200,35 +214,19 @@ const Members: React.FC = () => {
                 className="mb-8"
             />
 
-            {/* Sub-filter (Year Selector) */}
-            {activeTab === 'members' && (
+            {activeTab !== 'tutors' && (
                 <div className="flex justify-center mb-8">
-                    <div className="inline-flex flex-wrap items-center justify-center gap-1 p-1 bg-neutral-100 dark:bg-neutral-800/80 rounded-xl border border-neutral-200/60 dark:border-neutral-700/50 shadow-xs">
-                        <button
-                            type="button"
-                            onClick={() => setSelectedYear('all')}
-                            className={`px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 cursor-pointer ${selectedYear === 'all'
-                                ? 'bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 font-semibold shadow-xs'
-                                : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                                }`}
+                    <label className="inline-flex items-center gap-2 text-sm font-medium text-neutral-600 dark:text-neutral-400">
+                        Ordenar por ano
+                        <select
+                            value={yearSort}
+                            onChange={(e) => setYearSort(e.target.value as YearSort)}
+                            className="rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-800 dark:text-neutral-100 px-3 py-1.5 text-sm font-medium cursor-pointer"
                         >
-                            Todos os Anos
-                        </button>
-
-                        {availableYears.map(year => (
-                            <button
-                                key={year}
-                                type="button"
-                                onClick={() => setSelectedYear(year)}
-                                className={`px-3.5 py-1.5 text-xs font-medium rounded-lg transition-all duration-200 cursor-pointer ${selectedYear === year
-                                    ? 'bg-white dark:bg-neutral-900 text-primary-600 dark:text-primary-400 font-semibold shadow-xs'
-                                    : 'text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
-                                    }`}
-                            >
-                                {year}
-                            </button>
-                        ))}
-                    </div>
+                            <option value="desc">Mais recente</option>
+                            <option value="asc">Mais antigo</option>
+                        </select>
+                    </label>
                 </div>
             )}
 

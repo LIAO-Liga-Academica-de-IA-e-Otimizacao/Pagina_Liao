@@ -172,7 +172,7 @@ const MemberForm: React.FC<MemberFormProps> = ({ member, onSuccess, onCancel }) 
                             className="h-4 w-4 text-success-600 focus:ring-success-500 border-neutral-300 rounded"
                         />
                         <label htmlFor="isActive" className="ml-2 block text-sm text-neutral-900 dark:text-neutral-300">
-                            Membro Vigente/Ativo (Exibe na aba Diretoria/Membros do ano)
+                            Membro vigente (aparece em Atuais; desmarcado aparece em Ex-membros)
                         </label>
                     </div>
                 </div>
