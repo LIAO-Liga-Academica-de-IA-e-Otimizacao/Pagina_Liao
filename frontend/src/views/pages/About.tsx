@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { apiService } from '../../services/api';
 import { useSEO } from '../../hooks/useSEO';
 import Card from '../../components/ui/Card';
+import LiaoLogo from '../../components/ui/LiaoLogo';
 import EventStats, { StatCard, type EventStat } from '../../components/EventDetails/EventStats';
 import FilterTabs from '../../components/ui/FilterTabs';
 import { 
@@ -467,8 +468,7 @@ const About: React.FC = () => {
             {/* Header / Logo */}
             <header className="text-center w-full max-w-7xl mx-auto mb-12 sm:mb-20 fade-in-up">
                 <div className="flex justify-center mb-6 sm:mb-8">
-                     <img src="/logo.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain dark:hidden transition-all duration-300" />
-                     <img src="/logo-dark.png" alt="LIAO Logo" className="h-16 sm:h-20 object-contain hidden dark:block transition-all duration-300" />
+                    <LiaoLogo className="h-16 w-auto text-neutral-900 transition-colors duration-300 sm:h-20 dark:text-white" />
                 </div>
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 tracking-tight text-neutral-900 dark:text-white">Sobre a LIAO UFBA</h1>
                 <p className="text-neutral-600 dark:text-gray-400 text-base sm:text-lg md:text-xl max-w-2xl mx-auto font-light leading-relaxed">

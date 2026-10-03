@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import { FaSun, FaMoon } from 'react-icons/fa';
+import LiaoLogo from '../ui/LiaoLogo';
+import LiaoWordmark from '../ui/LiaoWordmark';
 
 
 
@@ -90,12 +92,12 @@ const Navbar: React.FC = () => {
                     {/* Logo */}
                     <div className="flex-1 flex items-center justify-start">
                         <Link to="/" className="flex items-center space-x-3">
-                            <img 
-                                src={isDark ? "/logo-dark.png" : "/logo.png"} 
-                                alt="LIAO Logo" 
-                                className="w-12 h-12 object-contain transition-all duration-300" 
+                            <LiaoLogo
+                                className={`w-12 h-12 transition-colors duration-300 ${
+                                    isDark ? 'text-white' : 'text-neutral-900'
+                                }`}
                             />
-                            <img src="/liao-text.png" alt="LIAO" className="h-8 object-contain" />
+                            <LiaoWordmark className="h-8 w-auto" />
                         </Link>
                     </div>
 
