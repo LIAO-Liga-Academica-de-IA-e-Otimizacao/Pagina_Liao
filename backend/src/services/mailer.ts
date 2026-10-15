@@ -1,9 +1,16 @@
 import nodemailer, { type Transporter } from 'nodemailer';
 
+interface SendMailAttachment {
+    filename: string;
+    content: Buffer;
+    contentType?: string;
+}
+
 interface SendMailInput {
     to: string | string[];
     subject: string;
     html: string;
+    attachments?: SendMailAttachment[];
 }
 
 let transporter: Transporter | null = null;
@@ -40,7 +47,7 @@ function getTransporter(): Transporter | null {
  * automated tests), so this never silently attempts to reach a real network
  * service without explicit configuration.
  */
-export async function sendMail({ to, subject, html }: SendMailInput): Promise<void> {
+export async function sendMail({ to, subject, html, attachments }: SendMailInput): Promise<void> {
     const from = process.env.SMTP_FROM || 'LIAO <no-reply@liao.ufba.br>';
     const client = getTransporter();
 
@@ -48,10 +55,11 @@ export async function sendMail({ to, subject, html }: SendMailInput): Promise<vo
         console.log(
             `[mailer] (log-only) would send email\n  to: ${
                 Array.isArray(to) ? to.join(', ') : to
-            }\n  subject: ${subject}`
+            }\n  subject: ${subject}` +
+                (attachments?.length ? `\n  attachments: ${attachments.map((a) => a.filename).join(', ')}` : '')
         );
         return;
     }
 
-    await client.sendMail({ from, to, subject, html });
+    await client.sendMail({ from, to, subject, html, attachments });
 }

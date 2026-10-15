@@ -292,7 +292,7 @@ const ProSel: React.FC = () => {
                             {confirmedBooking.fullName}, seu horário na {confirmedBooking.room} ({confirmedBooking.startTime} às {confirmedBooking.endTime}) foi confirmado.
                         </p>
                         <p className="text-neutral-600 dark:text-neutral-400 max-w-lg mx-auto mb-8">
-                            Você receberá um email de confirmação com os detalhes. Compareça ao PAF 1 — UFBA no horário agendado.
+                            Você receberá um email de confirmação com os detalhes. Compareça ao local informado no horário agendado.
                         </p>
                         <Button variant="primary" onClick={handleRestart}>
                             Voltar ao início

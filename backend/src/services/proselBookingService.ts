@@ -6,6 +6,7 @@ import {
     adminBookingNotificationEmail,
     roomFullNotificationEmail,
 } from './proselEmailTemplates';
+import { buildRoomFullExcel } from './proselExport';
 import { PROSEL_EVENT_DATE } from './proselBooking.constants';
 
 export class RoomFullError extends Error {
@@ -193,7 +194,25 @@ async function sendRoomFullNotification(room: ProSelRoom) {
             eventDate: new Date(PROSEL_EVENT_DATE),
             candidates,
         });
-        await sendMail({ to: process.env.PROSEL_ADMIN_EMAIL || 'liaoufba@gmail.com', subject, html });
+        const excelBuffer = await buildRoomFullExcel({
+            roomLabel: roomCapacity.label,
+            startTime: roomCapacity.startTime,
+            endTime: roomCapacity.endTime,
+            candidates,
+        });
+        const fileSlug = roomCapacity.label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        await sendMail({
+            to: process.env.PROSEL_ADMIN_EMAIL || 'liaoufba@gmail.com',
+            subject,
+            html,
+            attachments: [
+                {
+                    filename: `inscritos-${fileSlug}.xlsx`,
+                    content: excelBuffer,
+                    contentType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                },
+            ],
+        });
         await prisma.proSelRoomCapacity.update({
             where: { room },
             data: { fullNotificationStatus: 'sent' },
