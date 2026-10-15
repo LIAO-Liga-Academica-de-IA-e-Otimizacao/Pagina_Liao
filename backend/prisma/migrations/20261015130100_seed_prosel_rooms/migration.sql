@@ -3,6 +3,6 @@
 -- to seed via migration. Uses ON CONFLICT so re-running is a no-op.
 INSERT INTO "ProSelRoomCapacity" ("room", "label", "startTime", "endTime", "capacity", "updatedAt")
 VALUES
-    ('SALA_1', 'Sala 1', '08:00', '11:00', 15, CURRENT_TIMESTAMP),
-    ('SALA_2', 'Sala 2', '13:00', '16:00', 25, CURRENT_TIMESTAMP)
+    ('SALA_1', 'Sala 1', '08:00', '11:00', 16, CURRENT_TIMESTAMP),
+    ('SALA_2', 'Sala 2', '13:00', '16:00', 26, CURRENT_TIMESTAMP)
 ON CONFLICT ("room") DO NOTHING;
