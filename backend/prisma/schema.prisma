@@ -158,6 +158,52 @@ model SystemConfig {
   value String
 }
 
+enum ProSelRoom {
+  SALA_1
+  SALA_2
+}
+
+enum EmailDeliveryStatus {
+  pending
+  sent
+  failed
+}
+
+// Fixed configuration + live counter for each ProSel dynamic room/slot.
+// Seeded once via migration; bookedCount is only ever changed through a
+// guarded conditional update (see proselBookingService) to prevent
+// overbooking under concurrent requests.
+model ProSelRoomCapacity {
+  room                      ProSelRoom @id
+  label                     String
+  startTime                 String
+  endTime                   String
+  capacity                  Int
+  bookedCount               Int                 @default(0)
+  fullNotifiedAt            DateTime?
+  fullNotificationStatus    EmailDeliveryStatus @default(pending)
+  fullNotificationAttempts  Int                 @default(0)
+  updatedAt                 DateTime            @updatedAt
+  bookings                  ProSelBooking[]
+}
+
+model ProSelBooking {
+  id                          Int                 @id @default(autoincrement())
+  fullName                    String
+  email                       String              @unique
+  room                        ProSelRoom
+  roomCapacity                ProSelRoomCapacity  @relation(fields: [room], references: [room])
+  eventDate                   DateTime
+  startTime                   String
+  endTime                     String
+  candidateEmailStatus        EmailDeliveryStatus @default(pending)
+  candidateEmailAttempts      Int                 @default(0)
+  adminEmailStatus            EmailDeliveryStatus @default(pending)
+  adminEmailAttempts          Int                 @default(0)
+  createdAt                   DateTime            @default(now())
+  updatedAt                   DateTime            @updatedAt
+}
+
 model Project {
   id          Int      @id @default(autoincrement())
   title       String

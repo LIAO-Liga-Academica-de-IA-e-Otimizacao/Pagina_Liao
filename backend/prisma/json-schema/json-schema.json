@@ -580,6 +580,142 @@
         "value"
       ]
     },
+    "ProSelRoomCapacity": {
+      "type": "object",
+      "properties": {
+        "room": {
+          "type": "string",
+          "enum": [
+            "SALA_1",
+            "SALA_2"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "capacity": {
+          "type": "integer"
+        },
+        "bookedCount": {
+          "type": "integer",
+          "default": 0
+        },
+        "fullNotifiedAt": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "fullNotificationStatus": {
+          "type": "string",
+          "default": "pending",
+          "enum": [
+            "pending",
+            "sent",
+            "failed"
+          ]
+        },
+        "fullNotificationAttempts": {
+          "type": "integer",
+          "default": 0
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "bookings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProSelBooking"
+          }
+        }
+      },
+      "required": [
+        "room",
+        "label",
+        "startTime",
+        "endTime",
+        "capacity",
+        "updatedAt"
+      ]
+    },
+    "ProSelBooking": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "roomCapacity": {
+          "$ref": "#/definitions/ProSelRoomCapacity"
+        },
+        "eventDate": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string"
+        },
+        "candidateEmailStatus": {
+          "type": "string",
+          "default": "pending",
+          "enum": [
+            "pending",
+            "sent",
+            "failed"
+          ]
+        },
+        "candidateEmailAttempts": {
+          "type": "integer",
+          "default": 0
+        },
+        "adminEmailStatus": {
+          "type": "string",
+          "default": "pending",
+          "enum": [
+            "pending",
+            "sent",
+            "failed"
+          ]
+        },
+        "adminEmailAttempts": {
+          "type": "integer",
+          "default": 0
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "fullName",
+        "email",
+        "room",
+        "eventDate",
+        "startTime",
+        "endTime",
+        "updatedAt"
+      ]
+    },
     "Project": {
       "type": "object",
       "properties": {
@@ -774,6 +910,12 @@
     },
     "systemConfig": {
       "$ref": "#/definitions/SystemConfig"
+    },
+    "proSelRoomCapacity": {
+      "$ref": "#/definitions/ProSelRoomCapacity"
+    },
+    "proSelBooking": {
+      "$ref": "#/definitions/ProSelBooking"
     },
     "project": {
       "$ref": "#/definitions/Project"

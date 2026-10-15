@@ -1,72 +1,124 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { apiService } from '../../services/api';
-import { Link } from 'react-router-dom';
+import Button from '../../components/ui/Button';
+
+interface RoomAvailability {
+    room: string;
+    label: string;
+    startTime: string;
+    endTime: string;
+    capacity: number;
+    bookedCount: number;
+    remaining: number;
+    available: boolean;
+}
+
+interface AvailabilityResponse {
+    eventDate: string;
+    location: string;
+    rooms: RoomAvailability[];
+}
+
+const POLL_INTERVAL_MS = 15000;
+
+function formatEventDate(isoDate: string): string {
+    const [year, month, day] = isoDate.split('-');
+    return `${day}/${month}/${year}`;
+}
 
 const ProSel: React.FC = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        course: '',
-        semester: '',
-        motivation: '',
-    });
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
-    const [checkingConfig, setCheckingConfig] = useState(true);
+    const [availability, setAvailability] = useState<AvailabilityResponse | null>(null);
+    const [loadingAvailability, setLoadingAvailability] = useState(true);
+    const [selectedRoom, setSelectedRoom] = useState<RoomAvailability | null>(null);
+    const [step, setStep] = useState<'rooms' | 'form' | 'summary' | 'success'>('rooms');
+    const [formData, setFormData] = useState({ fullName: '', email: '' });
+    const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState('');
+    const [confirmedBooking, setConfirmedBooking] = useState<{
+        fullName: string;
+        room: string;
+        startTime: string;
+        endTime: string;
+    } | null>(null);
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-    ) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+    const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+    const fetchAvailability = useCallback(async () => {
+        try {
+            const response = await apiService.getProSelAvailability();
+            setAvailability(response.data);
+        } catch (err) {
+            console.error('Error fetching ProSel availability:', err);
+        } finally {
+            setLoadingAvailability(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchAvailability();
+        pollRef.current = setInterval(fetchAvailability, POLL_INTERVAL_MS);
+        return () => {
+            if (pollRef.current) clearInterval(pollRef.current);
+        };
+    }, [fetchAvailability]);
+
+    const handleSelectRoom = (room: RoomAvailability) => {
+        setSelectedRoom(room);
+        setError('');
+        setStep('form');
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleGoToSummary = (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setStep('summary');
+    };
+
+    const handleConfirm = async () => {
+        if (!selectedRoom) return;
+        setSubmitting(true);
         setError('');
-        setSuccess(false);
 
         try {
-            await apiService.submitApplication(formData);
-            setSuccess(true);
-            setFormData({
-                name: '',
-                email: '',
-                phone: '',
-                course: '',
-                semester: '',
-                motivation: '',
+            const response = await apiService.createProSelBooking({
+                fullName: formData.fullName.trim(),
+                email: formData.email.trim(),
+                room: selectedRoom.room,
             });
+            const booking = response.data.booking;
+            setConfirmedBooking({
+                fullName: booking.fullName,
+                room: selectedRoom.label,
+                startTime: booking.startTime,
+                endTime: booking.endTime,
+            });
+            setStep('success');
         } catch (err: any) {
-            setError(err.response?.data?.error || 'Erro ao enviar inscrição');
+            const message = err.response?.data?.error || 'Erro ao confirmar o agendamento. Tente novamente.';
+            setError(message);
+            // The room may have filled up or the email may have just been taken
+            // while the candidate was filling the form — refresh so the UI
+            // reflects reality instead of showing a stale "available" state.
+            fetchAvailability();
+            setStep('rooms');
         } finally {
-            setLoading(false);
+            setSubmitting(false);
         }
     };
 
-    useEffect(() => {
-        const checkStatus = async () => {
-            try {
-                const response = await apiService.getConfig('prosel_open');
-                setIsOpen(response.data === 'true');
-            } catch (error) {
-                console.error('Error checking status:', error);
-                // Default to closed on error for safety
-                setIsOpen(false);
-            } finally {
-                setCheckingConfig(false);
-            }
-        };
-        checkStatus();
-    }, []);
+    const handleRestart = () => {
+        setSelectedRoom(null);
+        setFormData({ fullName: '', email: '' });
+        setConfirmedBooking(null);
+        setError('');
+        setStep('rooms');
+        fetchAvailability();
+    };
 
-    if (checkingConfig) {
+    if (loadingAvailability) {
         return (
             <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
@@ -78,64 +130,70 @@ const ProSel: React.FC = () => {
         <div className="min-h-screen bg-neutral-50 dark:bg-neutral-900 page-padding-y">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                    <h1 className="section-title">Processo Seletivo</h1>
-                    <p className="text-xl text-neutral-600 dark:text-neutral-400">
-                        {isOpen
-                            ? 'Faça parte da LIAO! Preencha o formulário abaixo.'
-                            : 'O período de inscrições não está aberto no momento.'}
-                    </p>
+                    <h1 className="section-title">Agendamento da Dinâmica Presencial — ProSel LIAO</h1>
+                    {availability && (
+                        <p className="text-xl text-neutral-600 dark:text-neutral-400">
+                            {formatEventDate(availability.eventDate)} · {availability.location}
+                        </p>
+                    )}
                 </div>
 
-                {!isOpen ? (
-                    <div className="card p-12 text-center">
-                        <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-primary-100 dark:bg-primary-900/30 mb-6">
-                            <svg className="h-12 w-12 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">Aguarde a próxima edição!</h3>
-                        <p className="text-neutral-600 dark:text-neutral-400 max-w-lg mx-auto mb-8">
-                            Fique atento às nossas redes sociais para saber quando abriremos novas vagas.
-                            Enquanto isso, você pode conferir nossos conteúdos e projetos.
-                        </p>
-                        <Link to="/" className="btn-primary inline-flex items-center">
-                            Voltar para o início
-                        </Link>
+                {error && step === 'rooms' && (
+                    <div className="mb-6 p-4 bg-danger-50 dark:bg-danger-950/30 border border-danger-200 dark:border-danger-800 rounded-lg">
+                        <p className="text-danger-800 dark:text-danger-300">{error}</p>
                     </div>
-                ) : (
+                )}
+
+                {step === 'rooms' && availability && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        {availability.rooms.map((room) => (
+                            <div key={room.room} className="card p-6 flex flex-col">
+                                <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">
+                                    {room.label} — {room.startTime} às {room.endTime}
+                                </h3>
+                                <div className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1 my-4">
+                                    <p>Capacidade total: {room.capacity} candidatos</p>
+                                    <p>Vagas ocupadas: {room.bookedCount}</p>
+                                    <p>Vagas restantes: {room.remaining}</p>
+                                    <p className={room.available ? 'text-success-700 dark:text-success-400 font-medium' : 'text-danger-700 dark:text-danger-400 font-bold'}>
+                                        Status: {room.available ? 'Disponível' : 'Indisponível — sem vagas'}
+                                    </p>
+                                </div>
+                                <Button
+                                    variant="special"
+                                    className="mt-auto w-full"
+                                    disabled={!room.available}
+                                    onClick={() => handleSelectRoom(room)}
+                                >
+                                    {room.available ? 'Selecionar esta sala' : 'Sem vagas'}
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
+                {step === 'form' && selectedRoom && (
                     <div className="card p-8">
-                        {success && (
-                            <div className="mb-6 p-4 bg-success-50 dark:bg-success-950/30 border border-success-200 dark:border-success-800 rounded-lg">
-                                <p className="text-success-800 dark:text-success-300 font-medium">
-                                    Inscrição enviada com sucesso! Entraremos em contato em breve.
-                                </p>
-                            </div>
-                        )}
-
-                        {error && (
-                            <div className="mb-6 p-4 bg-danger-50 dark:bg-danger-950/30 border border-danger-200 dark:border-danger-800 rounded-lg">
-                                <p className="text-danger-800 dark:text-danger-300">{error}</p>
-                            </div>
-                        )}
-
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-6">
+                            {selectedRoom.label} — {selectedRoom.startTime} às {selectedRoom.endTime}
+                        </h3>
+                        <form onSubmit={handleGoToSummary} className="space-y-6">
                             <div>
                                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                                     Nome Completo *
                                 </label>
                                 <input
                                     type="text"
-                                    name="name"
-                                    value={formData.name}
+                                    name="fullName"
+                                    value={formData.fullName}
                                     onChange={handleChange}
                                     required
                                     className="input-field"
                                 />
                             </div>
-
                             <div>
                                 <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                    Email *
+                                    Email utilizado no Processo Seletivo *
                                 </label>
                                 <input
                                     type="email"
@@ -146,72 +204,99 @@ const ProSel: React.FC = () => {
                                     className="input-field"
                                 />
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                    Telefone
-                                </label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className="input-field"
-                                />
+                            <div className="flex gap-4">
+                                <Button type="button" variant="outline" onClick={handleRestart} className="flex-1">
+                                    Voltar
+                                </Button>
+                                <Button type="submit" variant="special" className="flex-1">
+                                    Revisar agendamento
+                                </Button>
                             </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                    Curso *
-                                </label>
-                                <input
-                                    type="text"
-                                    name="course"
-                                    value={formData.course}
-                                    onChange={handleChange}
-                                    required
-                                    className="input-field"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                    Semestre *
-                                </label>
-                                <input
-                                    type="number"
-                                    name="semester"
-                                    value={formData.semester}
-                                    onChange={handleChange}
-                                    required
-                                    min="1"
-                                    max="12"
-                                    className="input-field"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-                                    Por que você quer fazer parte da LIAO? *
-                                </label>
-                                <textarea
-                                    name="motivation"
-                                    value={formData.motivation}
-                                    onChange={handleChange}
-                                    required
-                                    rows={6}
-                                    className="input-field"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full btn-special disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? 'Enviando...' : 'Enviar Inscrição'}
-                            </button>
                         </form>
+                    </div>
+                )}
+
+                {step === 'summary' && selectedRoom && availability && (
+                    <div className="card p-8">
+                        <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-6">
+                            Confirme seu agendamento
+                        </h3>
+
+                        {error && (
+                            <div className="mb-6 p-4 bg-danger-50 dark:bg-danger-950/30 border border-danger-200 dark:border-danger-800 rounded-lg">
+                                <p className="text-danger-800 dark:text-danger-300">{error}</p>
+                            </div>
+                        )}
+
+                        <dl className="space-y-3 mb-8 text-neutral-700 dark:text-neutral-300">
+                            <div className="flex justify-between border-b border-neutral-200 dark:border-neutral-700 pb-2">
+                                <dt className="font-medium">Nome</dt>
+                                <dd>{formData.fullName}</dd>
+                            </div>
+                            <div className="flex justify-between border-b border-neutral-200 dark:border-neutral-700 pb-2">
+                                <dt className="font-medium">Email</dt>
+                                <dd>{formData.email}</dd>
+                            </div>
+                            <div className="flex justify-between border-b border-neutral-200 dark:border-neutral-700 pb-2">
+                                <dt className="font-medium">Data</dt>
+                                <dd>{formatEventDate(availability.eventDate)}</dd>
+                            </div>
+                            <div className="flex justify-between border-b border-neutral-200 dark:border-neutral-700 pb-2">
+                                <dt className="font-medium">Sala</dt>
+                                <dd>{selectedRoom.label}</dd>
+                            </div>
+                            <div className="flex justify-between border-b border-neutral-200 dark:border-neutral-700 pb-2">
+                                <dt className="font-medium">Horário</dt>
+                                <dd>{selectedRoom.startTime} às {selectedRoom.endTime}</dd>
+                            </div>
+                            <div className="flex justify-between pb-2">
+                                <dt className="font-medium">Local</dt>
+                                <dd>{availability.location}</dd>
+                            </div>
+                        </dl>
+
+                        <div className="flex gap-4">
+                            <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => setStep('form')}
+                                className="flex-1"
+                                disabled={submitting}
+                            >
+                                Editar
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="special"
+                                onClick={handleConfirm}
+                                loading={submitting}
+                                className="flex-1"
+                            >
+                                Confirmar agendamento
+                            </Button>
+                        </div>
+                    </div>
+                )}
+
+                {step === 'success' && confirmedBooking && (
+                    <div className="card p-12 text-center">
+                        <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-full bg-success-100 dark:bg-success-900/30 mb-6">
+                            <svg className="h-12 w-12 text-success-600 dark:text-success-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+                        <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-4">
+                            Agendamento confirmado!
+                        </h3>
+                        <p className="text-neutral-600 dark:text-neutral-400 max-w-lg mx-auto mb-2">
+                            {confirmedBooking.fullName}, seu horário na {confirmedBooking.room} ({confirmedBooking.startTime} às {confirmedBooking.endTime}) foi confirmado.
+                        </p>
+                        <p className="text-neutral-600 dark:text-neutral-400 max-w-lg mx-auto mb-8">
+                            Você receberá um email de confirmação com os detalhes. Compareça ao PAF 1 — UFBA no horário agendado.
+                        </p>
+                        <Button variant="primary" onClick={handleRestart}>
+                            Voltar ao início
+                        </Button>
                     </div>
                 )}
             </div>

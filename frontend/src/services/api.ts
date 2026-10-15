@@ -171,6 +171,11 @@ export const apiService = {
     updateApplicationStatus: (id: number, status: string) =>
         api.put(`/prosel/applications/${id}`, { status }),
 
+    // ProSel - in-person dynamic room booking (no caching: availability must stay fresh)
+    getProSelAvailability: () => api.get('/prosel/availability'),
+    createProSelBooking: (data: { fullName: string; email: string; room: string }) =>
+        api.post('/prosel/bookings', data),
+
     // System Config
     getConfig: (key: string) => getCached(`/config/${key}`),
     updateConfig: (key: string, value: string) => {

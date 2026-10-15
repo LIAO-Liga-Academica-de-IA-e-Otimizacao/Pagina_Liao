@@ -964,6 +964,183 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/prosel/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** getProSelAvailability operation */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                            data?: Record<string, never>;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prosel/bookings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** getProSelBookings operation */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                            data?: Record<string, never>;
+                        };
+                    };
+                };
+            };
+        };
+        put?: never;
+        /** createProSelBooking operation */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                            data?: Record<string, never>;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prosel/bookings/{id}/resend-email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** resendProSelBookingEmail operation */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/prosel/room-notifications/{room}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** resendProSelRoomFullNotification operation */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Successful response */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            success?: boolean;
+                        };
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/prosel": {
         parameters: {
             query?: never;
@@ -1134,6 +1311,48 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload an image to Cloudinary */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "multipart/form-data": {
+                        /** Format: binary */
+                        file: string;
+                        folder?: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Uploaded image URL */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1290,6 +1509,56 @@ export interface components {
         SystemConfig: {
             key: string;
             value: string;
+        };
+        ProSelRoomCapacity: {
+            /** @enum {string} */
+            room: "SALA_1" | "SALA_2";
+            label: string;
+            startTime: string;
+            endTime: string;
+            capacity: number;
+            /** @default 0 */
+            bookedCount: number;
+            /** Format: date-time */
+            fullNotifiedAt?: string | null;
+            /**
+             * @default pending
+             * @enum {string}
+             */
+            fullNotificationStatus: "pending" | "sent" | "failed";
+            /** @default 0 */
+            fullNotificationAttempts: number;
+            /** Format: date-time */
+            updatedAt: string;
+            bookings?: components["schemas"]["ProSelBooking"][];
+        };
+        ProSelBooking: {
+            id: number;
+            fullName: string;
+            email: string;
+            roomCapacity?: components["schemas"]["ProSelRoomCapacity"];
+            /** Format: date-time */
+            eventDate: string;
+            startTime: string;
+            endTime: string;
+            /**
+             * @default pending
+             * @enum {string}
+             */
+            candidateEmailStatus: "pending" | "sent" | "failed";
+            /** @default 0 */
+            candidateEmailAttempts: number;
+            /**
+             * @default pending
+             * @enum {string}
+             */
+            adminEmailStatus: "pending" | "sent" | "failed";
+            /** @default 0 */
+            adminEmailAttempts: number;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         Project: {
             id: number;
