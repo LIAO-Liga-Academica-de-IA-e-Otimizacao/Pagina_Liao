@@ -144,33 +144,60 @@ const ProSel: React.FC = () => {
                     </div>
                 )}
 
-                {step === 'rooms' && availability && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                        {availability.rooms.map((room) => (
-                            <div key={room.room} className="card p-6 flex flex-col">
-                                <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">
-                                    {room.label} — {room.startTime} às {room.endTime}
-                                </h3>
-                                <div className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1 my-4">
-                                    <p>Capacidade total: {room.capacity} candidatos</p>
-                                    <p>Vagas ocupadas: {room.bookedCount}</p>
-                                    <p>Vagas restantes: {room.remaining}</p>
-                                    <p className={room.available ? 'text-success-700 dark:text-success-400 font-medium' : 'text-danger-700 dark:text-danger-400 font-bold'}>
-                                        Status: {room.available ? 'Disponível' : 'Indisponível — sem vagas'}
-                                    </p>
-                                </div>
-                                <Button
-                                    variant="special"
-                                    className="mt-auto w-full"
-                                    disabled={!room.available}
-                                    onClick={() => handleSelectRoom(room)}
-                                >
-                                    {room.available ? 'Selecionar esta sala' : 'Sem vagas'}
-                                </Button>
+                {step === 'rooms' && availability && (() => {
+                    const isAfternoon = (room: RoomAvailability) => parseInt(room.startTime.split(':')[0], 10) >= 12;
+                    const morningRooms = availability.rooms.filter((room) => !isAfternoon(room));
+                    const afternoonRooms = availability.rooms.filter(isAfternoon);
+
+                    const renderRoomCard = (room: RoomAvailability) => (
+                        <div key={room.room} className="card p-6 flex flex-col">
+                            <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-1">
+                                {room.label} — {room.startTime} às {room.endTime}
+                            </h3>
+                            <div className="text-sm text-neutral-600 dark:text-neutral-400 space-y-1 my-4">
+                                <p>Capacidade total: {room.capacity} candidatos</p>
+                                <p>Vagas ocupadas: {room.bookedCount}</p>
+                                <p>Vagas restantes: {room.remaining}</p>
+                                <p className={room.available ? 'text-success-700 dark:text-success-400 font-medium' : 'text-danger-700 dark:text-danger-400 font-bold'}>
+                                    Status: {room.available ? 'Disponível' : 'Indisponível — sem vagas'}
+                                </p>
                             </div>
-                        ))}
-                    </div>
-                )}
+                            <Button
+                                variant="special"
+                                className="mt-auto w-full"
+                                disabled={!room.available}
+                                onClick={() => handleSelectRoom(room)}
+                            >
+                                {room.available ? 'Selecionar esta sala' : 'Sem vagas'}
+                            </Button>
+                        </div>
+                    );
+
+                    return (
+                        <div className="space-y-10">
+                            {morningRooms.length > 0 && (
+                                <div>
+                                    <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+                                        Salas da Manhã
+                                    </h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        {morningRooms.map(renderRoomCard)}
+                                    </div>
+                                </div>
+                            )}
+                            {afternoonRooms.length > 0 && (
+                                <div>
+                                    <h2 className="text-lg font-semibold text-neutral-800 dark:text-neutral-200 mb-4">
+                                        Salas da Tarde
+                                    </h2>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                        {afternoonRooms.map(renderRoomCard)}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })()}
 
                 {step === 'form' && selectedRoom && (
                     <div className="card p-8">

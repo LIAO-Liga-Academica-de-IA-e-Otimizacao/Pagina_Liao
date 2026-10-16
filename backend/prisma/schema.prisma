@@ -161,6 +161,8 @@ model SystemConfig {
 enum ProSelRoom {
   SALA_1
   SALA_2
+  SALA_3
+  SALA_4
 }
 
 enum EmailDeliveryStatus {

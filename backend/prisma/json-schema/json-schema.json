@@ -587,7 +587,9 @@
           "type": "string",
           "enum": [
             "SALA_1",
-            "SALA_2"
+            "SALA_2",
+            "SALA_3",
+            "SALA_4"
           ]
         },
         "label": {
